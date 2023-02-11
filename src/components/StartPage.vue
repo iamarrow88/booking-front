@@ -2,7 +2,7 @@
   <div>
     <h1>Sports Equipment Booking</h1>
     <p>Book your favorite sports equipment online!</p>
-    <div class="container">
+    <div class="container my-5">
       <div class="form-group">
         <label for="startDate">Start Date:</label>
         <input type="date" class="form-control" id="startDate" v-model="startDate">
@@ -28,15 +28,99 @@
       </div>
       <div v-if="resorts.length > 0">
         <h3>Resorts in {{ selectedCity.name }}:</h3>
-        <ul>
-          <li v-for="resort in resorts" :key="resort.id">{{ resort.name }}
-            <router-link :to="{ path: '/resorts/' + resort.id }" class="btn btn-primary">See Items</router-link>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="resort in resorts" :key="resort.id">{{ resort.name }}
+            <p class="my-2">Address: {{ resort.address }}</p>
+            <p class="my-2">Description: {{ resort.description }}</p>
+            <router-link :to="{ path: '/resorts/' + resort.id, query: { type: selectedType.name } }"
+                         class="btn btn-primary">See Items
+            </router-link>
           </li>
         </ul>
       </div>
     </div>
   </div>
 </template>
+<style scoped>
+.container {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+h1, h3, p {
+  text-align: center;
+}
+
+input[type="date"], input[type="number"], select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.form-container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+  list-style: none;
+}
+
+.btn {
+  margin-top: 10px;
+}
+
+.list-group {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.my-2 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.list-group-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+
+}
+
+</style>
+
 <script>
 export default {
   data() {
@@ -63,7 +147,9 @@ export default {
           },
           body: JSON.stringify({
             city_id: this.selectedCity.id,
-            type_id: this.selectedType.id
+            type_id: this.selectedType.id,
+            start_date: this.startDate,
+            duration: this.duration
           })
         });
         this.resorts = await response.json()
