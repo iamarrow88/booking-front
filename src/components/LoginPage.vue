@@ -61,6 +61,8 @@
 
 <script>
 
+import {createRouter as router} from "vue-router";
+
 export default {
   data() {
     return {
@@ -101,11 +103,14 @@ export default {
           this.surname = data.surname;
           localStorage.setItem('token', this.token);
           this.isLoggedIn = true;
+          this.errorMessage = '';
+          router.push('/');
         }
       } catch (err) {
         console.error(err);
       }
     },
+
     async login() {
       try {
         const res = await fetch('/api/user/login', {
@@ -124,11 +129,15 @@ export default {
           this.surname = data.surname;
           localStorage.setItem('token', this.token);
           this.isLoggedIn = true;
+          this.errorMessage = '';
+
+          router.push('/');
         }
       } catch (err) {
         console.error(err);
       }
     },
+
     async logout() {
       this.isLoggedIn = false
       this.surname = null

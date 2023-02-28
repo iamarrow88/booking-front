@@ -41,6 +41,60 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      startDate: null,
+      duration: 1,
+      selectedCity: null,
+      selectedType: null,
+      cities: [],
+      resorts: [],
+      types: []
+    }
+  },
+  methods: {
+    async getResorts() {
+      console.log(`Getting resorts for ${this.selectedCity.name}`)
+      try {
+        const response = await fetch('/api/resorts/filter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*'
+
+          },
+          body: JSON.stringify({
+            city_id: this.selectedCity.id,
+            type_id: this.selectedType.id,
+            start_date: this.startDate,
+            duration: this.duration
+          })
+        });
+        this.resorts = await response.json()
+        console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  },
+  async created() {
+    try {
+      const response = await fetch('/api/cities')
+      this.cities = await response.json()
+      const types = await fetch('/api/inventories/types')
+      this.types = await types.json()
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+}
+</script>
+
+
 <style scoped>
 .container {
   width: 50%;
@@ -120,55 +174,3 @@ li {
 }
 
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      startDate: null,
-      duration: 1,
-      selectedCity: null,
-      selectedType: null,
-      cities: [],
-      resorts: [],
-      types: []
-    }
-  },
-  methods: {
-    async getResorts() {
-      console.log(`Getting resorts for ${this.selectedCity.name}`)
-      try {
-        const response = await fetch('/api/resorts/filter', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*'
-
-          },
-          body: JSON.stringify({
-            city_id: this.selectedCity.id,
-            type_id: this.selectedType.id,
-            start_date: this.startDate,
-            duration: this.duration
-          })
-        });
-        this.resorts = await response.json()
-        console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  },
-  async created() {
-    try {
-      const response = await fetch('/api/cities')
-      this.cities = await response.json()
-      const types = await fetch('/api/inventories/types')
-      this.types = await types.json()
-    } catch (error) {
-      console.error(error)
-    }
-
-  }
-}
-</script>

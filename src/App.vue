@@ -1,46 +1,19 @@
 <template>
-  <header>
-    <div class="header-container">
-      <nav class="header-nav">
-        <ul class="header-nav-list">
-          <li v-if="!isLoggedIn">
-            <button @click="showLoginModal">Login</button>
-          </li>
-          <li v-if="isLoggedIn">
-            {{ surname }}
-            <button @click="logout">Logout</button>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <HeaderPage/>
   <div id="app">
     <router-view/>
   </div>
 
 </template>
 <script>
-import LoginPage from "@/components/LoginPage.vue";
+import HeaderPage from "@/components/HeaderPage.vue";
 
 export default {
-  name: 'App',
-  data() {
-    return {
-      isLoggedIn: false,
-      surname: null
-    }
+  components: {
+    HeaderPage
   },
-  methods: {
-    showLoginModal() {
-      this.$router.push({path: '/login', component: LoginPage})
-    },
+  name: 'App',
 
-    logout() {
-      this.isLoggedIn = false
-      this.surname = null
-      localStorage.removeItem("token");
-    }
-  }
 }
 </script>
 
