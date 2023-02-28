@@ -5,6 +5,7 @@ import StartPage from "@/components/StartPage";
 import ResortPage from "@/components/ResortPage";
 import LoginPage from "@/components/LoginPage.vue";
 import BookingPage from "@/components/BookingPage.vue";
+import BookingResortPage from "@/components/BookingResortPage.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -12,7 +13,9 @@ const router = createRouter({
         {path: '/', component: StartPage},
         {path: '/resorts/:id', component: ResortPage},
         {path: '/login', component: LoginPage},
-        {path: '/mybooking', component: BookingPage}
+        {path: '/mybooking', component: BookingPage},
+       // {path: '/:notFound(.*)', redirect: '/'},
+        {path: '/resorts/bookings', component: BookingResortPage}
     ]
 })
 

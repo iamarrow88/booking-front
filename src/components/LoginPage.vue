@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <h1>User Login/Registration</h1>
-    <div v-if="errorMessage">
-      <p>{{ errorMessage }}</p>
+  <div class="container">
+    <h1 class="title">User Login/Registration</h1>
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
     </div>
     <div v-if="!isLoggedIn">
-      <h3>Login</h3>
+      <h3 class="subtitle">Login</h3>
       <div class="form-group">
         <label for="emailInput">Email:</label>
         <input type="email" class="form-control" id="emailInput" v-model="email">
@@ -18,7 +18,7 @@
     </div>
 
     <div v-if="!isLoggedIn">
-      <h3>Registration</h3>
+      <h3 class="subtitle">Registration</h3>
       <div class="form-group">
         <label for="firstNameInput">First Name:</label>
         <input type="text" class="form-control" id="firstNameInput" v-model="firstName">
@@ -53,11 +53,12 @@
       <button class="btn btn-primary" @click="register">Register</button>
     </div>
     <div v-else>
-      <h3>Welcome, {{ surname }}</h3>
+      <h3 class="subtitle">Welcome, {{ surname }}</h3>
       <button class="btn btn-primary" @click="logout">Logout</button>
     </div>
   </div>
 </template>
+
 
 <script>
 
@@ -102,8 +103,11 @@ export default {
           this.token = data.token;
           this.surname = data.surname;
           localStorage.setItem('token', this.token);
+          localStorage.setItem('surname', this.surname);
+          localStorage.setItem('role_id', this.roleId);
           this.isLoggedIn = true;
           this.errorMessage = '';
+          this.$router.go();
           router.push('/');
         }
       } catch (err) {
@@ -127,9 +131,13 @@ export default {
           const data = await res.json();
           this.token = data.token;
           this.surname = data.surname;
+          this.roleId = data.role_id;
           localStorage.setItem('token', this.token);
+          localStorage.setItem('surname', this.surname);
+          localStorage.setItem('role_id', this.roleId);
           this.isLoggedIn = true;
           this.errorMessage = '';
+        //  this.$router.go();
 
           router.push('/');
         }
@@ -142,7 +150,83 @@ export default {
       this.isLoggedIn = false
       this.surname = null
       localStorage.removeItem("token");
+      localStorage.setItem('surname', this.surname);
+      localStorage.setItem('role_id', this.roleId);
     }
   }
 }
 </script>
+
+<style>
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #d8d8d8;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+button {
+  display: inline-block;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0069d9;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+</style>

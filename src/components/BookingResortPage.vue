@@ -1,6 +1,6 @@
 <template>
   <div class="my-booking">
-    <h3 class="my-booking-title">My Booking:</h3>
+    <h3 class="my-booking-title">All Booking:</h3>
     <div>
       <ul>
         <li v-for="item in booking" :key="item.id" class="my-booking-item">
@@ -31,7 +31,7 @@ export default {
   },
   async mounted() {
     try {
-      const res = await fetch('/api/user/bookings', {
+      const res = await fetch('/api/resorts/bookings', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

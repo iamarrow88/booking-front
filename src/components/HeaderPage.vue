@@ -10,8 +10,12 @@
             <button @click="showLoginModal">Login</button>
           </div>
           <div v-if="isLoggedIn" class="logout-button-container">
-            {{ surname }}
+            {{ surname }} // изменить
+            <button @click="goToMyBooking">My Booking</button>
+            <button v-if="isOwner" @click="goToResortBookings">Order Resorts</button>
+
             <button @click="logout">Logout</button>
+
           </div>
         </div>
       </nav>
@@ -26,12 +30,18 @@ export default {
   name: "HeaderPage",
   data() {
     return {
-      surname: null
+      surname: null,
     }
+  },
+  mounted() {
+    this.surname = localStorage.getItem('surname');
   },
   computed: {
     isLoggedIn() {
       return localStorage.getItem('token') !== null;
+    },
+    isOwner() {
+      return localStorage.getItem('role_id') === 3 || localStorage.getItem('role_id') === '3';
     }
   },
   methods: {
@@ -46,7 +56,13 @@ export default {
 
     goToHomePage() {
       this.$router.push('/');
-    }
+    },
+    goToMyBooking() {
+      this.$router.push("/mybooking"); // navigate to "/mybooking" route
+    },
+    goToResortBookings() {
+      this.$router.push({path: '/resorts/bookings'})
+    },
   }
 }
 </script>
