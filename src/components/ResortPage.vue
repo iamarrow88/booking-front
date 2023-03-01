@@ -2,24 +2,27 @@
   <div class="items-for-resort">
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
     <ul class="items-for-resort-list">
-      <li v-for="item in items" :key="item.id" class="items-for-resort-item">
-        <div class="items-for-resort-item-header">
-          <p class="items-for-resort-item-type">{{ this.$route.query.type }}</p>
-          <p class="items-for-resort-item-price">{{ item.price }}</p>
-        </div>
-        <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
-      </li>
+      <equipment-item v-for="item in items"
+                      :key="item.id"
+                      class="items-for-resort-item"
+                      v-bind:item="item"
+                      v-bind:types="types"
+                      v-bind:itemsInObj="itemsInObj"></equipment-item>
     </ul>
   </div>
 </template>
 
 <script>
+import EquipmentItem from "@/components/EquipmentItem.vue";
+
 export default {
+  components: EquipmentItem,
   data() {
     return {
       resortName: '',
       items: [],
-      types: []
+      types: [],
+      itemsInObj: {}
     }
   },
   async mounted() {
@@ -32,16 +35,21 @@ export default {
     }
     try {
       const response = await fetch(`http://localhost:8081/api/resorts/inventories/${this.$route.params.id}`)
-      this.items = await response.json()
+      this.items = await response.json();
     } catch (error) {
       console.error(error)
     }
+  },
+  async created() {
     try {
       const types = await fetch('/api/inventories/types')
-      this.types = await types.json()
+      const typesArr = await types.json();
+      this.types = typesArr/*.map(el => el.name)*/;
     } catch (error) {
       console.error(error)
     }
+
+
   }
 }
 </script>
