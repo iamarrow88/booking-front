@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       resortName: '',
-      items: []
+      items: [],
+      types: []
     }
   },
   async mounted() {
@@ -32,6 +33,12 @@ export default {
     try {
       const response = await fetch(`http://localhost:8081/api/resorts/inventories/${this.$route.params.id}`)
       this.items = await response.json()
+    } catch (error) {
+      console.error(error)
+    }
+    try {
+      const types = await fetch('/api/inventories/types')
+      this.types = await types.json()
     } catch (error) {
       console.error(error)
     }
