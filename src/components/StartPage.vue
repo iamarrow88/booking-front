@@ -32,7 +32,7 @@
           <li class="list-group-item" v-for="resort in resorts" :key="resort.id">{{ resort.name }}
             <p class="my-2">Address: {{ resort.address }}</p>
             <p class="my-2">Description: {{ resort.description }}</p>
-            <router-link :to="{ path: '/resorts/' + resort.id, query: { type: selectedType.id } }"
+            <router-link :to="{ path: '/resorts/' + resort.id, query: { type_id: selectedType.id } }"
                          class="btn btn-primary">See Items
             </router-link>
           </li>
