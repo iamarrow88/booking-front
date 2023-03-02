@@ -7,7 +7,7 @@
                       class="items-for-resort-item"
                       v-bind:item="item"
                       v-bind:types="types"
-                      v-bind:itemsInObj="itemsInObj"></equipment-item>
+                      :typeId="item.type_id"></equipment-item>
     </ul>
   </div>
 </template>
@@ -43,8 +43,7 @@ export default {
   async created() {
     try {
       const types = await fetch('/api/inventories/types')
-      const typesArr = await types.json();
-      this.types = typesArr/*.map(el => el.name)*/;
+      this.types = await types.json();
     } catch (error) {
       console.error(error)
     }
@@ -83,44 +82,11 @@ export default {
   align-items: center;
 }
 
-.items-for-resort-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-grow: 1;
-  margin-right: 1rem;
-}
 
-.items-for-resort-item-type {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.items-for-resort-item-price {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #666;
-}
-
-.items-for-resort-item-photo {
-  height: 100%;
-  max-height: 10rem;
-  object-fit: cover;
-  border-radius: 0.5rem;
-}
 
 @media (max-width: 767px) {
   .items-for-resort-title {
     font-size: 1.25rem;
-  }
-
-  .items-for-resort-item-type {
-    font-size: 1rem;
-  }
-
-  .items-for-resort-item-price {
-    font-size: 1rem;
   }
 }
 </style>

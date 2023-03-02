@@ -33,10 +33,8 @@
             <p class="my-2">Address: {{ resort.address }}</p>
             <p class="my-2">Description: {{ resort.description }}</p>
 
-            <button @click="$router.push(`/resorts/${resort.id}`)">See Items</button>
-<!--            <router-link :to="{ path: '/resorts/' + resort.id, query: { type: selectedType.name } }"
-                         class="btn btn-primary">See Items
-            </router-link>-->
+            <button @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id } })">See Items</button>
+
           </li>
         </ul>
       </div>
@@ -81,11 +79,7 @@ export default {
         });
         this.resorts = await response.json()
         console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
-        if(this.resorts.length === 0) {
-          this.isNotFoundShown = true;
-        } else {
-          this.isNotFoundShown = false;
-        }
+        this.isNotFoundShown = this.resorts.length === 0;
       } catch (error) {
         console.error(error)
       }
