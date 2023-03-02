@@ -20,7 +20,8 @@ export default {
       type_id: Number
     },
     types: Array,
-    typeId: Number
+    typeId: Number,
+    pageTypeId: Object
   },
   data() {
     return {

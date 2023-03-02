@@ -7,7 +7,9 @@
                       class="items-for-resort-item"
                       v-bind:item="item"
                       v-bind:types="types"
-                      :typeId="item.type_id"></equipment-item>
+                      :typeId="item.type_id"
+                      :pageTypeId="$route"></equipment-item>
+
     </ul>
   </div>
 </template>
@@ -22,7 +24,8 @@ export default {
       resortName: '',
       items: [],
       types: [],
-      itemsInObj: {}
+      filterByID: null,
+      notFilteredItems: [],
     }
   },
   async mounted() {
@@ -35,7 +38,8 @@ export default {
     }
     try {
       const response = await fetch(`http://localhost:8081/api/resorts/inventories/${this.$route.params.id}`)
-      this.items = await response.json();
+      this.notFilteredItems = await response.json();
+      this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID)
     } catch (error) {
       console.error(error)
     }
@@ -47,8 +51,7 @@ export default {
     } catch (error) {
       console.error(error)
     }
-
-
+    this.filterByID = +this.$route.fullPath.split('=')[1];
   }
 }
 </script>
