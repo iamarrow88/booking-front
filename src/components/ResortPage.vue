@@ -1,7 +1,7 @@
 <template>
   <div class="items-for-resort">
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
-    <ul class="items-for-resort-list">
+    <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in items"
                       :key="item.id"
                       class="items-for-resort-item"
@@ -11,6 +11,9 @@
                       :pageTypeId="$route"></equipment-item>
 
     </ul>
+    <div v-else>
+      Ничего не найдено
+    </div>
   </div>
 </template>
 
@@ -39,19 +42,21 @@ export default {
     try {
       const response = await fetch(`http://localhost:8081/api/resorts/inventories/${this.$route.params.id}`)
       this.notFilteredItems = await response.json();
-      this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID)
     } catch (error) {
       console.error(error)
     }
+    this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID);
+
   },
   async created() {
+    this.filterByID = +this.$route.query.type_id
     try {
       const types = await fetch('/api/inventories/types')
       this.types = await types.json();
     } catch (error) {
       console.error(error)
     }
-    this.filterByID = +this.$route.fullPath.split('=')[1];
+
   }
 }
 </script>
