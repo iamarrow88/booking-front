@@ -45,7 +45,11 @@ export default {
     } catch (error) {
       console.error(error)
     }
-    this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID);
+    if(this.filterByID) {
+      this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID);
+    } else {
+      this.items = this.notFilteredItems;
+    }
 
   },
   async created() {
