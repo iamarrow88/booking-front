@@ -94,7 +94,9 @@ export default {
     } catch (error) {
       console.error(error)
     }
-
+    this.selectedCity = this.cities[0];
+    this.selectedType = this.types[0];
+    this.startDate = (new Date().getFullYear() + '-' + ('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + new Date().getDate()).slice(-2));
   }
 }
 </script>
@@ -172,6 +174,8 @@ li {
   align-items: center;
   max-width: 500px;
   margin: 0 auto;
+  margin-top: 15px;
+  padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   overflow: hidden;
