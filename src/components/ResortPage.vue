@@ -1,14 +1,19 @@
 <template>
   <div class="items-for-resort">
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
-    <ul class="items-for-resort-list">
+    <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in items"
                       :key="item.id"
                       class="items-for-resort-item"
                       v-bind:item="item"
                       v-bind:types="types"
-                      v-bind:itemsInObj="itemsInObj"></equipment-item>
+                      :typeId="item.type_id"
+                      :pageTypeId="$route"></equipment-item>
+
     </ul>
+    <div v-else>
+      Ничего не найдено
+    </div>
   </div>
 </template>
 
@@ -22,7 +27,8 @@ export default {
       resortName: '',
       items: [],
       types: [],
-      itemsInObj: {}
+      filterByID: null,
+      notFilteredItems: [],
     }
   },
   async mounted() {
@@ -35,20 +41,25 @@ export default {
     }
     try {
       const response = await fetch(`http://localhost:8081/api/resorts/inventories/${this.$route.params.id}`)
-      this.items = await response.json();
+      this.notFilteredItems = await response.json();
     } catch (error) {
       console.error(error)
     }
-  },
-  async created() {
-    try {
-      const types = await fetch('/api/inventories/types')
-      const typesArr = await types.json();
-      this.types = typesArr/*.map(el => el.name)*/;
-    } catch (error) {
-      console.error(error)
+    if(this.filterByID) {
+      this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID);
+    } else {
+      this.items = this.notFilteredItems;
     }
 
+  },
+  async created() {
+    this.filterByID = +this.$route.query.type_id
+    try {
+      const types = await fetch('/api/inventories/types')
+      this.types = await types.json();
+    } catch (error) {
+      console.error(error)
+    }
 
   }
 }
@@ -83,44 +94,11 @@ export default {
   align-items: center;
 }
 
-.items-for-resort-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-grow: 1;
-  margin-right: 1rem;
-}
 
-.items-for-resort-item-type {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.items-for-resort-item-price {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #666;
-}
-
-.items-for-resort-item-photo {
-  height: 100%;
-  max-height: 10rem;
-  object-fit: cover;
-  border-radius: 0.5rem;
-}
 
 @media (max-width: 767px) {
   .items-for-resort-title {
     font-size: 1.25rem;
-  }
-
-  .items-for-resort-item-type {
-    font-size: 1rem;
-  }
-
-  .items-for-resort-item-price {
-    font-size: 1rem;
   }
 }
 </style>
