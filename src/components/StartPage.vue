@@ -32,11 +32,16 @@
           <li class="list-group-item" v-for="resort in resorts" :key="resort.id">{{ resort.name }}
             <p class="my-2">Address: {{ resort.address }}</p>
             <p class="my-2">Description: {{ resort.description }}</p>
-            <router-link :to="{ path: '/resorts/' + resort.id, query: { type_id: selectedType.id } }"
+
+            <button @click="$router.push(`/resorts/${resort.id}`)">See Items</button>
+<!--            <router-link :to="{ path: '/resorts/' + resort.id, query: { type: selectedType.name } }"
                          class="btn btn-primary">See Items
-            </router-link>
+            </router-link>-->
           </li>
         </ul>
+      </div>
+      <div v-else-if="isNotFoundShown">
+        Ничего на найдено, попробуйте другой город или другое снаряжение
       </div>
     </div>
   </div>
@@ -52,7 +57,8 @@ export default {
       selectedType: null,
       cities: [],
       resorts: [],
-      types: []
+      types: [],
+      isNotFoundShown: false,
     }
   },
   methods: {
@@ -74,7 +80,12 @@ export default {
           })
         });
         this.resorts = await response.json()
-        console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`)
+        console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
+        if(this.resorts.length === 0) {
+          this.isNotFoundShown = true;
+        } else {
+          this.isNotFoundShown = false;
+        }
       } catch (error) {
         console.error(error)
       }
@@ -171,6 +182,9 @@ li {
   border-radius: 5px;
   overflow: hidden;
 
+}
+button {
+  padding: 10px;
 }
 
 </style>
