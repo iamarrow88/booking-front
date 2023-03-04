@@ -1,5 +1,17 @@
 <template>
   <div class="items-for-resort">
+    <div class="form-group">
+      <label for="startDate">Start Date:</label>
+      <input type="date" class="form-control" id="startDate" v-model="startDate">
+    </div>
+    <label for="typeInput">Type</label>
+    <select class="form-control" id="typeInput" v-model="selectedType">
+      <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
+    </select>
+    <div class="form-group">
+      <label for="duration">Duration (days):</label>
+      <input type="number" class="form-control" id="duration" v-model.number="duration">
+    </div>
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in items"
@@ -33,19 +45,19 @@ export default {
   },
   async mounted() {
     try {
-      const response = await fetch(`http://localhost:8081/api/resorts/${this.$route.params.id}`)
+      const response = await fetch(`/api/resorts/${this.$route.params.id}`)
       const resort = await response.json()
       this.resortName = resort.name
     } catch (error) {
       console.error(error)
     }
     try {
-      const response = await fetch(`http://localhost:8081/api/resorts/inventories/${this.$route.params.id}`)
+      const response = await fetch(`/api/resorts/inventories/${this.$route.params.id}`)
       this.notFilteredItems = await response.json();
     } catch (error) {
       console.error(error)
     }
-    if(this.filterByID) {
+    if (this.filterByID) {
       this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID);
     } else {
       this.items = this.notFilteredItems;
@@ -93,7 +105,6 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-
 
 
 @media (max-width: 767px) {

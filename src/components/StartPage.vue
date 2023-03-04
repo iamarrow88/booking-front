@@ -33,7 +33,11 @@
             <p class="my-2">Address: {{ resort.address }}</p>
             <p class="my-2">Description: {{ resort.description }}</p>
 
-            <button @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id } })">See Items</button>
+            <button
+                @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id ,start_date:startDate, duration :duration  } })">
+              See
+              Items
+            </button>
 
           </li>
         </ul>
@@ -181,6 +185,7 @@ li {
   overflow: hidden;
 
 }
+
 button {
   padding: 10px;
 }
