@@ -7,6 +7,7 @@ import LoginPage from "@/components/LoginPage.vue";
 import BookingPage from "@/components/BookingPage.vue";
 import BookingResortPage from "@/components/BookingResortPage.vue";
 import EquipmentItem from "@/components/EquipmentItem.vue";
+import PopUp from "@/components/PopUp.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -25,3 +26,4 @@ const app = createApp(App);
     app.mount('#app');
 
 app.component('EquipmentItem', EquipmentItem);
+app.component('PopUp', PopUp);

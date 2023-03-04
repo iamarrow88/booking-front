@@ -1,15 +1,25 @@
 <template>
-  <li class="items-for-resort-item-header">
-    <p class="items-for-resort-item-type">{{ typeName }}</p>
-    <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
-    <p class="items-for-resort-item-price">{{ item.price }} RUB</p>
-    <button>Забронировать</button>
+  <li class="items-for-resort-item">
+    <div class="items-for-resort-item-header">
+      <p class="items-for-resort-item-type">{{ typeName }}</p>
+      <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
+      <p class="items-for-resort-item-price">{{ item.price }} RUB</p>
+      <button @click="showPopUp">Забронировать</button>
+    </div>
+    <pop-up :item="item"
+    :typeName="typeName"
+    :isBookingProcessStarted="isBookingProcessStarted"
+    @closePopUp="closePopUp"></pop-up>
   </li>
 </template>
 
 <script>
 
+
+import PopUp from "@/components/PopUp.vue";
+
 export default {
+  components: PopUp,
   name: "EquipmentItem",
   props: {
     item: {
@@ -26,6 +36,7 @@ export default {
   data() {
     return {
       typeName: null,
+      isBookingProcessStarted: false
     }
   },
   methods: {
@@ -35,6 +46,12 @@ export default {
           this.typeName = type.name
         }
       })
+    },
+    showPopUp() {
+      this.isBookingProcessStarted = !this.isBookingProcessStarted;
+    },
+    closePopUp(bool){
+      this.isBookingProcessStarted = bool;
     }
   },
   created() {
@@ -45,12 +62,17 @@ export default {
 </script>
 
 <style scoped>
+.items-for-resort-item {
+  display: flex;
+  flex-direction: column;
+}
 .items-for-resort-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-grow: 1;
   margin-right: 1rem;
+  width: 100%;
 }
 
 .items-for-resort-item-type {
