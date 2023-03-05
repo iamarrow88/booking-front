@@ -13,7 +13,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {path: '/', component: StartPage},
-        {path: '/resorts/:id', component: ResortPage},
+        {path: '/resorts/:id', component: ResortPage, props: true},
         {path: '/login', component: LoginPage},
         {path: '/mybooking', component: BookingPage},
        // {path: '/:notFound(.*)', redirect: '/'},

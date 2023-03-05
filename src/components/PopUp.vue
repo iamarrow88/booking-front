@@ -15,7 +15,7 @@ export default {
   name: "PopUp",
   props: {
     isBookingProcessStarted: Boolean,
-    typeName: Object,
+    typeName: String,
     item: {
       id: Number,
       photo: String,

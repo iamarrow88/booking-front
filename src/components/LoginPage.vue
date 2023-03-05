@@ -139,7 +139,7 @@ export default {
           this.errorMessage = '';
         //  this.$router.go();
 
-          router.push('/');
+          this.$router.push('/mybooking');
         }
       } catch (err) {
         console.error(err);

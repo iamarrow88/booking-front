@@ -22,6 +22,10 @@ import EquipmentItem from "@/components/EquipmentItem.vue";
 
 export default {
   components: EquipmentItem,
+  props: {
+    duration: Number,
+    startDate: Date,
+  },
   data() {
     return {
       resortName: '',
@@ -50,7 +54,6 @@ export default {
     } else {
       this.items = this.notFilteredItems;
     }
-
   },
   async created() {
     this.filterByID = +this.$route.query.type_id

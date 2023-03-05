@@ -1,7 +1,7 @@
 <template>
   <div class="my-booking">
     <h3 class="my-booking-title">My Booking:</h3>
-    <div>
+    <div v-if="booking.length > 0">
       <ul>
         <li v-for="item in booking" :key="item.id" class="my-booking-item">
           <div class="my-booking-item-header">
@@ -16,6 +16,9 @@
           </div>
         </li>
       </ul>
+    </div>
+    <div v-else>
+      Пока ничего нет
     </div>
   </div>
 </template>
