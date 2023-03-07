@@ -34,7 +34,7 @@
             <p class="my-2">Description: {{ resort.description }}</p>
 
             <button
-                @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id ,start_date:startDate, duration :duration  } })">
+                @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id, start_date: startDate, duration: duration  } })">
               See
               Items
             </button>
