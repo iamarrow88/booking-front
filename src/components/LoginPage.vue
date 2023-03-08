@@ -8,11 +8,11 @@
       <h3 class="subtitle">Login</h3>
       <div class="form-group">
         <label for="emailInput">Email:</label>
-        <input type="email" class="form-control" id="emailInput" v-model="email">
+        <input type="email" class="form-control" id="emailInput" v-model="emailLogin">
       </div>
       <div class="form-group">
         <label for="passwordInput">Password:</label>
-        <input type="password" class="form-control" id="passwordInput" v-model="password">
+        <input type="password" class="form-control" id="passwordInput" v-model="passwordLogin">
       </div>
       <button class="btn btn-primary" @click="login">Login</button>
     </div>
@@ -33,11 +33,11 @@
       </div>
       <div class="form-group">
         <label for="emailInput">Email:</label>
-        <input type="email" class="form-control" id="emailInput" v-model="email">
+        <input type="email" class="form-control" id="emailInput" v-model="emailRegister">
       </div>
       <div class="form-group">
         <label for="passwordInput">Password:</label>
-        <input type="password" class="form-control" id="passwordInput" v-model="password">
+        <input type="password" class="form-control" id="passwordInput" v-model="passwordRegister">
       </div>
       <div class="form-group">
         <label for="phoneInput">Phone:</label>
@@ -75,8 +75,11 @@ export default {
       phone: '',
       roleId: 2,
       token: '',
-      isLoggedIn: false,
-      errorMessage: ''
+      errorMessage: '',
+      emailLogin: '',
+      passwordLogin: '',
+      emailRegister: '',
+      passwordRegister: ''
     }
   },
   methods: {
@@ -89,8 +92,8 @@ export default {
             first_name: this.firstName,
             surname: this.surname,
             middle_name: this.middleName,
-            email: this.email,
-            password: this.password,
+            email: this.emailRegister,
+            password: this.passwordRegister,
             phone: this.phone,
             role_id: this.roleId
           })
@@ -105,11 +108,11 @@ export default {
           localStorage.setItem('token', this.token);
           localStorage.setItem('surname', this.surname);
           localStorage.setItem('role_id', this.roleId);
-          this.isLoggedIn = true;
+          this.$emit('loggin', true);
           this.errorMessage = '';
           /*this.$router.go();*/
           /*router.push('/');*/
-          this.$router.push('/mybooking');
+          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
 
         }
       } catch (err) {
@@ -123,8 +126,8 @@ export default {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            email: this.email,
-            password: this.password
+            email: this.emailLogin,
+            password: this.passwordLogin
           })
         });
         if (!res.ok) {
@@ -141,7 +144,7 @@ export default {
           this.errorMessage = '';
         //  this.$router.go();
 
-          this.$router.push('/mybooking');
+          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
         }
       } catch (err) {
         console.error(err);
