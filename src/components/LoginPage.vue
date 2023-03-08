@@ -62,7 +62,7 @@
 
 <script>
 
-import {createRouter as router} from "vue-router";
+/*import {createRouter as router} from "vue-router";*/
 
 export default {
   data() {
@@ -107,8 +107,10 @@ export default {
           localStorage.setItem('role_id', this.roleId);
           this.isLoggedIn = true;
           this.errorMessage = '';
-          this.$router.go();
-          router.push('/');
+          /*this.$router.go();*/
+          /*router.push('/');*/
+          this.$router.push('/mybooking');
+
         }
       } catch (err) {
         console.error(err);
@@ -139,7 +141,7 @@ export default {
           this.errorMessage = '';
         //  this.$router.go();
 
-          router.push('/');
+          this.$router.push('/mybooking');
         }
       } catch (err) {
         console.error(err);
