@@ -14,7 +14,7 @@
     </div>
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
-      <equipment-item v-for="item in getItemsList"
+      <equipment-item v-for="item in filteredItems"
                       :key="item.id"
                       class="items-for-resort-item"
                       v-bind:item="item"
@@ -51,16 +51,18 @@ export default {
     getEquipmentType() {
       this.types.forEach(type => {
         if (type.id === this.itemTypeId) {
-          /*this.$set(this.selectedType, type);*/
           this.selectedType = type;
         }
       })
     },
   },
-  computed: {
-    getItemsList() {
-      this.filteredItems = this.notFilteredItems.filter(item => item.key === this.selectedType.id)
-      return this.filteredItems;
+  watch: {
+    selectedType: {
+      deep: true,
+      handler: function(newValue) {
+        this.filteredItems = this.notFilteredItems.filter(item => item.type_id === newValue.id)
+
+      }
     },
   },
   async mounted() {
