@@ -28,6 +28,9 @@ import LoginPage from "@/components/LoginPage.vue";
 
 export default {
   name: "HeaderPage",
+  props: {
+    isLoggedIn: Boolean,
+  },
   data() {
     return {
       surname: null,
@@ -37,9 +40,6 @@ export default {
     this.surname = localStorage.getItem('surname');
   },
   computed: {
-    isLoggedIn() {
-      return localStorage.getItem('token') !== null;
-    },
     isOwner() {
       return localStorage.getItem('role_id') === 3 || localStorage.getItem('role_id') === '3';
     }

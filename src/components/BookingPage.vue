@@ -1,5 +1,5 @@
 <template>
-  <div class="my-booking">
+  <div v-if="isLoggedIn" class="my-booking">
     <h3 class="my-booking-title">My Booking:</h3>
     <div>
       <ul>
@@ -23,6 +23,9 @@
 <script>
 
 export default {
+  props: {
+    isLoggedIn: Boolean,
+  },
   data() {
     return {
       booking: [],
@@ -66,6 +69,11 @@ export default {
     } catch (err) {
       console.error(err);
     }
+
+   /* if(!this.isLoggedIn) {
+      this.$router.push('/login');
+    }*/
+
 
 
   }

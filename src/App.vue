@@ -1,5 +1,5 @@
 <template>
-  <HeaderPage/>
+  <HeaderPage :isLoggedIn="isLoggedIn"/>
   <div id="app">
     <router-view/>
   </div>
@@ -13,7 +13,14 @@ export default {
     HeaderPage
   },
   name: 'App',
-
+  data() {
+    return {
+      isLoggedIn: false
+    }
+  },
+  mounted() {
+    this.isLoggedIn = Boolean(localStorage.getItem('token')) || false;
+  }
 }
 </script>
 

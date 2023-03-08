@@ -65,6 +65,9 @@
 /*import {createRouter as router} from "vue-router";*/
 
 export default {
+  props: {
+    isLoggedIn: Boolean,
+  },
   data() {
     return {
       firstName: '',
@@ -101,6 +104,7 @@ export default {
 
         if (!res.ok) {
           this.errorMessage = "Invalid data provided, please try again";
+          this.$emit('loggin', false);
         } else {
           const data = await res.json();
           this.token = data.token;
@@ -132,6 +136,7 @@ export default {
         });
         if (!res.ok) {
           this.errorMessage = "Invalid data provided, please try again";
+          this.$emit('loggin', false);
         } else {
           const data = await res.json();
           this.token = data.token;
@@ -140,7 +145,7 @@ export default {
           localStorage.setItem('token', this.token);
           localStorage.setItem('surname', this.surname);
           localStorage.setItem('role_id', this.roleId);
-          this.isLoggedIn = true;
+          this.$emit('loggin', true);
           this.errorMessage = '';
         //  this.$router.go();
 
@@ -152,13 +157,13 @@ export default {
     },
 
     async logout() {
-      this.isLoggedIn = false
+      this.$emit('loggin', false);
       this.surname = null
       localStorage.removeItem("token");
       localStorage.setItem('surname', this.surname);
       localStorage.setItem('role_id', this.roleId);
-    }
-  }
+    },
+  },
 }
 </script>
 
