@@ -9,6 +9,9 @@
     <pop-up :item="item"
     :typeName="type.name"
     :isBookingProcessStarted="isBookingProcessStarted"
+            :resortName="resortName"
+            :startDate="startDate"
+            :duration="duration"
     @closePopUp="closePopUp"></pop-up>
   </li>
 </template>
@@ -31,7 +34,10 @@ export default {
     },
     types: Array,
     typeId: Number,
-    pageTypeId: Object
+    pageTypeId: Object,
+    resortName: String,
+    startDate: String,
+    duration: Number
   },
   data() {
     return {

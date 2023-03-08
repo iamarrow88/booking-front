@@ -20,7 +20,10 @@
                       v-bind:item="item"
                       v-bind:types="types"
                       :typeId="item.type_id"
-                      :pageTypeId="$route"></equipment-item>
+                      :pageTypeId="$route"
+                      :resortName="resortName"
+      :startDate="startDate"
+      :duration="duration"></equipment-item>
 
     </ul>
     <div v-else>

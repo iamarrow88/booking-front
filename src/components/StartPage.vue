@@ -100,7 +100,7 @@ export default {
     }
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
-    this.startDate = (new Date().getFullYear() + '-' + ('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + new Date().getDate()).slice(-2));
+    this.startDate = (new Date().toISOString().slice(0, 10));
   }
 }
 </script>
