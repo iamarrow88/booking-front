@@ -21,7 +21,10 @@
   </div>
 
   <div v-else>
-    <add-item :resortName="resortName"></add-item>
+<!--    <add-item :resortName="resortName"></add-item>-->
+    <select name="resortsList" id="resortsList" v-model="resortToEdit">
+      <option v-for="resort in resorts" :key="resort.id">{{ resort.name}}</option>
+    </select>
   </div>
 
 </template>
@@ -40,6 +43,9 @@ export default {
       city: '',
       cities: [],
       isResortAdded: false,
+      resortToEdit: '',
+      resortToEditName: '',
+      resorts: [],
     }
   },
   methods: {
@@ -60,11 +66,23 @@ export default {
         const result = await response.json();
         console.log(result);
         if(result.ok){
+          this.resortToEdit = this.resortId;
           this.isResortAdded = true;
           this.resortName = '';
           this.resortAddress = '';
           this.resortDescription = '';
           this.city = this.cities[0].name;
+        }
+        try {
+          const resorts = await fetch('/api/resorts');
+          this.resorts = await resorts.json();
+          this.resorts.forEach(resort => {
+            if(resort.id === this.resortToEdit){
+              this.resortToEditName = resort.name;
+            }
+          })
+        } catch (e) {
+          console.error(e);
         }
       } catch (error) {
         console.error(error)
