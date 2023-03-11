@@ -10,6 +10,7 @@ import EquipmentItem from "@/components/EquipmentItem.vue";
 import PopUp from "@/components/PopUp.vue";
 import AddItem from "@/components/addItem.vue";
 import CreateResortPage from "@/components/CreateResortPage.vue";
+import ManageResorts from "@/components/ManageResorts.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -22,6 +23,7 @@ const router = createRouter({
         {path: '/resorts/bookings', component: BookingResortPage},
         {path: '/addEquipment', component: AddItem},
         {path: '/addResort', component: CreateResortPage},
+        {path: '/resorts/manage', component: ManageResorts},
     ]
 })
 
@@ -33,3 +35,4 @@ app.component('EquipmentItem', EquipmentItem);
 app.component('PopUp', PopUp);
 app.component('AddItem', AddItem);
 app.component('CreateResortPage', CreateResortPage);
+app.component('ManageResorts', ManageResorts);

@@ -139,6 +139,7 @@ export default {
           this.$emit('loggin', false);
         } else {
           const data = await res.json();
+          console.log(data);
           this.token = data.token;
           this.surname = data.surname;
           this.roleId = data.role_id;

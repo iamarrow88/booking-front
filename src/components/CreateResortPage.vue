@@ -54,6 +54,7 @@ export default {
       try {
         const response = await fetch('/api/resorts', {
           method: 'POST',
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
                 city_id: this.city.id,
                 resort_name: this.resortName,
