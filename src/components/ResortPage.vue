@@ -14,13 +14,16 @@
     </div>
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
-      <equipment-item v-for="item in items"
+      <equipment-item v-for="item in filteredItems"
                       :key="item.id"
                       class="items-for-resort-item"
                       v-bind:item="item"
                       v-bind:types="types"
                       :typeId="item.type_id"
-                      :pageTypeId="$route"></equipment-item>
+                      :pageTypeId="$route"
+                      :resortName="resortName"
+      :startDate="startDate"
+      :duration="duration"></equipment-item>
 
     </ul>
     <div v-else>
@@ -39,9 +42,31 @@ export default {
       resortName: '',
       items: [],
       types: [],
-      filterByID: null,
+      itemTypeId: null,
       notFilteredItems: [],
+      duration: null,
+      startDate: null,
+      selectedType: null,
+      filteredItems: [],
     }
+  },
+  methods: {
+    getEquipmentType() {
+      this.types.forEach(type => {
+        if (type.id === this.itemTypeId) {
+          this.selectedType = type;
+        }
+      })
+    },
+  },
+  watch: {
+    selectedType: {
+      deep: true,
+      handler: function(newValue) {
+        this.filteredItems = this.notFilteredItems.filter(item => item.type_id === newValue.id)
+
+      }
+    },
   },
   async mounted() {
     try {
@@ -57,15 +82,18 @@ export default {
     } catch (error) {
       console.error(error)
     }
-    if (this.filterByID) {
-      this.items = this.notFilteredItems.filter(item => item.type_id === this.filterByID);
+    this.getEquipmentType();
+    if (this.itemTypeId) {
+      this.items = this.notFilteredItems.filter(item => item.type_id === this.itemTypeId);
     } else {
       this.items = this.notFilteredItems;
     }
 
   },
   async created() {
-    this.filterByID = +this.$route.query.type_id
+    this.itemTypeId = +this.$route.query.type_id;
+    this.startDate = this.$route.query.start_date;
+    this.duration = this.$route.query.duration;
     try {
       const types = await fetch('/api/inventories/types')
       this.types = await types.json();

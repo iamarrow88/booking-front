@@ -34,7 +34,7 @@
             <p class="my-2">Description: {{ resort.description }}</p>
 
             <button
-                @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id ,start_date:startDate, duration :duration  } })">
+                @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id, start_date: startDate, duration: duration  } })">
               See
               Items
             </button>
@@ -100,7 +100,7 @@ export default {
     }
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
-    this.startDate = (new Date().getFullYear() + '-' + ('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + new Date().getDate()).slice(-2));
+    this.startDate = (new Date().toISOString().slice(0, 10));
   }
 }
 </script>

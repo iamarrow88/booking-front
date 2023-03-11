@@ -8,11 +8,11 @@
       <h3 class="subtitle">Login</h3>
       <div class="form-group">
         <label for="emailInput">Email:</label>
-        <input type="email" class="form-control" id="emailInput" v-model="email">
+        <input type="email" class="form-control" id="emailInput" v-model="emailLogin">
       </div>
       <div class="form-group">
         <label for="passwordInput">Password:</label>
-        <input type="password" class="form-control" id="passwordInput" v-model="password">
+        <input type="password" class="form-control" id="passwordInput" v-model="passwordLogin">
       </div>
       <button class="btn btn-primary" @click="login">Login</button>
     </div>
@@ -33,11 +33,11 @@
       </div>
       <div class="form-group">
         <label for="emailInput">Email:</label>
-        <input type="email" class="form-control" id="emailInput" v-model="email">
+        <input type="email" class="form-control" id="emailInput" v-model="emailRegister">
       </div>
       <div class="form-group">
         <label for="passwordInput">Password:</label>
-        <input type="password" class="form-control" id="passwordInput" v-model="password">
+        <input type="password" class="form-control" id="passwordInput" v-model="passwordRegister">
       </div>
       <div class="form-group">
         <label for="phoneInput">Phone:</label>
@@ -62,9 +62,12 @@
 
 <script>
 
-import {createRouter as router} from "vue-router";
+/*import {createRouter as router} from "vue-router";*/
 
 export default {
+  props: {
+    isLoggedIn: Boolean,
+  },
   data() {
     return {
       firstName: '',
@@ -75,8 +78,11 @@ export default {
       phone: '',
       roleId: 2,
       token: '',
-      isLoggedIn: false,
-      errorMessage: ''
+      errorMessage: '',
+      emailLogin: '',
+      passwordLogin: '',
+      emailRegister: '',
+      passwordRegister: ''
     }
   },
   methods: {
@@ -89,8 +95,8 @@ export default {
             first_name: this.firstName,
             surname: this.surname,
             middle_name: this.middleName,
-            email: this.email,
-            password: this.password,
+            email: this.emailRegister,
+            password: this.passwordRegister,
             phone: this.phone,
             role_id: this.roleId
           })
@@ -98,6 +104,7 @@ export default {
 
         if (!res.ok) {
           this.errorMessage = "Invalid data provided, please try again";
+          this.$emit('loggin', false);
         } else {
           const data = await res.json();
           this.token = data.token;
@@ -105,10 +112,12 @@ export default {
           localStorage.setItem('token', this.token);
           localStorage.setItem('surname', this.surname);
           localStorage.setItem('role_id', this.roleId);
-          this.isLoggedIn = true;
+          this.$emit('loggin', true);
           this.errorMessage = '';
-          this.$router.go();
-          router.push('/');
+          /*this.$router.go();*/
+          /*router.push('/');*/
+          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
+
         }
       } catch (err) {
         console.error(err);
@@ -121,12 +130,13 @@ export default {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            email: this.email,
-            password: this.password
+            email: this.emailLogin,
+            password: this.passwordLogin
           })
         });
         if (!res.ok) {
           this.errorMessage = "Invalid data provided, please try again";
+          this.$emit('loggin', false);
         } else {
           const data = await res.json();
           this.token = data.token;
@@ -135,11 +145,11 @@ export default {
           localStorage.setItem('token', this.token);
           localStorage.setItem('surname', this.surname);
           localStorage.setItem('role_id', this.roleId);
-          this.isLoggedIn = true;
+          this.$emit('loggin', true);
           this.errorMessage = '';
         //  this.$router.go();
 
-          router.push('/');
+          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
         }
       } catch (err) {
         console.error(err);
@@ -147,13 +157,13 @@ export default {
     },
 
     async logout() {
-      this.isLoggedIn = false
+      this.$emit('loggin', false);
       this.surname = null
       localStorage.removeItem("token");
       localStorage.setItem('surname', this.surname);
       localStorage.setItem('role_id', this.roleId);
-    }
-  }
+    },
+  },
 }
 </script>
 
