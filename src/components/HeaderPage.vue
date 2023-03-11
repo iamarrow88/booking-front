@@ -51,7 +51,8 @@ export default {
 
     logout() {
       localStorage.removeItem("token");
-      this.$router.go();
+      this.$emit('loggin', false);
+      this.$router.push('/login');
     },
 
     goToHomePage() {

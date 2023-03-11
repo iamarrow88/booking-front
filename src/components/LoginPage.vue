@@ -82,7 +82,7 @@ export default {
       emailLogin: '',
       passwordLogin: '',
       emailRegister: '',
-      passwordRegister: ''
+      passwordRegister: '',
     }
   },
   methods: {
@@ -116,7 +116,7 @@ export default {
           this.errorMessage = '';
           /*this.$router.go();*/
           /*router.push('/');*/
-          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
+          this.$router.push({path: '/mybooking'});
 
         }
       } catch (err) {
@@ -149,7 +149,7 @@ export default {
           this.errorMessage = '';
         //  this.$router.go();
 
-          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
+          this.$router.push({path: '/mybooking'});
         }
       } catch (err) {
         console.error(err);
@@ -162,8 +162,12 @@ export default {
       localStorage.removeItem("token");
       localStorage.setItem('surname', this.surname);
       localStorage.setItem('role_id', this.roleId);
+      this.$router.push({path: '/mybooking'});
     },
   },
+ /* mounted() {
+    this.isLoggedIn = Boolean(localStorage.getItem('token')) || false;
+  }*/
 }
 </script>
 

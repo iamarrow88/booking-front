@@ -1,7 +1,7 @@
 <template>
-  <HeaderPage :isLoggedIn="isLoggedIn"/>
+  <HeaderPage :isLoggedIn="isLoggedIn" @loggin="loggin"/>
   <div id="app">
-    <router-view/>
+    <router-view :isLoggedIn="isLoggedIn" @loggin="loggin"/>
   </div>
 
 </template>
@@ -16,6 +16,11 @@ export default {
   data() {
     return {
       isLoggedIn: false
+    }
+  },
+  methods: {
+    loggin(bool){
+      this.isLoggedIn = bool;
     }
   },
   mounted() {

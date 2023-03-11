@@ -56,6 +56,7 @@ export default {
 
     },
     async bookingItem() {
+      this.booking_id = new Date();
       try {
         const response = await fetch('/api/booking', {
           method: 'POST',
