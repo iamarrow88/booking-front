@@ -1,4 +1,5 @@
 <template>
+  <h3>Здесь можно добавить инвентарь</h3>
   <div class="create-title">Добавить инвентарь</div>
   <label class="create-type" for="itemType">Выберите тип инвентаря</label>
   <select class="create-type-list" id="itemType" v-model="typeName">

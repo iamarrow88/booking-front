@@ -9,6 +9,7 @@ import BookingResortPage from "@/components/BookingResortPage.vue";
 import EquipmentItem from "@/components/EquipmentItem.vue";
 import PopUp from "@/components/PopUp.vue";
 import AddItem from "@/components/addItem.vue";
+import CreateResortPage from "@/components/CreateResortPage.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -19,7 +20,8 @@ const router = createRouter({
         {path: '/mybooking', component: BookingPage},
        // {path: '/:notFound(.*)', redirect: '/'},
         {path: '/resorts/bookings', component: BookingResortPage},
-        {path: '/addEquipment', component: AddItem}
+        {path: '/addEquipment', component: AddItem},
+        {path: '/addResort', component: CreateResortPage},
     ]
 })
 
@@ -30,3 +32,4 @@ const app = createApp(App);
 app.component('EquipmentItem', EquipmentItem);
 app.component('PopUp', PopUp);
 app.component('AddItem', AddItem);
+app.component('CreateResortPage', CreateResortPage);
