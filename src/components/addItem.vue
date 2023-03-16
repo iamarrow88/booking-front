@@ -58,6 +58,7 @@ export default {
     }
   },
   async created() {
+    this.editMode = this.$route.query.editMode;
     try {
       const types = await fetch('/api/inventories/types');
       this.types = await types.json();
@@ -73,6 +74,7 @@ export default {
     } catch (error) {
       console.error(error);
     }
+
   }
 
 }
