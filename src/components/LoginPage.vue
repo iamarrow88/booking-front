@@ -70,6 +70,7 @@ export default {
   },
   data() {
     return {
+      id: null,
       firstName: '',
       surname: '',
       middleName: '',
@@ -82,7 +83,7 @@ export default {
       emailLogin: '',
       passwordLogin: '',
       emailRegister: '',
-      passwordRegister: ''
+      passwordRegister: '',
     }
   },
   methods: {
@@ -112,11 +113,10 @@ export default {
           localStorage.setItem('token', this.token);
           localStorage.setItem('surname', this.surname);
           localStorage.setItem('role_id', this.roleId);
+          localStorage.setItem('userId', this.id);
           this.$emit('loggin', true);
           this.errorMessage = '';
-          /*this.$router.go();*/
-          /*router.push('/');*/
-          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
+          this.$router.push({path: '/mybooking', params: {id: this.id}});
 
         }
       } catch (err) {
@@ -139,17 +139,20 @@ export default {
           this.$emit('loggin', false);
         } else {
           const data = await res.json();
+          console.log(data);
           this.token = data.token;
           this.surname = data.surname;
           this.roleId = data.role_id;
+          this.id = data.id;
           localStorage.setItem('token', this.token);
           localStorage.setItem('surname', this.surname);
           localStorage.setItem('role_id', this.roleId);
+          localStorage.setItem('userId', this.id);
           this.$emit('loggin', true);
           this.errorMessage = '';
         //  this.$router.go();
 
-          this.$router.push({path: '/mybooking', query: {isLoggedIn: true}});
+          this.$router.push({path: '/mybooking', params: {id: this.id}});
         }
       } catch (err) {
         console.error(err);
@@ -162,8 +165,12 @@ export default {
       localStorage.removeItem("token");
       localStorage.setItem('surname', this.surname);
       localStorage.setItem('role_id', this.roleId);
+      this.$router.push({path: '/mybooking'});
     },
   },
+ /* mounted() {
+    this.isLoggedIn = Boolean(localStorage.getItem('token')) || false;
+  }*/
 }
 </script>
 

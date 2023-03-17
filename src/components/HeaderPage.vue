@@ -13,7 +13,7 @@
             {{ surname }} // изменить
             <button @click="goToMyBooking">My Booking</button>
             <button v-if="isOwner" @click="goToResortBookings">Order Resorts</button>
-
+            <button v-if="isOwner" @click="goToResortManagingPage">Manage Resorts</button>
             <button @click="logout">Logout</button>
 
           </div>
@@ -51,7 +51,8 @@ export default {
 
     logout() {
       localStorage.removeItem("token");
-      this.$router.go();
+      this.$emit('loggin', false);
+      this.$router.push('/login');
     },
 
     goToHomePage() {
@@ -63,6 +64,9 @@ export default {
     goToResortBookings() {
       this.$router.push({path: '/resorts/bookings'})
     },
+    goToResortManagingPage() {
+      this.$router.push({path: '/resorts/manage'})
+    }
   }
 }
 </script>

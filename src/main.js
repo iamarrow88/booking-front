@@ -10,6 +10,9 @@ import EquipmentItem from "@/components/EquipmentItem.vue";
 import PopUp from "@/components/PopUp.vue";
 import AddItem from "@/components/addItem.vue";
 import CreateResortPage from "@/components/CreateResortPage.vue";
+import ManageResorts from "@/components/ManageResorts.vue";
+import ResortItem from "@/components/ResortItem.vue";
+import ManageEquipment from "@/components/ManageEquipment.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -22,6 +25,8 @@ const router = createRouter({
         {path: '/resorts/bookings', component: BookingResortPage},
         {path: '/addEquipment', component: AddItem},
         {path: '/addResort', component: CreateResortPage},
+        {path: '/resorts/manage', component: ManageResorts},
+        {path: '/resorts/equipment', component: ManageEquipment},
     ]
 })
 
@@ -33,3 +38,5 @@ app.component('EquipmentItem', EquipmentItem);
 app.component('PopUp', PopUp);
 app.component('AddItem', AddItem);
 app.component('CreateResortPage', CreateResortPage);
+app.component('ResortItem', ResortItem);
+app.component('ManageEquipment', ManageEquipment);

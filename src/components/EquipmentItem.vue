@@ -4,7 +4,10 @@
       <p class="items-for-resort-item-type">{{ type.name }}</p>
       <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
       <p class="items-for-resort-item-price">{{ item.price }} RUB</p>
-      <button @click="showPopUp">Забронировать</button>
+      <button @click="showPopUp"
+              v-if="!editMode">Забронировать</button>
+      <button v-if="editMode" @click="this.$emit('DeleteItem', item.id)">Удалить</button>
+      <button v-if="editMode" @click="this.$emit('EditItem', item.id)">Редактировать</button>
     </div>
     <pop-up :item="item"
     :typeName="type.name"
@@ -37,7 +40,8 @@ export default {
     pageTypeId: Object,
     resortName: String,
     startDate: String,
-    duration: Number
+    duration: Number,
+    editMode: Boolean,
   },
   data() {
     return {

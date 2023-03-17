@@ -1,5 +1,5 @@
 <template>
-  <div class="add-resort" v-if="!isResortAdded">
+  <div class="add-resort">
     <h2>Страница создания карточки курорта</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Введите название курорта</label>
@@ -17,16 +17,12 @@
       <input type="text" id="resortDescription" v-model="resortDescription">
     </div>
 
-    <button @click="addResort">Создать карточку курорта</button>
-  </div>
+    <button @click="addResort">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
 
-  <div v-else>
-<!--    <add-item :resortName="resortName"></add-item>-->
-    <select name="resortsList" id="resortsList" v-model="resortToEdit">
-      <option v-for="resort in resorts" :key="resort.id">{{ resort.name}}</option>
-    </select>
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -34,71 +30,117 @@
 
 export default {
   name: "CreateResortPage",
-  /*components: addItem,*/
   data() {
     return {
+      editMode: false,
+
+      cities: [],
+      resorts: [],
+
+      resortId: null,
+      cityId: null,
+
       resortName: '',
       resortAddress: '',
       resortDescription: '',
       city: '',
-      cities: [],
-      isResortAdded: false,
-      resortToEdit: '',
+
+      userId: null,
+      errorMessage: null,
+
+      /*isResortAdded: false,*/
+      /*resortToEditId: '',
       resortToEditName: '',
-      resorts: [],
+      resortToEditCityId: null,
+      resortToEditAddress: '',
+      resortToEditDescription: '',*/
+
+
+
+/*      isEditOpen: false,*/
+
+
     }
   },
   methods: {
     async addResort () {
-      this.resortId = new Date();
       try {
         const response = await fetch('/api/resorts', {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*'
+          },
           body: JSON.stringify({
                 city_id: this.city.id,
                 resort_name: this.resortName,
                 resort_address: this.resortAddress,
                 resort_description: this.resortDescription,
-                ID:  this.resortId
+                ID:  this.resortId,
+                owner_id: this.$props.userId
               }
           )
         });
         const result = await response.json();
         console.log(result);
         if(result.ok){
-          this.resortToEdit = this.resortId;
-          this.isResortAdded = true;
           this.resortName = '';
           this.resortAddress = '';
           this.resortDescription = '';
           this.city = this.cities[0].name;
-        }
-        try {
-          const resorts = await fetch('/api/resorts');
-          this.resorts = await resorts.json();
-          this.resorts.forEach(resort => {
-            if(resort.id === this.resortToEdit){
-              this.resortToEditName = resort.name;
-            }
-          })
-        } catch (e) {
-          console.error(e);
+        } else {
+          this.errorMessage = "Invalid data provided, please try again";
         }
       } catch (error) {
         console.error(error)
       }
+      this.$router.push('/resorts/manage');
+      /*await this.getResorts();*/
+    },
+    async getResorts() {
+      try {
+        const resorts = await fetch('/api/resorts');
+        this.resorts = await resorts.json();
+
+        if(this.editMode){
+          this.resorts.forEach(resort => {
+            if(resort.id === +this.$route.query.resortId){
+              this.resort = resort;
+              this.resortName = resort.name;
+              this.cityId = resort.city_id;
+              this.resortAddress = resort.address;
+              this.resortDescription = resort.description;
+              }
+          })
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   },
   async created() {
+    this.editMode = this.$route.query.editMode;
+    this.userId = localStorage.getItem('userId');
+    this.resortId = this.$route.query.resortId ? this.$route.query.resortId : new Date();
+    await this.getResorts();
+
     try {
       const cities = await fetch('/api/cities');
       this.cities = await cities.json();
-      this.city = this.cities[0].name;
+      if(this.editMode) {
+        this.cities.forEach(city => {
+          console.log(`${city.id} === ${+this.cityId}`);
+          if(city.id === +this.cityId) this.city = city.name;
+        })
+      } else {
+        this.city = this.cities[0].name;
+      }
     } catch (error) {
       console.error(error)
     }
-  }
 
+
+  },
 }
 </script>
 
