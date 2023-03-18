@@ -13,8 +13,7 @@
     :typeName="type.name"
     :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"
-            :startDate="startDate"
-            :duration="duration"
+            :Date="Date"
     @closePopUp="closePopUp"></pop-up>
   </li>
 </template>
@@ -39,8 +38,7 @@ export default {
     typeId: Number,
     pageTypeId: Object,
     resortName: String,
-    startDate: String,
-    duration: Number,
+    Date: String,
     editMode: Boolean,
   },
   data() {

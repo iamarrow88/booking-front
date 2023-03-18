@@ -2,7 +2,9 @@
   <div v-show="isBookingProcessStarted" class="pop-up" @click="closePopUp">
     <div class="pop-up-block">
       <div class="pop-up-text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
-      <div class="pop-up-text">На курорте <b>{{ resortName }}</b> с <b>{{ formatStartDate }}</b> по <b>{{ formatEndDate }}</b></div>
+      <div class="pop-up-text">На курорте <b>{{ resortName }}</b> с <b>{{ formatDate }}</b> по <b>{{
+          formatEndDate
+        }}</b></div>
       <div class="pop-up-btns">
         <button class="pop-up-btn" @click="bookingItem">Да</button>
         <button class="pop-up-btn" @click="closePopUp">Нет</button>
@@ -25,14 +27,13 @@ export default {
       type_id: Number
     },
     resortName: String,
-    startDate: String,
-    duration: Number
+    Date: String,
   },
   data() {
     return {
       bookings: [],
       endDate: null,
-      formatStartDate: null,
+      formatDate: null,
       formatEndDate: null
     }
   },
@@ -43,31 +44,31 @@ export default {
     },
     getEndDate() {
       console.log('getEndDate')
-      let formatDate = new Date(this.startDate);
+      let formatDate = new Date(this.Date);
       let endDate = formatDate;
-      endDate.setDate(formatDate.getDate() + +this.duration)
+      endDate.setDate(formatDate.getDate() + +this.duration) // del duration
       this.endDate = endDate.toISOString().slice(0, 10);
       return this.endDate;
     },
     formatDate() {
       console.log('formatDate')
-      this.formatStartDate = new Date(this.startDate).toLocaleDateString();
+      this.formatDate = new Date(this.Date).toLocaleDateString();
       this.formatEndDate = new Date(this.endDate).toLocaleDateString();
 
     },
     async bookingItem() {
-      this.booking_id = new Date();
       try {
         const response = await fetch('/api/booking', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': '*'
+            'Accept': '*',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
           },
           body: JSON.stringify({
             inventory_id: this.$props.item.id,
-            start_date: this.$props.startDate,
-            duration: this.$props.duration,
+            start_time: this.Date + 'T' + this.startTime+ ':00Z',
+            end_time: this.Date + 'T' + this.endTime + ':00Z'
           })
         });
         this.bookings = await response.json();
@@ -85,31 +86,32 @@ export default {
 </script>
 
 <style scoped>
-  .pop-up {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(178, 178, 178, .3);
-    z-index: 10;
-  }
-  .pop-up-block {
-    position: absolute;
-    top: 46%;
-    left: 35%;
-    padding: 25px;
-    background-color: #fff;
-  }
+.pop-up {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(178, 178, 178, .3);
+  z-index: 10;
+}
 
-  .pop-up-text {
-    margin-bottom: 15px;
-  }
+.pop-up-block {
+  position: absolute;
+  top: 46%;
+  left: 35%;
+  padding: 25px;
+  background-color: #fff;
+}
 
-  .pop-up-btns {
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-  }
+.pop-up-text {
+  margin-bottom: 15px;
+}
+
+.pop-up-btns {
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+}
 </style>

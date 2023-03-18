@@ -3,18 +3,18 @@
     <div class="header-container">
       <nav class="header-nav">
         <div>
-          <button @click="goToHomePage">Home</button>
+          <button @click="goToHomePage">Домашняя страница</button>
         </div>
         <div class="header-nav-list">
           <div v-if="!isLoggedIn">
-            <button @click="showLoginModal">Login</button>
+            <button @click="showLoginModal">Войти</button>
           </div>
           <div v-if="isLoggedIn" class="logout-button-container">
             {{ surname }} // изменить
-            <button @click="goToMyBooking">My Booking</button>
-            <button v-if="isOwner" @click="goToResortBookings">Order Resorts</button>
-            <button v-if="isOwner" @click="goToResortManagingPage">Manage Resorts</button>
-            <button @click="logout">Logout</button>
+            <button @click="goToMyBooking">Мои бронирования</button>
+            <button v-if="isOwner" @click="goToResortBookings">Бронирования курорта</button>
+            <button v-if="isOwner" @click="goToResortManagingPage">Управление курортом</button>
+            <button @click="logout">Выйти</button>
 
           </div>
         </div>

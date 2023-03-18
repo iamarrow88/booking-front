@@ -1,40 +1,54 @@
 <template>
   <div>
-    <h1>Sports Equipment Booking</h1>
-    <p>Book your favorite sports equipment online!</p>
+    <h1>Бронирование спортивного инвентаря</h1>
+    <p>Забронируйте свой любимый спортивный инвентарь онлайн!</p>
     <div class="container my-5">
       <div class="form-group">
-        <label for="startDate">Start Date:</label>
-        <input type="date" class="form-control" id="startDate" v-model="startDate">
+        <label for="Date">Дата:</label>
+        <input type="date" class="form-control" id="Date" v-model="sel_date">
+      </div>
+      <div class="form-group" style="display: flex; justify-content: space-between;">
+        <div>
+          <label for="startTime">Начало:</label>
+          <input type="time" class="form-control" id="startTime" v-model="startTime">
+        </div>
+        <div>
+          <label for="endTime">Конец:</label>
+          <input type="time" class="form-control" id="endTime" v-model="endTime">
+        </div>
       </div>
       <div class="form-group">
-        <label for="city">City:</label>
+        <label for="city">Город:</label>
         <select class="form-control" id="city" v-model="selectedCity">
           <option v-for="city in cities" :key="city.id" :value="city">{{ city.name }}</option>
         </select>
         <div class="form-group">
-          <label for="typeInput">Type</label>
+          <label for="typeInput">Тип инвентаря</label>
           <select class="form-control" id="typeInput" v-model="selectedType">
             <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
           </select>
         </div>
       </div>
+
       <div class="form-group">
-        <label for="duration">Duration (days):</label>
-        <input type="number" class="form-control" id="duration" v-model.number="duration">
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary" @click="getResorts">Find Resorts</button>
+        <button class="btn btn-primary" @click="getResorts">Поиск курорта</button>
       </div>
       <div v-if="resorts.length > 0">
         <h3>Resorts in {{ selectedCity.name }}:</h3>
         <ul class="list-group">
           <li class="list-group-item" v-for="resort in resorts" :key="resort.id">{{ resort.name }}
-            <p class="my-2">Address: {{ resort.address }}</p>
-            <p class="my-2">Description: {{ resort.description }}</p>
+            <p class="my-2">Адрес: {{ resort.address }}</p>
+            <p class="my-2">Описание: {{ resort.description }}</p>
 
             <button
-                @click="$router.push({ path: '/resorts/' + resort.id, query: { type_id: selectedType.id, start_date: startDate, duration: duration  } })">
+                @click="$router.push({ path: '/resorts/' + resort.id, query:
+                 {
+                  type_id: selectedType.id,
+                  sel_date: sel_date,
+                  startTime: startTime,
+                  endTime:endTime
+                 }
+                })">
               See
               Items
             </button>
@@ -53,8 +67,9 @@
 export default {
   data() {
     return {
-      startDate: null,
-      duration: 1,
+      sel_date: null,
+      startTime: '',
+      endTime: '',
       selectedCity: null,
       selectedType: null,
       cities: [],
@@ -72,13 +87,12 @@ export default {
           headers: {
             'Content-Type': 'application/json',
             'Accept': '*'
-
           },
           body: JSON.stringify({
             city_id: this.selectedCity.id,
             type_id: this.selectedType.id,
-            start_date: this.startDate,
-            duration: this.duration
+            start_time: this.sel_date + 'T' + this.startTime + ':00Z',
+            end_time: this.sel_date + 'T' + this.endTime + ':00Z',
           })
         });
         this.resorts = await response.json()
@@ -100,7 +114,7 @@ export default {
     }
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
-    this.startDate = (new Date().toISOString().slice(0, 10));
+    this.sel_date = (new Date().toISOString().slice(0, 10));
   }
 }
 </script>
