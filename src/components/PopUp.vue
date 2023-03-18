@@ -2,8 +2,8 @@
   <div v-show="isBookingProcessStarted" class="pop-up" @click="closePopUp">
     <div class="pop-up-block">
       <div class="pop-up-text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
-      <div class="pop-up-text">На курорте <b>{{ resortName }}</b> с <b>{{ formatDate }}</b> по <b>{{
-          formatEndDate
+      <div class="pop-up-text">На курорте <b>{{ resortName }}</b> с <b>{{ this.startTime }}</b> по <b>{{
+          this.endTime
         }}</b></div>
       <div class="pop-up-btns">
         <button class="pop-up-btn" @click="bookingItem">Да</button>
@@ -27,14 +27,11 @@ export default {
       type_id: Number
     },
     resortName: String,
-    Date: String,
   },
   data() {
     return {
       bookings: [],
       endDate: null,
-      formatDate: null,
-      formatEndDate: null
     }
   },
   methods: {
@@ -42,20 +39,7 @@ export default {
       this.$props.isBookingProcessStarted = false;
       this.$emit('closePopUp', false)
     },
-    getEndDate() {
-      console.log('getEndDate')
-      let formatDate = new Date(this.Date);
-      let endDate = formatDate;
-      endDate.setDate(formatDate.getDate() + +this.duration) // del duration
-      this.endDate = endDate.toISOString().slice(0, 10);
-      return this.endDate;
-    },
-    formatDate() {
-      console.log('formatDate')
-      this.formatDate = new Date(this.Date).toLocaleDateString();
-      this.formatEndDate = new Date(this.endDate).toLocaleDateString();
 
-    },
     async bookingItem() {
       try {
         const response = await fetch('/api/booking', {
@@ -79,8 +63,6 @@ export default {
   },
   created() {
     console.log('created')
-    this.getEndDate();
-    this.formatDate();
   }
 }
 </script>

@@ -33,7 +33,7 @@
                       :typeId="item.type_id"
                       :pageTypeId="$route"
                       :resortName="resortName"
-                      :startDate="sel_date"
+                      :sel_date="sel_date"
       ></equipment-item>
 
     </ul>
@@ -105,6 +105,8 @@ export default {
   async created() {
     this.itemTypeId = +this.$route.query.type_id;
     this.sel_date = this.$route.query.sel_date;
+    this.startTime = this.$route.query.start_time;
+    this.endTime = this.$route.query.end_time;
     try {
       const types = await fetch('/api/inventories/types')
       this.types = await types.json();

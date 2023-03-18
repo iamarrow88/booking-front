@@ -46,7 +46,7 @@
                   type_id: selectedType.id,
                   sel_date: sel_date,
                   startTime: startTime,
-                  endTime:endTime
+                  endTime: endTime,
                  }
                 })">
               See
