@@ -35,7 +35,7 @@ export default {
       resort_id: Number,
       type_id: Number
     },
-   /* types: Array,*/
+    types: Array,
     typeId: Number,
     pageTypeId: Object,
     resortName: String,
@@ -46,8 +46,7 @@ export default {
   data() {
     return {
       type: null,
-      isBookingProcessStarted: false,
-      types: [],
+      isBookingProcessStarted: false
     }
   },
   methods: {
@@ -55,8 +54,6 @@ export default {
       this.types.forEach(type => {
         if(type.id === this.typeId) {
           this.type = type;
-          console.log(this.type);
-
         }
       })
     },
@@ -67,13 +64,7 @@ export default {
       this.isBookingProcessStarted = bool;
     }
   },
-  async created() {
-    try {
-      const types = await fetch('/api/inventories/types')
-      this.types = await types.json();
-    } catch (error) {
-      console.error(error)
-    }
+  created() {
     this.getEquipmentType();
   },
 }

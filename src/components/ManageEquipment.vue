@@ -21,24 +21,10 @@ export default {
   name: "ManageEquipment",
   data() {
     return {
-      equipments: [
-          {
-            id:4,
-            type_id:4,
-            resort_id:1,
-            price:100,
-            photo:"",
-          },
-          {
-            id:11,
-            type_id:4,
-            resort_id:1,
-            price:100,
-            photo:"",
-          }
-
-  ],
+      equipments: [],
       isNotFoundShown: false,
+      userId: null,
+      resorts: [],
     }
   },
   methods: {
@@ -49,7 +35,25 @@ export default {
       console.log('delete', itemId);
     }
 },
-  /*async created() {
+  async created() {
+    this.userId = localStorage.getItem('userId');
+    try {
+      const response = await fetch('/api/resorts/filter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*'
+
+        },
+        body: JSON.stringify({
+          owner_id: this.userId,
+        })
+      });
+      this.resorts = await response.json()
+      console.log(`чет нашел`);
+    } catch (error) {
+      console.error(error)
+    }
     try {
       const equipments = await fetch('/inventories/filter', {
         method: 'POST',
@@ -58,16 +62,19 @@ export default {
           'Accept': '*'
         },
         body: JSON.stringify({
-          /!*resort_id: 1 || 2 || 3,*!/
+          /*resort_id: 1,
+          type_id: 1,
+          start_date: 1,
+          duration: 1*/
         })
       });
       this.equipments = await equipments.json();
       this.isNotFoundShown = this.equipments.length === 0;
-      console.log(this.equipments.length);
+
     } catch (e) {
       console.error(e);
     }
-  }*/
+  }
 }
 </script>
 

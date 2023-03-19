@@ -17,12 +17,13 @@
       <equipment-item v-for="item in filteredItems"
                       :key="item.id"
                       class="items-for-resort-item"
-                      :item="item"
+                      v-bind:item="item"
+                      v-bind:types="types"
                       :typeId="item.type_id"
                       :pageTypeId="$route"
                       :resortName="resortName"
-                      :startDate="startDate"
-                      :duration="duration"></equipment-item>
+      :startDate="startDate"
+      :duration="duration"></equipment-item>
 
     </ul>
     <div v-else>
