@@ -10,11 +10,61 @@
       <div class="form-group" style="display: flex; justify-content: space-between;">
         <div>
           <label for="startTime">Начало:</label>
-          <input type="time" class="form-control" id="startTime" v-model="startTime">
+            <select name="startTime" id="startTime" v-model="startTime">
+              <option value="0">0:00</option>
+              <option value="1">1:00</option>
+              <option value="2">2:00</option>
+              <option value="3">3:00</option>
+              <option value="4">4:00</option>
+              <option value="5">5:00</option>
+              <option value="6">6:00</option>
+              <option value="7">7:00</option>
+              <option value="8">8:00</option>
+              <option value="9">9:00</option>
+              <option value="10">10:00</option>
+              <option value="11">11:00</option>
+              <option value="12">12:00</option>
+              <option value="13">13:00</option>
+              <option value="14">14:00</option>
+              <option value="15">15:00</option>
+              <option value="16">16:00</option>
+              <option value="17">17:00</option>
+              <option value="18">18:00</option>
+              <option value="19">19:00</option>
+              <option value="20">20:00</option>
+              <option value="21">21:00</option>
+              <option value="22">22:00</option>
+              <option value="23">23:00</option>
+            </select>
         </div>
         <div>
           <label for="endTime">Конец:</label>
-          <input type="time" class="form-control" id="endTime" v-model="endTime">
+          <select name="endTime" id="endTime" v-model="endTime">
+            <option value="0">0:00</option>
+            <option value="1">1:00</option>
+            <option value="2">2:00</option>
+            <option value="3">3:00</option>
+            <option value="4">4:00</option>
+            <option value="5">5:00</option>
+            <option value="6">6:00</option>
+            <option value="7">7:00</option>
+            <option value="8">8:00</option>
+            <option value="9">9:00</option>
+            <option value="10">10:00</option>
+            <option value="11">11:00</option>
+            <option value="12">12:00</option>
+            <option value="13">13:00</option>
+            <option value="14">14:00</option>
+            <option value="15">15:00</option>
+            <option value="16">16:00</option>
+            <option value="17">17:00</option>
+            <option value="18">18:00</option>
+            <option value="19">19:00</option>
+            <option value="20">20:00</option>
+            <option value="21">21:00</option>
+            <option value="22">22:00</option>
+            <option value="23">23:00</option>
+          </select>
         </div>
       </div>
       <div class="form-group">
@@ -44,6 +94,7 @@
                 @click="$router.push({ path: '/resorts/' + resort.id, query:
                  {
                   type_id: selectedType.id,
+                  selectedCityId: selectedCity.id,
                   sel_date: sel_date,
                   startTime: startTime,
                   endTime: endTime,
@@ -76,6 +127,8 @@ export default {
       resorts: [],
       types: [],
       isNotFoundShown: false,
+      startDate: null,
+      todayDate: null,
     }
   },
   methods: {
@@ -112,9 +165,20 @@ export default {
     } catch (error) {
       console.error(error)
     }
+    this.startDate = new Date(new Date().setHours(0, 0, 0, 0));
+    this.todayDate = new Date();
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
     this.sel_date = (new Date().toISOString().slice(0, 10));
+    this.startTime = +this.todayDate.toString().split(':')[0].slice(-3) + 1;
+    this.endTime = +new Date(+new Date().setTime(Date.parse(this.todayDate) + 7200000)).toString().split(':')[0].slice(-3);
+  },
+  watch: {
+    startTime(newTime) {
+      const MsInHour = 60 * 60 * 1000;
+      const hoursToAdd = (+newTime + 1) * MsInHour;
+      this.endTime = +new Date(Date.parse(this.startDate) + hoursToAdd).toString().split(':')[0].slice(-2);
+    }
   }
 }
 </script>
