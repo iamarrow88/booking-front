@@ -11,16 +11,16 @@
         <div>
           <label for="startTime">Начало:</label>
             <select name="startTime" id="startTime" v-model="startTime">
-              <option value="0">0:00</option>
-              <option value="1">1:00</option>
-              <option value="2">2:00</option>
-              <option value="3">3:00</option>
+              <option value="00">0:00</option>
+              <option value="01">1:00</option>
+              <option value="02">2:00</option>
+              <option value="03">3:00</option>
               <option value="4">4:00</option>
-              <option value="5">5:00</option>
-              <option value="6">6:00</option>
-              <option value="7">7:00</option>
-              <option value="8">8:00</option>
-              <option value="9">9:00</option>
+              <option value="05">5:00</option>
+              <option value="06">6:00</option>
+              <option value="07">7:00</option>
+              <option value="08">8:00</option>
+              <option value="09">9:00</option>
               <option value="10">10:00</option>
               <option value="11">11:00</option>
               <option value="12">12:00</option>
@@ -40,16 +40,16 @@
         <div>
           <label for="endTime">Конец:</label>
           <select name="endTime" id="endTime" v-model="endTime">
-            <option value="0">0:00</option>
-            <option value="1">1:00</option>
-            <option value="2">2:00</option>
-            <option value="3">3:00</option>
-            <option value="4">4:00</option>
-            <option value="5">5:00</option>
-            <option value="6">6:00</option>
-            <option value="7">7:00</option>
-            <option value="8">8:00</option>
-            <option value="9">9:00</option>
+            <option value="00">0:00</option>
+            <option value="01">1:00</option>
+            <option value="02">2:00</option>
+            <option value="03">3:00</option>
+            <option value="04">4:00</option>
+            <option value="05">5:00</option>
+            <option value="06">6:00</option>
+            <option value="07">7:00</option>
+            <option value="08">8:00</option>
+            <option value="09">9:00</option>
             <option value="10">10:00</option>
             <option value="11">11:00</option>
             <option value="12">12:00</option>
@@ -170,14 +170,14 @@ export default {
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
     this.sel_date = (new Date().toISOString().slice(0, 10));
-    this.startTime = +this.todayDate.toString().split(':')[0].slice(-3) + 1;
-    this.endTime = +new Date(+new Date().setTime(Date.parse(this.todayDate) + 7200000)).toString().split(':')[0].slice(-3);
+    this.startTime = (+this.todayDate.toString().split(':')[0].slice(-3) + 1).toString();
   },
   watch: {
     startTime(newTime) {
       const MsInHour = 60 * 60 * 1000;
       const hoursToAdd = (+newTime + 1) * MsInHour;
-      this.endTime = +new Date(Date.parse(this.startDate) + hoursToAdd).toString().split(':')[0].slice(-2);
+      let endTime = +new Date(Date.parse(this.startDate) + hoursToAdd).toString().split(':')[0].slice(-2);
+      this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
     }
   }
 }
