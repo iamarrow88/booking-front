@@ -1,17 +1,28 @@
 <template>
   <div class="items-for-resort">
-    <div class="form-group">
-      <label for="startDate">Start Date:</label>
-      <input type="date" class="form-control" id="startDate" v-model="startDate">
+
+    <div class="form-group" style="display: flex; justify-content: space-between;">
+      <div>
+        <label for="startDate">Дата:</label>
+        <input type="date" class="form-control" id="startDate" v-model="sel_date">
+      </div>
+      <div>
+        <label for="startTime">Начало бронирования:</label>
+        <input type="time" class="form-control" id="startTime" v-model="startTime">
+      </div>
+      <div>
+        <label for="endTime">Конец бронирования:</label>
+        <input type="time" class="form-control" id="endTime" v-model="endTime">
+      </div>
+      <div>
+        <label for="typeInput">Тип инвентаря</label>
+        <select class="form-control" id="typeInput" v-model="selectedType">
+          <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
+        </select>
+      </div>
     </div>
-    <label for="typeInput">Type</label>
-    <select class="form-control" id="typeInput" v-model="selectedType">
-      <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
-    </select>
-    <div class="form-group">
-      <label for="duration">Duration (days):</label>
-      <input type="number" class="form-control" id="duration" v-model.number="duration">
-    </div>
+
+
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in filteredItems"
@@ -22,8 +33,8 @@
                       :typeId="item.type_id"
                       :pageTypeId="$route"
                       :resortName="resortName"
-      :startDate="startDate"
-      :duration="duration"></equipment-item>
+                      :sel_date="sel_date"
+      ></equipment-item>
 
     </ul>
     <div v-else>
@@ -44,8 +55,9 @@ export default {
       types: [],
       itemTypeId: null,
       notFilteredItems: [],
-      duration: null,
-      startDate: null,
+      sel_date: null,
+      startTime: '',
+      endTime: '',
       selectedType: null,
       filteredItems: [],
     }
@@ -62,7 +74,7 @@ export default {
   watch: {
     selectedType: {
       deep: true,
-      handler: function(newValue) {
+      handler: function (newValue) {
         this.filteredItems = this.notFilteredItems.filter(item => item.type_id === newValue.id)
 
       }
@@ -92,8 +104,9 @@ export default {
   },
   async created() {
     this.itemTypeId = +this.$route.query.type_id;
-    this.startDate = this.$route.query.start_date;
-    this.duration = this.$route.query.duration;
+    this.sel_date = this.$route.query.sel_date;
+    this.startTime = this.$route.query.start_time;
+    this.endTime = this.$route.query.end_time;
     try {
       const types = await fetch('/api/inventories/types')
       this.types = await types.json();

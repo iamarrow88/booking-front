@@ -1,18 +1,18 @@
 <template>
   <div v-if="isLoggedIn" class="my-booking">
-    <h3 class="my-booking-title">My Booking:</h3>
+    <h3 class="my-booking-title">Мои бронирования:</h3>
     <div>
       <ul>
         <li v-for="item in booking" :key="item.id" class="my-booking-item">
           <div class="my-booking-item-header">
-            <p class="my-booking-id">Booking ID: {{ item.id }}</p>
-            <p class="my-booking-resort">Resort: {{ item.resort.name }}</p>
+            <p class="my-booking-id">ID бронирования: {{ item.id }}</p>
+            <p class="my-booking-resort">Курорт: {{ item.resort.name }}</p>
           </div>
           <div class="my-booking-item-body">
-            <p>Inventory Type: {{ inv_types[item.inventory_id].name }}</p>
-            <p>Start Date: {{ item.start_date }}</p>
-            <p>End Date: {{ item.end_date }}</p>
-            <p>Total Price: {{ item.total_price }}</p>
+            <p>Тип инвернтаря: {{ inv_types[item.inventory_id].name }}</p>
+            <p>Начало: {{ item.start_time }}</p>
+            <p>Конец: {{ item.end_time }}</p>
+            <p>Полная стоимость: {{ item.total_price }}</p>
           </div>
         </li>
       </ul>
@@ -70,10 +70,9 @@ export default {
       console.error(err);
     }
 
-   /* if(!this.isLoggedIn) {
-      this.$router.push('/login');
-    }*/
-
+    /* if(!this.isLoggedIn) {
+       this.$router.push('/login');
+     }*/
 
 
   }
