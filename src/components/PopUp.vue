@@ -62,7 +62,8 @@ export default {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': '*'
+            'Accept': '*',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify({
             inventory_id: this.$props.item.id,

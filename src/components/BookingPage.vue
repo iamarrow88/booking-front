@@ -69,13 +69,6 @@ export default {
     } catch (err) {
       console.error(err);
     }
-
-   /* if(!this.isLoggedIn) {
-      this.$router.push('/login');
-    }*/
-
-
-
   }
 }
 </script>

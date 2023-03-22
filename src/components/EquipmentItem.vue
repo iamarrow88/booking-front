@@ -9,7 +9,7 @@
       <button v-if="editMode" @click="this.$emit('DeleteItem', item.id)">Удалить</button>
       <button v-if="editMode" @click="this.$emit('EditItem', item.id)">Редактировать</button>
     </div>
-    <pop-up :item="item"
+    <pop-up v-if="!editMode" :item="item"
     :typeName="type.name"
     :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"

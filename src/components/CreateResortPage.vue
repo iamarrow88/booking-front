@@ -7,7 +7,7 @@
     </div>
     <div class="form-block resort-address">
       <label for="resortAddress">Введите адрес курорта</label>
-      <select v-model="city">
+      <select v-model="cityName">
         <option v-for="city in cities" :key="city.id">{{ city.name }}</option>
       </select>
       <input type="text" id="resortAddress" v-model="resortAddress">
@@ -18,7 +18,13 @@
     </div>
 
     <button @click="addResort">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
-
+    <div v-if="editMode">
+      <equipment-item v-for="item in equipments"
+                      :key="item.id"
+      :item="item"
+      :typeId="item.type_id"
+      :resortName="resortName"></equipment-item>
+    </div>
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
@@ -26,10 +32,12 @@
 </template>
 
 <script>
-/*import addItem from "@/components/addItem.vue";*/
+
+import EquipmentItem from "@/components/EquipmentItem.vue";
 
 export default {
   name: "CreateResortPage",
+  components: EquipmentItem,
   data() {
     return {
       editMode: false,
@@ -43,24 +51,14 @@ export default {
       resortName: '',
       resortAddress: '',
       resortDescription: '',
-      city: '',
+      cityName: '',
 
       userId: null,
       errorMessage: null,
 
-      /*isResortAdded: false,*/
-      /*resortToEditId: '',
-      resortToEditName: '',
-      resortToEditCityId: null,
-      resortToEditAddress: '',
-      resortToEditDescription: '',*/
-
-
-
-/*      isEditOpen: false,*/
-
-
-    }
+      equipments: [],
+      token: '',
+      }
   },
   methods: {
     async addResort () {
@@ -69,15 +67,16 @@ export default {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': '*'
+            'Accept': '*',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify({
-                city_id: this.city.id,
-                resort_name: this.resortName,
-                resort_address: this.resortAddress,
-                resort_description: this.resortDescription,
-                ID:  this.resortId,
-                owner_id: this.$props.userId
+            city_id: this.city.id,
+            name: this.resortName,
+            address: this.resortAddress,
+            description: this.resortDescription,
+            id:  this.resortId,
+            owner_id: localStorage.getItem('userId')
               }
           )
         });
@@ -87,7 +86,7 @@ export default {
           this.resortName = '';
           this.resortAddress = '';
           this.resortDescription = '';
-          this.city = this.cities[0].name;
+          this.cityName = this.cities[0].name;
         } else {
           this.errorMessage = "Invalid data provided, please try again";
         }
@@ -95,7 +94,6 @@ export default {
         console.error(error)
       }
       this.$router.push('/resorts/manage');
-      /*await this.getResorts();*/
     },
     async getResorts() {
       try {
@@ -116,24 +114,44 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    async getEquipments() {
+      try {
+        const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
+        this.equipments = await equipments.json();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  },
+  watch: {
+    cityName(){
+       this.cities.forEach(city => {
+         if(city.name === this.cityName) {
+           this.cityId = city.id;
+
+         }
+      })
     }
   },
   async created() {
     this.editMode = this.$route.query.editMode;
     this.userId = localStorage.getItem('userId');
-    this.resortId = this.$route.query.resortId ? this.$route.query.resortId : new Date();
+    this.resortId = this.$route.query.resortId ? this.$route.query.resortId : Date.now();
+    this.token = localStorage.getItem('token');
     await this.getResorts();
+    if(this.editMode) await this.getEquipments();
 
     try {
       const cities = await fetch('/api/cities');
       this.cities = await cities.json();
       if(this.editMode) {
         this.cities.forEach(city => {
-          console.log(`${city.id} === ${+this.cityId}`);
-          if(city.id === +this.cityId) this.city = city.name;
+          if(city.id === +this.cityId) this.cityName = city.name;
         })
       } else {
-        this.city = this.cities[0].name;
+        this.cityName = this.cities[0].name;
+        this.cityId = this.cities[0].id;
       }
     } catch (error) {
       console.error(error)

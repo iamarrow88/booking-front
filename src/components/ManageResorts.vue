@@ -4,7 +4,7 @@
     <div v-for="resort in usersResorts" :key="resort.id">{{ resort.name }}</div>
   </div>-->
   <div class="add-resort">
-    <router-link to="/addResort" :editingMode="false">Добавить курорт</router-link>
+    <router-link to="/addResort" :editMode="false">Добавить курорт</router-link>
   </div>
   <router-link to="/resorts/equipment">Страница управления снаряжением</router-link>
   <div class="resorts-list" v-if="usersResorts.length > 0">
@@ -19,9 +19,6 @@
 
 <script>
 import ResortItem from "@/components/ResortItem.vue";
-/*
-import CreateResortPage from "@/components/CreateResortPage.vue";
-*/
 
 export default {
   name: "ManageResorts",
@@ -71,7 +68,6 @@ export default {
           try {
             const resorts = await fetch('/api/resorts');
             this.allResorts = await resorts.json();
-            console.log(this.allResorts);
             this.usersResorts = this.allResorts.filter(resort => resort.owner_id === +this.userId);
 
           } catch (e) {
@@ -89,16 +85,18 @@ export default {
     try {
       const resorts = await fetch('/api/resorts');
       this.allResorts = await resorts.json();
-      console.log(this.allResorts);
       this.usersResorts = this.allResorts.filter(resort => resort.owner_id === +this.userId);
     } catch (e) {
       console.error(e);
     }
-    //this.userId = +localStorage.getItem('userId');
   },
   watch: {
     usersResorts() {
-      return this.allResorts.filter(resort => resort.owner_id === +this.userId);
+       this.allResorts.filter(resort => {
+         console.log(resort.owner_id);
+         console.log(this.userId);
+         return resort.owner_id === +this.userId
+      });
     }
   }
 }
