@@ -133,7 +133,11 @@ export default {
   },
   methods: {
     async getResorts() {
-      console.log(`Getting resorts for ${this.selectedCity.name}`)
+      console.log(`Getting resorts for ${this.selectedCity.name}`);
+      const startTime = this.startTime + ':00:00';
+      const endTime = this.endTime + ':00:00';
+      console.log(startTime);
+      console.log(endTime);
       try {
         const response = await fetch('/api/resorts/filter', {
           method: 'POST',
@@ -144,8 +148,8 @@ export default {
           body: JSON.stringify({
             city_id: this.selectedCity.id,
             type_id: this.selectedType.id,
-            start_time: this.sel_date + 'T' + this.startTime + ':00Z',
-            end_time: this.sel_date + 'T' + this.endTime + ':00Z',
+            start_time: this.sel_date + 'T' + startTime + '.000Z',
+            end_time: this.sel_date + 'T' + endTime + '.000Z',
           })
         });
         this.resorts = await response.json()
