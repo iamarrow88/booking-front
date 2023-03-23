@@ -136,8 +136,6 @@ export default {
       console.log(`Getting resorts for ${this.selectedCity.name}`);
       const startTime = this.startTime + ':00:00';
       const endTime = this.endTime + ':00:00';
-      console.log(startTime);
-      console.log(endTime);
       try {
         const response = await fetch('/api/resorts/filter', {
           method: 'POST',
