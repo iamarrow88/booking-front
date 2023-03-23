@@ -172,7 +172,7 @@ export default {
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
     this.sel_date = (new Date().toISOString().slice(0, 10));
-    this.startTime = (+this.todayDate.toString().split(':')[0].slice(-3) + 1).toString();
+    this.startTime = (+this.todayDate.toString().split(':')[0].slice(-3) + 1).toString() === '24' ? '00' : (+this.todayDate.toString().split(':')[0].slice(-3) + 1).toString();
   },
   watch: {
     startTime(newTime) {
