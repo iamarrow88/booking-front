@@ -14,6 +14,7 @@ import ManageResorts from "@/components/ManageResorts.vue";
 import ResortItem from "@/components/ResortItem.vue";
 import ManageEquipment from "@/components/ManageEquipment.vue";
 import ModalWindow from "@/components/ModalWindow.vue";
+import BookingItem from "@/components/BookingItem.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,3 +43,4 @@ app.component('CreateResortPage', CreateResortPage);
 app.component('ResortItem', ResortItem);
 app.component('ManageEquipment', ManageEquipment);
 app.component('ModalWindow', ModalWindow);
+app.component('BookingItem', BookingItem);
