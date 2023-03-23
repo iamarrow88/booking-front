@@ -47,7 +47,10 @@ export default {
       try {
         const response = await fetch('/api/inventories', {
           method: 'PUT',
-          headers: {'Content-Type': 'application/json'},
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          },
           body: this.formData
         });
         const result = await response.json();

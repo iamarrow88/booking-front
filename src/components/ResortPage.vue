@@ -8,11 +8,61 @@
       </div>
       <div>
         <label for="startTime">Начало бронирования:</label>
-        <input type="time" class="form-control" id="startTime" v-model="startTime">
+        <select name="startTime" id="startTime" v-model="startTime" class="form-control">
+          <option value="00">0:00</option>
+          <option value="01">1:00</option>
+          <option value="02">2:00</option>
+          <option value="03">3:00</option>
+          <option value="4">4:00</option>
+          <option value="05">5:00</option>
+          <option value="06">6:00</option>
+          <option value="07">7:00</option>
+          <option value="08">8:00</option>
+          <option value="09">9:00</option>
+          <option value="10">10:00</option>
+          <option value="11">11:00</option>
+          <option value="12">12:00</option>
+          <option value="13">13:00</option>
+          <option value="14">14:00</option>
+          <option value="15">15:00</option>
+          <option value="16">16:00</option>
+          <option value="17">17:00</option>
+          <option value="18">18:00</option>
+          <option value="19">19:00</option>
+          <option value="20">20:00</option>
+          <option value="21">21:00</option>
+          <option value="22">22:00</option>
+          <option value="23">23:00</option>
+        </select>
       </div>
       <div>
         <label for="endTime">Конец бронирования:</label>
-        <input type="time" class="form-control" id="endTime" v-model="endTime">
+        <select name="startTime" id="endTime" v-model="endTime"  class="form-control">
+          <option value="00">0:00</option>
+          <option value="01">1:00</option>
+          <option value="02">2:00</option>
+          <option value="03">3:00</option>
+          <option value="4">4:00</option>
+          <option value="05">5:00</option>
+          <option value="06">6:00</option>
+          <option value="07">7:00</option>
+          <option value="08">8:00</option>
+          <option value="09">9:00</option>
+          <option value="10">10:00</option>
+          <option value="11">11:00</option>
+          <option value="12">12:00</option>
+          <option value="13">13:00</option>
+          <option value="14">14:00</option>
+          <option value="15">15:00</option>
+          <option value="16">16:00</option>
+          <option value="17">17:00</option>
+          <option value="18">18:00</option>
+          <option value="19">19:00</option>
+          <option value="20">20:00</option>
+          <option value="21">21:00</option>
+          <option value="22">22:00</option>
+          <option value="23">23:00</option>
+        </select>
       </div>
       <div>
         <label for="typeInput">Тип инвентаря</label>
@@ -26,14 +76,16 @@
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in filteredItems"
-                      :key="item.id"
                       class="items-for-resort-item"
-                      v-bind:item="item"
-                      v-bind:types="types"
+                      :key="item.id"
+                      :item="item"
+                      :types="types"
                       :typeId="item.type_id"
-                      :pageTypeId="$route"
                       :resortName="resortName"
+                      :editMode="false"
                       :sel_date="sel_date"
+                      :startTime="startTime"
+                      :endTime="endTime"
       ></equipment-item>
 
     </ul>
@@ -51,6 +103,7 @@ export default {
   data() {
     return {
       resortName: '',
+      /*resortId: $this.$rou*/
       items: [],
       types: [],
       itemTypeId: null,
@@ -105,8 +158,8 @@ export default {
   async created() {
     this.itemTypeId = +this.$route.query.type_id;
     this.sel_date = this.$route.query.sel_date;
-    this.startTime = this.$route.query.start_time;
-    this.endTime = this.$route.query.end_time;
+    this.startTime = this.$route.query.startTime;
+    this.endTime = this.$route.query.endTime;
     try {
       const types = await fetch('/api/inventories/types')
       this.types = await types.json();
