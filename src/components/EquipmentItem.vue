@@ -3,19 +3,23 @@
     <div class="items-for-resort-item-header">
       <p class="items-for-resort-item-type">{{ type.name }}</p>
       <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
-      <p class="items-for-resort-item-price">{{ item.price }} RUB</p>
+      <p class="items-for-resort-item-price">Час - {{ item.price }} RUB</p>
+      <p class="items-for-resort-item-price">Итого - {{ item.price * duration }} RUB</p>
       <button @click="showPopUp"
               v-if="!editMode">Забронировать</button>
       <button v-if="editMode" @click="this.$emit('DeleteItem', item.id)">Удалить</button>
       <button v-if="editMode" @click="this.$emit('EditItem', item.id)">Редактировать</button>
     </div>
     <pop-up :item="item"
-    :typeName="type.name"
-    :isBookingProcessStarted="isBookingProcessStarted"
+            :typeName="type.name"
+            :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"
-            :startDate="startDate"
-            :duration="duration"
-    @closePopUp="closePopUp"></pop-up>
+            :sel_date="sel_date"
+            :startTime="startTime"
+            :endTime="endTime"
+            :total = "item.price * duration"
+            @closePopUp="closePopUp"></pop-up>
+    <modal-window :isOpen="isBooked" @closePopUp="closePopUp"></modal-window>
   </li>
 </template>
 
@@ -23,9 +27,10 @@
 
 
 import PopUp from "@/components/PopUp.vue";
+import ModalWindow from "@/components/ModalWindow.vue";
 
 export default {
-  components: PopUp,
+  components: PopUp, ModalWindow,
   name: "EquipmentItem",
   props: {
     item: {
@@ -37,16 +42,17 @@ export default {
     },
     types: Array,
     typeId: Number,
-    pageTypeId: Object,
     resortName: String,
-    startDate: String,
-    duration: Number,
     editMode: Boolean,
+    sel_date: null,
+    startTime: String,
+    endTime: String
   },
   data() {
     return {
       type: null,
-      isBookingProcessStarted: false
+      isBookingProcessStarted: false,
+      isBooked: false
     }
   },
   methods: {
@@ -60,8 +66,14 @@ export default {
     showPopUp() {
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
     },
-    closePopUp(bool){
-      this.isBookingProcessStarted = bool;
+    closePopUp(bool1, bool2){
+      this.isBookingProcessStarted = bool1;
+      this.isBooked = bool2;
+    },
+  },
+  computed: {
+    duration() {
+      return +this.endTime - +this.startTime;
     }
   },
   created() {

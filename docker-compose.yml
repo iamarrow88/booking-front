@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: booking-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: booking_booking
+    external: true

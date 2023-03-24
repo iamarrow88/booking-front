@@ -1,34 +1,34 @@
 <template>
   <div class="container">
-    <h1 class="title">User Login/Registration</h1>
+    <h1 class="title">Вход/Регистрация</h1>
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
     <div v-if="!isLoggedIn">
-      <h3 class="subtitle">Login</h3>
+      <h3 class="subtitle">Войти</h3>
       <div class="form-group">
         <label for="emailInput">Email:</label>
         <input type="email" class="form-control" id="emailInput" v-model="emailLogin">
       </div>
       <div class="form-group">
-        <label for="passwordInput">Password:</label>
+        <label for="passwordInput">Пароль:</label>
         <input type="password" class="form-control" id="passwordInput" v-model="passwordLogin">
       </div>
       <button class="btn btn-primary" @click="login">Login</button>
     </div>
 
     <div v-if="!isLoggedIn">
-      <h3 class="subtitle">Registration</h3>
+      <h3 class="subtitle">Регистрация</h3>
       <div class="form-group">
-        <label for="firstNameInput">First Name:</label>
+        <label for="firstNameInput">Фамилия:</label>
         <input type="text" class="form-control" id="firstNameInput" v-model="firstName">
       </div>
       <div class="form-group">
-        <label for="surnameInput">Surname:</label>
+        <label for="surnameInput">Имя:</label>
         <input type="text" class="form-control" id="surnameInput" v-model="surname">
       </div>
       <div class="form-group">
-        <label for="middleNameInput">Middle Name:</label>
+        <label for="middleNameInput">Отчество:</label>
         <input type="text" class="form-control" id="middleNameInput" v-model="middleName">
       </div>
       <div class="form-group">
@@ -36,15 +36,15 @@
         <input type="email" class="form-control" id="emailInput" v-model="emailRegister">
       </div>
       <div class="form-group">
-        <label for="passwordInput">Password:</label>
+        <label for="passwordInput">Пароль:</label>
         <input type="password" class="form-control" id="passwordInput" v-model="passwordRegister">
       </div>
       <div class="form-group">
-        <label for="phoneInput">Phone:</label>
+        <label for="phoneInput">Телефон:</label>
         <input type="text" class="form-control" id="phoneInput" v-model="phone">
       </div>
       <div class="form-group">
-        <label for="roleIdInput">Role ID:</label>
+        <label for="roleIdInput">Роль:</label>
         <select class="form-control" id="roleIdInput" v-model="roleId">
           <option value="2">User</option>
           <option value="3">Owner</option>
@@ -53,7 +53,7 @@
       <button class="btn btn-primary" @click="register">Register</button>
     </div>
     <div v-else>
-      <h3 class="subtitle">Welcome, {{ surname }}</h3>
+      <h3 class="subtitle">Здравствуйте, {{ surname }}</h3>
       <button class="btn btn-primary" @click="logout">Logout</button>
     </div>
   </div>

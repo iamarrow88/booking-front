@@ -2,7 +2,9 @@
   <div v-show="isBookingProcessStarted" class="pop-up" @click="closePopUp">
     <div class="pop-up-block">
       <div class="pop-up-text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
-      <div class="pop-up-text">На курорте <b>{{ resortName }}</b> с <b>{{ formatStartDate }}</b> по <b>{{ formatEndDate }}</b></div>
+      <div class="pop-up-text">На курорте <b>{{ resortName }}</b></div>
+      <div class="pop-up-text">Когда: <b>{{ formattedDate }}</b> c <b>{{ startTime }}</b> по <b>{{ endTime }}</b></div>
+      <div class="pop-up-text">Стоимость: <b>{{ total }}  RUB</b></div>
       <div class="pop-up-btns">
         <button class="pop-up-btn" @click="bookingItem">Да</button>
         <button class="pop-up-btn" @click="closePopUp">Нет</button>
@@ -15,8 +17,6 @@
 export default {
   name: "PopUp",
   props: {
-    isBookingProcessStarted: Boolean,
-    typeName: String,
     item: {
       id: Number,
       photo: String,
@@ -24,92 +24,94 @@ export default {
       resort_id: Number,
       type_id: Number
     },
+    typeName: String,
+    isBookingProcessStarted: Boolean,
     resortName: String,
-    startDate: String,
-    duration: Number
+    sel_date: String,
+    startTime: String,
+    endTime: String,
+    total: Number
   },
   data() {
     return {
       bookings: [],
       endDate: null,
-      formatStartDate: null,
-      formatEndDate: null
+      isBooked: false,
     }
   },
   methods: {
     closePopUp() {
       this.$props.isBookingProcessStarted = false;
-      this.$emit('closePopUp', false)
+      this.$emit('closePopUp', false, this.isBooked)
     },
-    getEndDate() {
-      console.log('getEndDate')
-      let formatDate = new Date(this.startDate);
-      let endDate = formatDate;
-      endDate.setDate(formatDate.getDate() + +this.duration)
-      this.endDate = endDate.toISOString().slice(0, 10);
-      return this.endDate;
-    },
-    formatDate() {
-      console.log('formatDate')
-      this.formatStartDate = new Date(this.startDate).toLocaleDateString();
-      this.formatEndDate = new Date(this.endDate).toLocaleDateString();
 
-    },
     async bookingItem() {
-      this.booking_id = new Date();
+      const startTime = this.startTime + ':00:00';
+      const endTime = this.endTime + ':00:00';
       try {
         const response = await fetch('/api/booking', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': '*'
+            'Accept': '*',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
           },
           body: JSON.stringify({
-            inventory_id: this.$props.item.id,
-            start_date: this.$props.startDate,
-            duration: this.$props.duration,
+            inventory_id: +this.$props.item.id,
+            start_time: this.sel_date + 'T' + startTime + 'Z',
+            end_time: this.sel_date + 'T' + endTime + 'Z'
           })
         });
-        this.bookings = await response.json();
+        if(response.ok) {
+          this.bookings = await response.json();
+          this.$emit('closePopUp', false, true)
+        } else {
+          console.log('not ok');
+          this.$emit('closePopUp', false, false)
+        }
+
+
       } catch (error) {
         console.error(error)
       }
     }
   },
-  created() {
-    console.log('created')
-    this.getEndDate();
-    this.formatDate();
-  }
+  computed: {
+    formattedDate() {
+      let arr = this.sel_date.split('-');
+      return arr.reverse().join('.');
+    }
+  },
 }
 </script>
 
 <style scoped>
-  .pop-up {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(178, 178, 178, .3);
-    z-index: 10;
-  }
-  .pop-up-block {
-    position: absolute;
-    top: 46%;
-    left: 35%;
-    padding: 25px;
-    background-color: #fff;
-  }
+.pop-up {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(178, 178, 178, .3);
+  z-index: 10;
+}
 
-  .pop-up-text {
-    margin-bottom: 15px;
-  }
+.pop-up-block {
+  position: absolute;
+  top: 46%;
+  left: 35%;
+  padding: 25px;
+  background-color: #fff;
+}
 
-  .pop-up-btns {
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-  }
+.pop-up-text {
+  margin-bottom: 15px;
+}
+
+.pop-up-btns {
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+}
 </style>
