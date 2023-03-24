@@ -21,53 +21,21 @@ export default {
   name: "ManageEquipment",
   data() {
     return {
-      equipments: [
-          {
-            id:4,
-            type_id:4,
-            resort_id:1,
-            price:100,
-            photo:"",
-          },
-          {
-            id:11,
-            type_id:4,
-            resort_id:1,
-            price:100,
-            photo:"",
-          }
-
-  ],
+      equipments: [],
       isNotFoundShown: false,
     }
   },
   methods: {
     EditItem(itemId) {
+      // !! TODO проверить добавление снаряжения, сделать редактирование, удаление
       console.log('edit', itemId);
     },
     DeleteItem(itemId) {
       console.log('delete', itemId);
     }
 },
-  /*async created() {
-    try {
-      const equipments = await fetch('/inventories/filter', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': '*'
-        },
-        body: JSON.stringify({
-          /!*resort_id: 1 || 2 || 3,*!/
-        })
-      });
-      this.equipments = await equipments.json();
-      this.isNotFoundShown = this.equipments.length === 0;
-      console.log(this.equipments.length);
-    } catch (e) {
-      console.error(e);
-    }
-  }*/
+  created() {
+  }
 }
 </script>
 

@@ -18,13 +18,7 @@
     </div>
 
     <button @click="addResort">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
-    <div v-if="editMode">
-      <equipment-item v-for="item in equipments"
-                      :key="item.id"
-      :item="item"
-      :typeId="item.type_id"
-      :resortName="resortName"></equipment-item>
-    </div>
+
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
@@ -33,14 +27,15 @@
 
 <script>
 
-import EquipmentItem from "@/components/EquipmentItem.vue";
-
 export default {
   name: "CreateResortPage",
-  components: EquipmentItem,
+  props: {
+    resortIdFromParent: Number,
+    editMode: Boolean,
+  },
   data() {
     return {
-      editMode: false,
+      /*createEditMode: null,*/
 
       cities: [],
       resorts: [],
@@ -55,109 +50,53 @@ export default {
 
       userId: null,
       errorMessage: null,
-
-      equipments: [],
-      token: '',
-      }
+      isEditComponent: null,
+    }
   },
   methods: {
-    async addResort () {
-      try {
-        const response = await fetch('/api/resorts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*',
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({
-            city_id: this.city.id,
-            name: this.resortName,
-            address: this.resortAddress,
-            description: this.resortDescription,
-            id:  this.resortId,
-            owner_id: localStorage.getItem('userId')
-              }
-          )
-        });
-        const result = await response.json();
-        console.log(result);
-        if(result.ok){
-          this.resortName = '';
-          this.resortAddress = '';
-          this.resortDescription = '';
-          this.cityName = this.cities[0].name;
-        } else {
-          this.errorMessage = "Invalid data provided, please try again";
-        }
-      } catch (error) {
-        console.error(error)
-      }
-      this.$router.push('/resorts/manage');
+    addResort () {
+      console.log('create resort');
+      this.$emit('updateResort', this.editMode, this.cityId, this.resortId, this.resortName, this.resortAddress, this.resortDescription, this.userId);
+      /*this.isEditComponent = false;*/
     },
     async getResorts() {
       try {
         const resorts = await fetch('/api/resorts');
         this.resorts = await resorts.json();
-
-        if(this.editMode){
-          this.resorts.forEach(resort => {
-            if(resort.id === +this.$route.query.resortId){
-              this.resort = resort;
-              this.resortName = resort.name;
-              this.cityId = resort.city_id;
-              this.resortAddress = resort.address;
-              this.resortDescription = resort.description;
-              }
-          })
-        }
       } catch (e) {
         console.error(e);
       }
-    },
-    async getEquipments() {
-      try {
-        const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
-        this.equipments = await equipments.json();
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  },
-  watch: {
-    cityName(){
-       this.cities.forEach(city => {
-         if(city.name === this.cityName) {
-           this.cityId = city.id;
-
-         }
-      })
     }
   },
   async created() {
-    this.editMode = this.$route.query.editMode;
     this.userId = localStorage.getItem('userId');
-    this.resortId = this.$route.query.resortId ? this.$route.query.resortId : Date.now();
-    this.token = localStorage.getItem('token');
+    this.isEditComponent = this.editMode;
+    this.resortId = this.resortIdFromParent ? this.resortIdFromParent : Date.now();
     await this.getResorts();
-    if(this.editMode) await this.getEquipments();
 
     try {
       const cities = await fetch('/api/cities');
       this.cities = await cities.json();
-      if(this.editMode) {
-        this.cities.forEach(city => {
-          if(city.id === +this.cityId) this.cityName = city.name;
-        })
-      } else {
+      if(!this.editMode) {
         this.cityName = this.cities[0].name;
-        this.cityId = this.cities[0].id;
+        this.cityId = this.cities[0].id
       }
     } catch (error) {
       console.error(error)
     }
 
+    this.resorts.forEach(resort => {
+      if(resort.id === this.resortId){
+        this.resortName = resort.name;
+        this.resortAddress = resort.address;
+        this.resortDescription = resort.description;
+        this.cityId = resort.city_id;
+        this.cities.forEach(city => {
+          if(city.id === this.cityId) this.cityName = city.name;
+        })
 
+      }
+    })
   },
 }
 </script>

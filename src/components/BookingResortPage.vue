@@ -1,6 +1,6 @@
 <template>
   <div class="my-booking">
-    <h3 class="my-booking-title">All Booking:</h3>
+    <h3 class="my-booking-title">Все бронирования:</h3>
     <div>
       <ul>
         <li v-for="item in booking" :key="item.id" class="my-booking-item">
@@ -9,10 +9,10 @@
             <p class="my-booking-resort">Resort: {{ item.resort.name }}</p>
           </div>
           <div class="my-booking-item-body">
-            <p>Inventory Type: {{ inv_types[item.inventory_id].name }}</p>
-            <p>Start Date: {{ item.start_date }}</p>
-            <p>End Date: {{ item.end_date }}</p>
-            <p>Total Price: {{ item.total_price }}</p>
+            <p>Тип инвентаря: {{ inv_types[item.inventory_id].name }}</p>
+            <p>Начало: {{ item.start_time }}</p>
+            <p>Конец: {{ item.end_time }}</p>
+            <p>Полная стоимость: {{ item.total_price }}</p>
           </div>
         </li>
       </ul>
