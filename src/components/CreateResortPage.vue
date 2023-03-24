@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      createEditMode: null,
+      /*createEditMode: null,*/
 
       cities: [],
       resorts: [],
@@ -50,12 +50,14 @@ export default {
 
       userId: null,
       errorMessage: null,
+      isEditComponent: null,
     }
   },
   methods: {
     addResort () {
       console.log('create resort');
       this.$emit('updateResort', this.editMode, this.cityId, this.resortId, this.resortName, this.resortAddress, this.resortDescription, this.userId);
+      /*this.isEditComponent = false;*/
     },
     async getResorts() {
       try {
@@ -68,7 +70,7 @@ export default {
   },
   async created() {
     this.userId = localStorage.getItem('userId');
-
+    this.isEditComponent = this.editMode;
     this.resortId = this.resortIdFromParent ? this.resortIdFromParent : Date.now();
     await this.getResorts();
 
@@ -77,6 +79,7 @@ export default {
       this.cities = await cities.json();
       if(!this.editMode) {
         this.cityName = this.cities[0].name;
+        this.cityId = this.cities[0].id
       }
     } catch (error) {
       console.error(error)

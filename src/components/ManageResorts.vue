@@ -8,9 +8,9 @@
                         @updateResort="editResort"></create-resort-page>
   </div>
   <router-link to="/resorts/equipment">Страница управления снаряжением</router-link>
-  <div class="resorts-list" v-if="usersResorts.length > 0">
+  <div class="resorts-list" v-if="resorts.length > 0">
     <resort-item @editResortFromItem="editResort"
-                 @deleteResort="deleteResort" v-for="resort in getUsersResorts"
+                 @deleteResort="deleteResort" v-for="resort in resorts"
                  :key="resort.id"
                  :resort="resort"></resort-item>
   </div>
@@ -28,12 +28,13 @@ export default {
   components: {CreateResortPage, ResortItem},
   data() {
     return {
-      allResorts: [],
-      usersResorts: [],
+      resorts: [],
       userId: null,
       errorMessage: null,
       city: '',
-      isEditComponent: false
+      isEditComponent: false,
+      cities: [],
+      wasChangeResorts: 0,
     }
   },
   methods: {
@@ -70,7 +71,18 @@ export default {
     },
     async editResort(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
       console.log('edit', resortId);
+      console.log(arguments);
+
       const method = editMode ? 'PUT' : 'POST';
+      const body = {
+        name: resortName,
+        city_id: +cityId,
+        owner_id: +userId,
+        description: resortDescription,
+        address: resortAddress
+      }
+      if(editMode) body['id'] = +resortId;
+      console.log(body);
 
       try {
         const response = await fetch('/api/resorts', {
@@ -80,19 +92,12 @@ export default {
             'Accept': '*',
             Authorization: `Bearer ${localStorage.getItem('token')}`
           },
-          body: JSON.stringify({
-                id:  +resortId,
-                name: resortName,
-                city_id: +cityId,
-                owner_id: +userId,
-                description: resortDescription,
-                address: resortAddress
-            }
-          )
+          body: JSON.stringify(body)
         });
-        const result = await response.json();
-        if(result.ok){
+
+        if(response.ok){
           console.log('ok');
+          this.wasChangeResorts += 1;
           this.resortName = '';
           this.resortAddress = '';
           this.resortDescription = '';
@@ -107,32 +112,46 @@ export default {
     },
     editComponent() {
       this.isEditComponent = !this.isEditComponent;
+    },
+    async getUserResorts() {
+      try {
+        const resorts = await fetch('/api/myresorts',
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+              },
+            });
+        this.resorts = await resorts.json();
+      } catch (e) {
+        console.error(e);
+      }
     }
   },
-
+  watch: {
+    wasChangeResorts(){
+      this.getUserResorts();
+    }
+  },
   async mounted() {
+    await  this.getUserResorts();
     try {
-      const resorts = await fetch('/api/myresorts',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            },
-          });
-      this.allResorts = await resorts.json();
-      this.userId = localStorage.getItem('userId');
-      this.usersResorts = this.allResorts.filter(resort => resort.owner_id === +this.userId);
-
-    } catch (e) {
-      console.error(e);
+      const cities = await fetch('/api/cities');
+      this.cities = await cities.json();
+      if(!this.editMode) {
+        this.cityName = this.cities[0].name;
+        this.cityId = this.cities[0].id
+      }
+    } catch (error) {
+      console.error(error)
     }
   },
-  computed: {
+  /*computed: {
     getUsersResorts() {
       return [...this.allResorts].filter(resort => resort.owner_id === +this.userId);
     }
-  }
+  }*/
 }
 </script>
 

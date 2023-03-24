@@ -41,6 +41,7 @@ export default {
       this.$emit('deleteResort', this.resort.id);
     },
     updateResortUp(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
+      this.isEditComponent = false;
       this.$emit('editResortFromItem', editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId);
     }
   },
