@@ -103,7 +103,6 @@ export default {
   data() {
     return {
       resortName: '',
-      /*resortId: $this.$rou*/
       items: [],
       types: [],
       itemTypeId: null,

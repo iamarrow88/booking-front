@@ -1,10 +1,12 @@
 <template>
     <div>
       <div>{{ resort.name }}</div>
-      <button @click="editResort">Edit</button>
+      <button @click="editResortDown">Edit</button>
       <button @click="deleteResort">Delete</button>
-      <div v-if="isEdit">
-        <create-resort-page :resort="resort"></create-resort-page>
+      <div v-if="isEditComponent">
+        <create-resort-page :resortIdFromParent="resort.id"
+                            :editMode="isEditComponent"
+                            @updateResort="updateResortUp"></create-resort-page>
       </div>
     </div>
 </template>
@@ -23,20 +25,27 @@ export default {
       owner_id: Number,
       description: String,
       address: String,
+      isEdit: Boolean
     },
-    data() {
-      return {
-        isEdit: false,
-      }
+  },
+  data() {
+    return {
+      isEditComponent: false,
     }
   },
   methods: {
-    editResort() {
-      this.$emit('editResort', this.resort.id);
+    editResortDown() {
+      this.isEditComponent = !this.isEditComponent
     },
     deleteResort() {
       this.$emit('deleteResort', this.resort.id);
+    },
+    updateResortUp(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
+      this.$emit('editResortFromItem', editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId);
     }
+  },
+  created() {
+    this.isEditComponent = this.isEdit;
   }
 
 }

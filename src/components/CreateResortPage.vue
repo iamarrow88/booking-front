@@ -7,7 +7,7 @@
     </div>
     <div class="form-block resort-address">
       <label for="resortAddress">Введите адрес курорта</label>
-      <select v-model="city">
+      <select v-model="cityName">
         <option v-for="city in cities" :key="city.id">{{ city.name }}</option>
       </select>
       <input type="text" id="resortAddress" v-model="resortAddress">
@@ -26,13 +26,16 @@
 </template>
 
 <script>
-/*import addItem from "@/components/addItem.vue";*/
 
 export default {
   name: "CreateResortPage",
+  props: {
+    resortIdFromParent: Number,
+    editMode: Boolean,
+  },
   data() {
     return {
-      editMode: false,
+      createEditMode: null,
 
       cities: [],
       resorts: [],
@@ -43,103 +46,54 @@ export default {
       resortName: '',
       resortAddress: '',
       resortDescription: '',
-      city: '',
+      cityName: '',
 
       userId: null,
       errorMessage: null,
-
-      /*isResortAdded: false,*/
-      /*resortToEditId: '',
-      resortToEditName: '',
-      resortToEditCityId: null,
-      resortToEditAddress: '',
-      resortToEditDescription: '',*/
-
-
-
-/*      isEditOpen: false,*/
-
-
     }
   },
   methods: {
-    async addResort () {
-      try {
-        const response = await fetch('/api/resorts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*'
-          },
-          body: JSON.stringify({
-                city_id: this.city.id,
-                resort_name: this.resortName,
-                resort_address: this.resortAddress,
-                resort_description: this.resortDescription,
-                ID:  this.resortId,
-                owner_id: this.$props.userId
-              }
-          )
-        });
-        const result = await response.json();
-        console.log(result);
-        if(result.ok){
-          this.resortName = '';
-          this.resortAddress = '';
-          this.resortDescription = '';
-          this.city = this.cities[0].name;
-        } else {
-          this.errorMessage = "Invalid data provided, please try again";
-        }
-      } catch (error) {
-        console.error(error)
-      }
-      this.$router.push('/resorts/manage');
-      /*await this.getResorts();*/
+    addResort () {
+      console.log('create resort');
+      this.$emit('updateResort', this.editMode, this.cityId, this.resortId, this.resortName, this.resortAddress, this.resortDescription, this.userId);
     },
     async getResorts() {
       try {
         const resorts = await fetch('/api/resorts');
         this.resorts = await resorts.json();
-
-        if(this.editMode){
-          this.resorts.forEach(resort => {
-            if(resort.id === +this.$route.query.resortId){
-              this.resort = resort;
-              this.resortName = resort.name;
-              this.cityId = resort.city_id;
-              this.resortAddress = resort.address;
-              this.resortDescription = resort.description;
-              }
-          })
-        }
       } catch (e) {
         console.error(e);
       }
     }
   },
   async created() {
-    this.editMode = this.$route.query.editMode;
     this.userId = localStorage.getItem('userId');
-    this.resortId = this.$route.query.resortId ? this.$route.query.resortId : new Date();
+
+    this.resortId = this.resortIdFromParent ? this.resortIdFromParent : Date.now();
     await this.getResorts();
 
     try {
       const cities = await fetch('/api/cities');
       this.cities = await cities.json();
-      if(this.editMode) {
-        this.cities.forEach(city => {
-          console.log(`${city.id} === ${+this.cityId}`);
-          if(city.id === +this.cityId) this.city = city.name;
-        })
-      } else {
-        this.city = this.cities[0].name;
+      if(!this.editMode) {
+        this.cityName = this.cities[0].name;
       }
     } catch (error) {
       console.error(error)
     }
 
+    this.resorts.forEach(resort => {
+      if(resort.id === this.resortId){
+        this.resortName = resort.name;
+        this.resortAddress = resort.address;
+        this.resortDescription = resort.description;
+        this.cityId = resort.city_id;
+        this.cities.forEach(city => {
+          if(city.id === this.cityId) this.cityName = city.name;
+        })
 
+      }
+    })
   },
 }
 </script>

@@ -1,16 +1,18 @@
 <template>
-  <!--  <div class="resorts-list"
-    v-if="usersResorts.length > 0">
-      <div v-for="resort in usersResorts" :key="resort.id">{{ resort.name }}</div>
-    </div>-->
+
   <div class="add-resort">
-    <router-link to="/addResort" :editingMode="false">Добавить курорт</router-link>
+    <button class="sub-btn"
+            @click="editComponent">Добавить курорт</button>
+    <create-resort-page v-if="isEditComponent"
+                        :editMode="false"
+                        @updateResort="editResort"></create-resort-page>
   </div>
   <router-link to="/resorts/equipment">Страница управления снаряжением</router-link>
   <div class="resorts-list" v-if="usersResorts.length > 0">
-    <resort-item @editResort="this.$router.push({path: '/addResort', query: { resortId: resort.id, editMode: true }})"
-                 @deleteResort="deleteResort" v-for="resort in usersResorts"
-                 :key="resort.id" :resort="resort"></resort-item>
+    <resort-item @editResortFromItem="editResort"
+                 @deleteResort="deleteResort" v-for="resort in getUsersResorts"
+                 :key="resort.id"
+                 :resort="resort"></resort-item>
   </div>
   <div v-if="errorMessage" class="error-message">
     {{ errorMessage }}
@@ -19,19 +21,19 @@
 
 <script>
 import ResortItem from "@/components/ResortItem.vue";
-/*
 import CreateResortPage from "@/components/CreateResortPage.vue";
-*/
 
 export default {
   name: "ManageResorts",
-  components: {/*CreateResortPage,*/ ResortItem},
+  components: {CreateResortPage, ResortItem},
   data() {
     return {
       allResorts: [],
       usersResorts: [],
-      userId: 3,
+      userId: null,
       errorMessage: null,
+      city: '',
+      isEditComponent: false
     }
   },
   methods: {
@@ -40,6 +42,10 @@ export default {
       try {
         const response = await fetch(`/api/resorts/${resortId}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          },
         });
         if (response.ok) {
           try {
@@ -61,42 +67,49 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    }
-  },
-  async editResort(resortId) {
-    this.isEditOpen = !this.isEditOpen;
-    console.log('edit', resortId);
-    try {
-      const res = await fetch(`/resorts/${resortId}`, { // тут надо /resorts и слать json со всеми данными
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({})
-      });
-      if (res.ok) {
-        try {
-          const resorts = await fetch('/api/myresorts',
-              {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
-              });
-          this.allResorts = await resorts.json();
-          console.log(this.allResorts);
-          this.usersResorts = this.allResorts.filter(resort => resort.owner_id === +this.userId);
+    },
+    async editResort(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
+      console.log('edit', resortId);
+      const method = editMode ? 'PUT' : 'POST';
 
-        } catch (e) {
-          console.error(e);
+      try {
+        const response = await fetch('/api/resorts', {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+                id:  +resortId,
+                name: resortName,
+                city_id: +cityId,
+                owner_id: +userId,
+                description: resortDescription,
+                address: resortAddress
+            }
+          )
+        });
+        const result = await response.json();
+        if(result.ok){
+          console.log('ok');
+          this.resortName = '';
+          this.resortAddress = '';
+          this.resortDescription = '';
+          this.city = this.cities[0].name;
+        } else {
+          this.errorMessage = "Invalid data provided, please try again";
         }
-      } else {
-        this.errorMessage = "Invalid data provided, please try again";
-      }
-    } catch (e) {
-      console.error(e);
-    }
 
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    editComponent() {
+      this.isEditComponent = !this.isEditComponent;
+    }
   },
+
   async mounted() {
     try {
       const resorts = await fetch('/api/myresorts',
@@ -108,21 +121,29 @@ export default {
             },
           });
       this.allResorts = await resorts.json();
-      console.log(this.allResorts);
+      this.userId = localStorage.getItem('userId');
       this.usersResorts = this.allResorts.filter(resort => resort.owner_id === +this.userId);
+
     } catch (e) {
       console.error(e);
     }
-    //this.userId = +localStorage.getItem('userId');
   },
-  watch: {
-    usersResorts() {
-      return this.allResorts.filter(resort => resort.owner_id === +this.userId);
+  computed: {
+    getUsersResorts() {
+      return [...this.allResorts].filter(resort => resort.owner_id === +this.userId);
     }
   }
 }
 </script>
 
 <style scoped>
+.sub-btn {
+  padding: 7px;
+  background-color: transparent;
+  cursor: pointer;
+  color: darkslateblue;
+  text-decoration: underline;
+
+}
 
 </style>
