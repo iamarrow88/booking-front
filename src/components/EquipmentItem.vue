@@ -1,16 +1,16 @@
 <template>
   <li class="items-for-resort-item">
     <div class="items-for-resort-item-header">
-      <p class="items-for-resort-item-type">{{ type.name }}</p>
+<!--      <p class="items-for-resort-item-type">{{ type.name }}</p>-->
       <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
       <p class="items-for-resort-item-price">Час - {{ item.price }} RUB</p>
-      <p class="items-for-resort-item-price">Итого - {{ item.price * duration }} RUB</p>
+      <p v-if="!editMode" class="items-for-resort-item-price">Итого - {{ item.price * duration }} RUB</p>
       <button @click="showPopUp"
               v-if="!editMode">Забронировать</button>
       <button v-if="editMode" @click="this.$emit('DeleteItem', item.id)">Удалить</button>
       <button v-if="editMode" @click="this.$emit('EditItem', item.id)">Редактировать</button>
     </div>
-    <pop-up :item="item"
+    <pop-up v-if="!editMode" :item="item"
             :typeName="type.name"
             :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"
@@ -40,6 +40,7 @@ export default {
       resort_id: Number,
       type_id: Number
     },
+    resortId: Number,
     types: Array,
     typeId: Number,
     resortName: String,

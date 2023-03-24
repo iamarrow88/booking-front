@@ -1,6 +1,6 @@
 <template>
-  <h3>Здесь можно добавить инвентарь</h3>
-  <div class="create-title">Добавить инвентарь</div>
+  <h3>{{ editEquipmModeFromParent ? "Здесь можно изменить данные инвентаря" : "Здесь можно добавить инвентарь" }}</h3>
+  <div class="create-title">{{ editEquipmModeFromParent ? "Изменить данные инвентаря" : "Добавить инвентарь" }}</div>
   <label class="create-type" for="itemType">Выберите тип инвентаря</label>
   <select class="create-type-list" id="itemType" v-model="typeName">
     <option class="create-type-list-item" v-for="type in types" v-bind:key="type.id">{{ type.name }}</option>
@@ -12,56 +12,72 @@
   </select>
 
   <label for="price" class="create-price">Введите стоимость</label>
-  <input type="number" class="create-price-input" v-model="price">
+  <input type="number" class="create-price-input" v-model="price" min="1">
 
   <label class="create-upload" for="upload-img">Загрузите фото</label>
   <input type="file" name="img" id="img" accept="image/*" @change="addImg">
 
-  <button @click="createItem">Создать</button>
+  <button @click="createItem">{{ editEquipmModeFromParent ? "Сохранить изменения" : "Создать" }}</button>
 </template>
 
 <script>
 export default {
   name: "addItem",
+  props: {
+    editEquipmModeFromParent: Boolean
+  },
   data() {
     return {
       types: [],
       resorts: [],
       typeName: '',
+      typeId: '',
       resortName: '',
+      resortId: null,
       price: null,
-      formData: null,
+      photo: null,
+      editMode: null,
+
     }
   },
   methods: {
     addImg(event) {
-      console.log(event.target.files[0]);
-      this.formData = new FormData();
-      this.formData.append('img', event.target.files[0]);
+      this.photo = event.target.files[0];
     },
     async createItem() {
-      this.formData.append('ItemType', this.typeName);
-      this.formData.append('ResortName', this.resortName);
-      this.formData.append('price', this.price);
+      const id = Date.now();
 
       try {
         const response = await fetch('/api/inventories', {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`
           },
-          body: this.formData
+          body: JSON.stringify({
+            id: id,
+            type_id: +this.typeId,
+            resort_id: +this.resortId,
+            price: +this.price,
+            photo: this.photo
+          })
         });
         const result = await response.json();
-        console.log(JSON.stringify(result));
+        console.log(result);
+        if(result.ok){
+          console.log('here')
+          this.editMode = false;
+          this.$emit('isAddItemBlockOpen', false)
+        } else {
+          console.log('ошибка')
+        }
       } catch (error) {
         console.error(error);
       }
     }
   },
   async created() {
-    this.editMode = this.$route.query.editMode;
+    this.editMode = this.$route.query.editMode ? this.$route.query.editMode : this.editModeFromParent;
     try {
       const types = await fetch('/api/inventories/types');
       this.types = await types.json();
@@ -72,12 +88,22 @@ export default {
     try {
       const resorts = await fetch('/api/resorts');
       this.resorts = await resorts.json();
-      console.log(this.resortName)
-
     } catch (error) {
       console.error(error);
     }
 
+  },
+  watch: {
+    typeName(newName) {
+      this.types.forEach(type => {
+        if(type.name === newName) this.typeId = type.id;
+      })
+    },
+    resortName(newResort){
+      for(let i = 0; i < this.resorts.length; i++) {
+        if(this.resorts[i].name === newResort) this.resortId = this.resorts[i].id
+      }
+    }
   }
 
 }

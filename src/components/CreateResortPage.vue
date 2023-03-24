@@ -1,6 +1,6 @@
 <template>
   <div class="add-resort">
-    <h2>Страница создания карточки курорта</h2>
+    <h2>{{  editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта"}}</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Введите название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
@@ -22,6 +22,13 @@
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
+
+    <div class="eqiupm-edit-block">
+      <button class="sub-btn"
+      @click="equipmEdittingModeTurning">Редактировать инвентарь</button>
+      <manage-equipment v-if="isEquipmentsEditingModeOn"
+      :resortId="resortId"></manage-equipment>
+    </div>
   </div>
 </template>
 
@@ -35,7 +42,8 @@ export default {
       editMode: false,
 
       cities: [],
-      resorts: [],
+      allResorts: [],
+      userResorts: [],
 
       resortId: null,
       cityId: null,
@@ -48,18 +56,7 @@ export default {
       userId: null,
       errorMessage: null,
 
-      /*isResortAdded: false,*/
-      /*resortToEditId: '',
-      resortToEditName: '',
-      resortToEditCityId: null,
-      resortToEditAddress: '',
-      resortToEditDescription: '',*/
-
-
-
-/*      isEditOpen: false,*/
-
-
+      isEquipmentsEditingModeOn: false,
     }
   },
   methods: {
@@ -100,10 +97,10 @@ export default {
     async getResorts() {
       try {
         const resorts = await fetch('/api/resorts');
-        this.resorts = await resorts.json();
+        this.allResorts = await resorts.json();
 
         if(this.editMode){
-          this.resorts.forEach(resort => {
+          this.allResorts.forEach(resort => {
             if(resort.id === +this.$route.query.resortId){
               this.resort = resort;
               this.resortName = resort.name;
@@ -116,11 +113,19 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    equipmEdittingModeTurning() {
+      this.isEquipmentsEditingModeOn = !this.isEquipmentsEditingModeOn;
+    }
+  },
+  watch: {
+    userId() {
+      this.userResorts = [...this.allResorts.filter(resort => resort.owner_id === this.userId)]
     }
   },
   async created() {
     this.editMode = this.$route.query.editMode;
-    this.userId = localStorage.getItem('userId');
+    this.userId = +localStorage.getItem('userId');
     this.resortId = this.$route.query.resortId ? this.$route.query.resortId : new Date();
     await this.getResorts();
 
@@ -129,7 +134,6 @@ export default {
       this.cities = await cities.json();
       if(this.editMode) {
         this.cities.forEach(city => {
-          console.log(`${city.id} === ${+this.cityId}`);
           if(city.id === +this.cityId) this.city = city.name;
         })
       } else {
@@ -158,5 +162,12 @@ export default {
   }
   .resort-address input {
     width: 50%;
+  }
+  .sub-btn {
+    padding: 7px;
+    background-color: transparent;
+    cursor: pointer;
+    color: darkslateblue;
+    text-decoration: underline;
   }
 </style>
