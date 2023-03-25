@@ -9,7 +9,7 @@
             <p class="my-booking-resort">Resort: {{ item.resort.name }}</p>
           </div>
           <div class="my-booking-item-body">
-            <p>Тип инвернтаря: {{ inv_types[item.inventory_id].name }}</p>
+            <p>Тип инвентаря: {{ inv_types[item.inventory_id].name }}</p>
             <p>Начало: {{ item.start_time }}</p>
             <p>Конец: {{ item.end_time }}</p>
             <p>Полная стоимость: {{ item.total_price }}</p>
