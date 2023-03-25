@@ -1,7 +1,6 @@
 <template>
   <li class="items-for-resort-item">
     <div class="items-for-resort-item-header">
-<!--      <p class="items-for-resort-item-type">{{ type.name }}</p>-->
       <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
       <p class="items-for-resort-item-price">Час - {{ item.price }} RUB</p>
       <p v-if="!editMode" class="items-for-resort-item-price">Итого - {{ item.price * duration }} RUB</p>
