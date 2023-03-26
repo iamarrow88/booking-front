@@ -45,35 +45,12 @@ export default {
       this.$emit('closePopUp', false, this.isBooked)
     },
 
-    async bookingItem() {
-      const startTime = this.startTime + ':00:00';
-      const endTime = this.endTime + ':00:00';
-      try {
-        const response = await fetch('/api/booking', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': '*',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-          },
-          body: JSON.stringify({
-            inventory_id: +this.$props.item.id,
-            start_time: this.sel_date + 'T' + startTime + 'Z',
-            end_time: this.sel_date + 'T' + endTime + 'Z'
-          })
-        });
-        if(response.ok) {
-          this.bookings = await response.json();
-          this.$emit('closePopUp', false, true)
-        } else {
-          console.log('not ok');
-          this.$emit('closePopUp', false, false)
-        }
-
-
-      } catch (error) {
-        console.error(error)
-      }
+    async goPaymentPage() {
+      this.$router.push({path: '/payment', query: { sel_date: this.sel_date,
+          startTime: this.startTime,
+          endTime: this.endTime,
+          itemId: this.item.id,
+        }});
     }
   },
   computed: {

@@ -15,6 +15,7 @@ import ResortItem from "@/components/ResortItem.vue";
 import ManageEquipment from "@/components/ManageEquipment.vue";
 import ModalWindow from "@/components/ModalWindow.vue";
 import BookingItem from "@/components/BookingItem.vue";
+import PaymentPage from "@/components/PaymentPage.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -29,6 +30,7 @@ const router = createRouter({
         {path: '/addResort', component: CreateResortPage},
         {path: '/resorts/manage', component: ManageResorts},
         {path: '/resorts/equipment', component: ManageEquipment},
+        {path: '/payment', component: PaymentPage},
     ]
 })
 
@@ -44,3 +46,4 @@ app.component('ResortItem', ResortItem);
 app.component('ManageEquipment', ManageEquipment);
 app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
+app.component('PaymentPage', PaymentPage);
