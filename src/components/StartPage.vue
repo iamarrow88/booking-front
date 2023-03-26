@@ -227,12 +227,6 @@ input[type="submit"]:hover {
   background-color: #45a049;
 }
 
-.form-container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-
 li {
   margin-bottom: 10px;
   list-style: none;

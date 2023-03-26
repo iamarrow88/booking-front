@@ -1,77 +1,79 @@
 <template>
-  <div class="items-for-resort">
-
-    <div class="form-group" style="display: flex; justify-content: space-between;">
-      <div>
+  <div class="results">
+    <div class="filters">
+      <div class="filters__date-input date-input">
         <label for="startDate">Дата:</label>
         <input type="date" class="form-control" id="startDate" v-model="sel_date">
       </div>
-      <div>
-        <label for="startTime">Начало бронирования:</label>
-        <select name="startTime" id="startTime" v-model="startTime" class="form-control">
-          <option value="00">0:00</option>
-          <option value="01">1:00</option>
-          <option value="02">2:00</option>
-          <option value="03">3:00</option>
-          <option value="4">4:00</option>
-          <option value="05">5:00</option>
-          <option value="06">6:00</option>
-          <option value="07">7:00</option>
-          <option value="08">8:00</option>
-          <option value="09">9:00</option>
-          <option value="10">10:00</option>
-          <option value="11">11:00</option>
-          <option value="12">12:00</option>
-          <option value="13">13:00</option>
-          <option value="14">14:00</option>
-          <option value="15">15:00</option>
-          <option value="16">16:00</option>
-          <option value="17">17:00</option>
-          <option value="18">18:00</option>
-          <option value="19">19:00</option>
-          <option value="20">20:00</option>
-          <option value="21">21:00</option>
-          <option value="22">22:00</option>
-          <option value="23">23:00</option>
-        </select>
-      </div>
-      <div>
-        <label for="endTime">Конец бронирования:</label>
-        <select name="startTime" id="endTime" v-model="endTime"  class="form-control">
-          <option value="00">0:00</option>
-          <option value="01">1:00</option>
-          <option value="02">2:00</option>
-          <option value="03">3:00</option>
-          <option value="4">4:00</option>
-          <option value="05">5:00</option>
-          <option value="06">6:00</option>
-          <option value="07">7:00</option>
-          <option value="08">8:00</option>
-          <option value="09">9:00</option>
-          <option value="10">10:00</option>
-          <option value="11">11:00</option>
-          <option value="12">12:00</option>
-          <option value="13">13:00</option>
-          <option value="14">14:00</option>
-          <option value="15">15:00</option>
-          <option value="16">16:00</option>
-          <option value="17">17:00</option>
-          <option value="18">18:00</option>
-          <option value="19">19:00</option>
-          <option value="20">20:00</option>
-          <option value="21">21:00</option>
-          <option value="22">22:00</option>
-          <option value="23">23:00</option>
-        </select>
-      </div>
-      <div>
+
+      <div class="filters__type type">
         <label for="typeInput">Тип инвентаря</label>
         <select class="form-control" id="typeInput" v-model="selectedType">
           <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
         </select>
       </div>
-    </div>
 
+      <div class="select-time">
+        <div class="select-time__start">
+          <label for="startTime">Начало бронирования:</label>
+          <select name="startTime" id="startTime" v-model="startTime" class="form-control">
+            <option value="00">0:00</option>
+            <option value="01">1:00</option>
+            <option value="02">2:00</option>
+            <option value="03">3:00</option>
+            <option value="04">4:00</option>
+            <option value="05">5:00</option>
+            <option value="06">6:00</option>
+            <option value="07">7:00</option>
+            <option value="08">8:00</option>
+            <option value="09">9:00</option>
+            <option value="10">10:00</option>
+            <option value="11">11:00</option>
+            <option value="12">12:00</option>
+            <option value="13">13:00</option>
+            <option value="14">14:00</option>
+            <option value="15">15:00</option>
+            <option value="16">16:00</option>
+            <option value="17">17:00</option>
+            <option value="18">18:00</option>
+            <option value="19">19:00</option>
+            <option value="20">20:00</option>
+            <option value="21">21:00</option>
+            <option value="22">22:00</option>
+            <option value="23">23:00</option>
+          </select>
+        </div>
+        <div class="select-time__end">
+          <label for="endTime">Конец бронирования:</label>
+          <select name="startTime" id="endTime" v-model="endTime"  class="form-control">
+            <option value="00">0:00</option>
+            <option value="01">1:00</option>
+            <option value="02">2:00</option>
+            <option value="03">3:00</option>
+            <option value="04">4:00</option>
+            <option value="05">5:00</option>
+            <option value="06">6:00</option>
+            <option value="07">7:00</option>
+            <option value="08">8:00</option>
+            <option value="09">9:00</option>
+            <option value="10">10:00</option>
+            <option value="11">11:00</option>
+            <option value="12">12:00</option>
+            <option value="13">13:00</option>
+            <option value="14">14:00</option>
+            <option value="15">15:00</option>
+            <option value="16">16:00</option>
+            <option value="17">17:00</option>
+            <option value="18">18:00</option>
+            <option value="19">19:00</option>
+            <option value="20">20:00</option>
+            <option value="21">21:00</option>
+            <option value="22">22:00</option>
+            <option value="23">23:00</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
     <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
@@ -171,10 +173,20 @@ export default {
 </script>
 
 <style>
-.items-for-resort {
+.results {
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
+}
+
+.filters {
+  margin: 0 auto;
+  padding: 1rem;
+  width: 30vw;
+}
+
+.date-input, .type, .select-time, .select-time__start, .select-time__end {
+  width: 100%;
 }
 
 .items-for-resort-title {
@@ -199,10 +211,24 @@ export default {
   align-items: center;
 }
 
+input[type="date"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
 
 @media (max-width: 767px) {
   .items-for-resort-title {
     font-size: 1.25rem;
+  }
+
+  .filters {
+    width: 50vw;
   }
 }
 </style>
