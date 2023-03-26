@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
+    <h3 class="items-for-resort-title">Инвентарь по курорту {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in filteredItems"
                       class="items-for-resort-item"
@@ -239,5 +239,16 @@ input[type="date"] {
   .filters {
     width: 50vw;
   }
+}
+
+input[type="date"], input[type="number"], select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
 }
 </style>

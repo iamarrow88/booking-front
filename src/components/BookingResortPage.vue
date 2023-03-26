@@ -1,10 +1,12 @@
 <template>
   <div class="my-booking">
     <h3 class="my-booking-title">Все бронирования:</h3>
+
     <booking-item v-for="item in booking"
                   :key="item.id"
                   :item="item"
                   :inventoryTypes="inv_types"></booking-item>
+
   </div>
 </template>
 
