@@ -1,28 +1,18 @@
 <template>
   <div class="my-booking">
     <h3 class="my-booking-title">Все бронирования:</h3>
-    <div>
-      <ul>
-        <li v-for="item in booking" :key="item.id" class="my-booking-item">
-          <div class="my-booking-item-header">
-            <p class="my-booking-id">Booking ID: {{ item.id }}</p>
-            <p class="my-booking-resort">Resort: {{ item.resort.name }}</p>
-          </div>
-          <div class="my-booking-item-body">
-            <p>Тип инвентаря: {{ inv_types[item.inventory_id].name }}</p>
-            <p>Начало: {{ item.start_time }}</p>
-            <p>Конец: {{ item.end_time }}</p>
-            <p>Полная стоимость: {{ item.total_price }}</p>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <booking-item v-for="item in booking"
+                  :key="item.id"
+                  :item="item"
+                  :inventoryTypes="inv_types"></booking-item>
   </div>
 </template>
 
 <script>
+import BookingItem from "@/components/BookingItem.vue";
 
 export default {
+  components: {BookingItem},
   data() {
     return {
       booking: [],
@@ -43,7 +33,6 @@ export default {
         this.errorMessage = "Invalid data provided, please try again";
       } else {
         this.booking = await res.json()
-        console.log(this.booking)
       }
     } catch (err) {
       console.error(err);
@@ -60,8 +49,8 @@ export default {
       if (!res.ok) {
         this.errorMessage = "Invalid data provided, please try again";
       } else {
-        this.inv_types = await res.json()
-        console.log(this.inv_types)
+        this.inv_types = await res.json();
+
       }
     } catch (err) {
       console.error(err);
@@ -84,35 +73,6 @@ export default {
   font-weight: bold;
 }
 
-.my-booking-item {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-}
-
-.my-booking-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.my-booking-id {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.my-booking-resort {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #666;
-}
-
-.my-booking-item-body {
-  margin-top: 1rem;
-}
-
 .my-booking-item-body p {
   margin: 0;
   font-size: 1.1rem;
@@ -121,14 +81,6 @@ export default {
 @media (max-width: 767px) {
   .my-booking-title {
     font-size: 1.25rem;
-  }
-
-  .my-booking-id {
-    font-size: 1rem;
-  }
-
-  .my-booking-resort {
-    font-size: 1rem;
   }
 
   .my-booking-item-body p {
