@@ -45,7 +45,7 @@
         </div>
         <div class="select-time__end">
           <label for="endTime">Конец бронирования:</label>
-          <select name="startTime" id="endTime" v-model="endTime"  class="form-control">
+          <select name="startTime" id="endTime" v-model="endTime" class="form-control">
             <option value="00">0:00</option>
             <option value="01">1:00</option>
             <option value="02">2:00</option>
@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <h3 class="items-for-resort-title">Инвентарь по курорту {{ resortName }}:</h3>
+    <h3 class="items-for-resort-title">Инвентарь в "{{ resortName }}":</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in filteredItems"
                       class="items-for-resort-item"
@@ -193,6 +193,7 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+
 .select-time__start, .select-time__end {
   width: 40%;
 }
