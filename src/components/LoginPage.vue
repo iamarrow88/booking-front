@@ -7,14 +7,18 @@
     <div v-if="!isLoggedIn">
       <h3 class="subtitle">Войти</h3>
       <div class="form-group">
-        <label for="emailInput">Email:</label>
-        <input type="email" class="form-control" id="emailInput" v-model="emailLogin">
+        <label for="emailLogInput">Email:</label>
+        <input type="email" class="form-control" id="emailLogInput" v-model="emailLogin" @focusout="validateLoginMail(emailLogin)">
+        <div class="error-message" v-if="isEmailLoginWrong || isEmailLoginNull">
+          {{ isEmailLoginWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
+            isEmailLoginNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
-        <label for="passwordInput">Пароль:</label>
-        <input type="password" class="form-control" id="passwordInput" v-model="passwordLogin">
+        <label for="passwordLogInput">Пароль:</label>
+        <input type="password" class="form-control" id="passwordLogInput" v-model="passwordLogin">
+        <div class="error-message" v-if="isPasswordLoginNull">Введите пароль</div>
       </div>
-      <button class="btn btn-primary" @click="login">Login</button>
+      <button class="btn btn-primary" @click="login">Войти в аккаунт</button>
     </div>
 
     <div v-if="!isLoggedIn">
@@ -22,26 +26,42 @@
       <div class="form-group">
         <label for="firstNameInput">Фамилия:</label>
         <input type="text" class="form-control" id="firstNameInput" v-model="firstName">
+        <div class="error-message" v-if="isFirstNameWrong || isFirstNameNull">
+          {{ isFirstNameWrong ? "Допускаются только буквы" :
+            isFirstNameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="surnameInput">Имя:</label>
         <input type="text" class="form-control" id="surnameInput" v-model="surname">
+        <div class="error-message" v-if="isSurnameWrong || isSurnameNull">
+          {{ isSurnameWrong ? "Допускаются только буквы" :
+            isSurnameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="middleNameInput">Отчество:</label>
         <input type="text" class="form-control" id="middleNameInput" v-model="middleName">
+        <div class="error-message" v-if="isMiddleNameWrong || isMiddleNameNull">
+          {{ isMiddleNameWrong ? "Допускаются только буквы" :
+            isMiddleNameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
-        <label for="emailInput">Email:</label>
-        <input type="email" class="form-control" id="emailInput" v-model="emailRegister">
+        <label for="emailRegInput">Email:</label>
+        <input type="email" class="form-control" id="emailRegInput" v-model="emailRegister" @focusout="validateRegMail(emailRegister)">
+        <div class="error-message" v-if="isEmailRegisterWrong || isEmailRegisterNull">
+          {{ isEmailRegisterWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
+            isEmailRegisterNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
-        <label for="passwordInput">Пароль:</label>
-        <input type="password" class="form-control" id="passwordInput" v-model="passwordRegister">
+        <label for="passwordRegInput">Пароль:</label>
+        <input type="password" class="form-control" id="passwordRegInput" v-model="passwordRegister" >
+        <div class="error-message" v-if="isPasswordRegisterNull">Введите пароль</div>
       </div>
       <div class="form-group">
         <label for="phoneInput">Телефон:</label>
         <input type="text" class="form-control" id="phoneInput" v-model="phone">
+        <div class="error-message" v-if="isPhoneNumberWrong || isPhoneNumberNull">
+          {{ isPhoneNumberWrong ? "Допускаются только цифры" :
+            isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="roleIdInput">Роль:</label>
@@ -50,11 +70,11 @@
           <option value="3">Owner</option>
         </select>
       </div>
-      <button class="btn btn-primary" @click="register">Register</button>
+      <button class="btn btn-primary" @click="register">Зарегистрироваться</button>
     </div>
     <div v-else>
       <h3 class="subtitle">Здравствуйте, {{ surname }}</h3>
-      <button class="btn btn-primary" @click="logout">Logout</button>
+      <button class="btn btn-primary" @click="logout">Выйти из аккаунта</button>
     </div>
   </div>
 </template>
@@ -74,8 +94,6 @@ export default {
       firstName: '',
       surname: '',
       middleName: '',
-      email: '',
-      password: '',
       phone: '',
       roleId: 2,
       token: '',
@@ -84,78 +102,109 @@ export default {
       passwordLogin: '',
       emailRegister: '',
       passwordRegister: '',
+
+      isFirstNameWrong: false,
+      isEmailLoginWrong: false,
+      isSurnameWrong: false,
+      isMiddleNameWrong: false,
+      isEmailRegisterWrong: false,
+      isPhoneNumberWrong: false,
+
+      isFirstNameNull: false,
+      isEmailLoginNull: false,
+      isSurnameNull: false,
+      isMiddleNameNull: false,
+      isEmailRegisterNull: false,
+      isPhoneNumberNull: false,
+
+      isPasswordLoginNull: false,
+      isPasswordRegisterNull: false,
+
+      regexAlpha: /[^a-zA-ZА-яЁё]/gmi,
+      regexNumber: /[^0-9]/g,
     }
   },
   methods: {
     async register() {
-      try {
-        const res = await fetch('/api/user/register', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            first_name: this.firstName,
-            surname: this.surname,
-            middle_name: this.middleName,
-            email: this.emailRegister,
-            password: this.passwordRegister,
-            phone: this.phone,
-            role_id: this.roleId
-          })
-        });
+      this.isPasswordRegisterNull = false;
+      if(!this.checkFirstNameInput(this.firstName) ||
+         !this.checkSurnameInput(this.surname) ||
+         !this.checkMiddleNameInput(this.middleName) ||
+         !this.checkMailReg(this.emailRegister) ||
+         !this.checkRegPass(this.passwordRegister) ||
+         !this.checkPhoneInput(this.phone)){
+        try {
+          const res = await fetch('/api/user/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              first_name: this.firstName,
+              surname: this.surname,
+              middle_name: this.middleName,
+              email: this.emailRegister,
+              password: this.passwordRegister,
+              phone: this.phone,
+              role_id: this.roleId
+            })
+          });
 
-        if (!res.ok) {
-          this.errorMessage = "Invalid data provided, please try again";
-          this.$emit('loggin', false);
-        } else {
-          const data = await res.json();
-          this.token = data.token;
-          this.surname = data.surname;
-          localStorage.setItem('token', this.token);
-          localStorage.setItem('surname', this.surname);
-          localStorage.setItem('role_id', this.roleId);
-          localStorage.setItem('userId', this.id);
-          this.$emit('loggin', true);
-          this.errorMessage = '';
-          this.$router.push({path: '/mybooking', params: {id: this.id}});
+          if (!res.ok) {
+            this.errorMessage = "Invalid data provided, please try again";
+            this.$emit('loggin', false);
+          } else {
+            const data = await res.json();
+            this.token = data.token;
+            this.surname = data.surname;
+            localStorage.setItem('token', this.token);
+            localStorage.setItem('surname', this.surname);
+            localStorage.setItem('role_id', this.roleId);
+            localStorage.setItem('userId', this.id);
+            this.$emit('loggin', true);
+            this.errorMessage = '';
+            this.$router.push({path: '/mybooking', params: {id: this.id}});
 
+          }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
       }
     },
 
     async login() {
-      try {
-        const res = await fetch('/api/user/login', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            email: this.emailLogin,
-            password: this.passwordLogin
-          })
-        });
-        if (!res.ok) {
-          this.errorMessage = "Invalid data provided, please try again";
-          this.$emit('loggin', false);
-        } else {
-          const data = await res.json();
-          console.log(data);
-          this.token = data.token;
-          this.surname = data.surname;
-          this.roleId = data.role_id;
-          this.id = data.id;
-          localStorage.setItem('token', this.token);
-          localStorage.setItem('surname', this.surname);
-          localStorage.setItem('role_id', this.roleId);
-          localStorage.setItem('userId', this.id);
-          this.$emit('loggin', true);
-          this.errorMessage = '';
-        //  this.$router.go();
+      this.isPasswordLoginNull = false;
 
-          this.$router.push({path: '/mybooking', params: {id: this.id}});
+      if(!this.checkLoginPass(this.passwordLogin) ||
+          this.validateLoginMail(this.emailLogin)){
+        try {
+          const res = await fetch('/api/user/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              email: this.emailLogin,
+              password: this.passwordLogin
+            })
+          });
+          if (!res.ok) {
+            this.errorMessage = "Invalid data provided, please try again";
+            this.$emit('loggin', false);
+          } else {
+            const data = await res.json();
+            this.token = data.token;
+            this.surname = data.surname;
+            this.roleId = data.role_id;
+            this.id = data.id;
+            localStorage.setItem('token', this.token);
+            localStorage.setItem('surname', this.surname);
+            localStorage.setItem('role_id', this.roleId);
+            localStorage.setItem('userId', this.id);
+            this.$emit('loggin', true);
+            this.errorMessage = '';
+
+            this.$router.push({path: '/mybooking', params: {id: this.id}});
+          }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
       }
     },
 
@@ -167,10 +216,103 @@ export default {
       localStorage.setItem('role_id', this.roleId);
       this.$router.push({path: '/mybooking'});
     },
+
+    validateRegMail(mail){
+      this.checkMailReg(mail);
+      if(this.isEmailRegisterNull) return false;
+      if(!this.isEmailRegisterNull) this.isEmailRegisterWrong = this.isMailInvalid(mail);
+      return this.isEmailRegisterWrong;
+    },
+
+    validateLoginMail(mail){
+      this.checkMailLog(mail);
+      if(this.isEmailLoginNull) return false;
+      if(!this.isEmailLoginNull) this.isEmailLoginWrong = this.isMailInvalid(mail);
+      return this.isEmailLoginWrong;
+    },
+
+    isMailInvalid(mail){
+      if(mail.match(/[\s]/g)) return true;
+      const dogHunter = mail.split('@');
+      if(dogHunter.length !== 2) return true;
+      const dotHunter = dogHunter[1].split('.');
+      if(dotHunter.length >= 2) {
+        return !!dotHunter.some(el => el == false);
+      } else {
+        return true;
+      }
+    },
+
+    checkLoginPass(pass){
+      this.isPasswordLoginNull = pass.length === 0;
+      return this.isPasswordLoginNull;
+    },
+
+    checkRegPass(pass){
+      this.isPasswordRegisterNull = pass.length === 0;
+      return this.isPasswordRegisterNull;
+    },
+
+    checkFirstNameInput(val){
+      this.isFirstNameNull = val.length === 0;
+      return this.isFirstNameNull;
+    },
+
+    checkSurnameInput(val){
+      this.isSurnameNull = val.length === 0;
+      return this.isSurnameNull;
+    },
+
+    checkMiddleNameInput(val){
+      this.isMiddleNameNull = val.length === 0;
+      return this.isMiddleNameNull;
+    },
+
+    checkMailLog(val){
+      this.isEmailLoginNull = val.length === 0;
+      return this.isEmailLoginNull;
+    },
+
+    checkMailReg(val){
+      this.isEmailRegisterNull = val.length === 0;
+      return this.isEmailRegisterNull;
+    },
+
+    checkPhoneInput(val){
+      this.isPhoneNumberNull = val.length === 0;
+      return this.isPhoneNumberNull;
+    },
   },
- /* mounted() {
-    this.isLoggedIn = Boolean(localStorage.getItem('token')) || false;
-  }*/
+  watch: {
+    firstName(newName) {
+      this.isFirstNameWrong = newName.match(this.regexAlpha);
+      this.isFirstNameNull = false;
+    },
+    surname(newName) {
+      this.isSurnameWrong = newName.match(this.regexAlpha);
+      this.isSurnameNull = false;
+    },
+    middleName(newName) {
+      this.isMiddleNameWrong= newName.match(this.regexAlpha);
+      this.isMiddleNameNull = false;
+    },
+    phone(newName) {
+      this.isPhoneNumberWrong= newName.match(this.regexNumber);
+      this.isPhoneNumberNull = false;
+    },
+    passwordLogin() {
+      this.isPasswordLoginNull = false;
+    },
+    passwordRegister() {
+      this.isPasswordRegisterNull = false;
+    },
+    emailLogin(){
+      this.isEmailLoginNull = false;
+    },
+    emailRegister(){
+      this.isEmailRegisterNull = false;
+    }
+  }
 }
 </script>
 

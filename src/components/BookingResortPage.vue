@@ -5,8 +5,8 @@
       <ul>
         <li v-for="item in booking" :key="item.id" class="my-booking-item">
           <div class="my-booking-item-header">
-            <p class="my-booking-id">Booking ID: {{ item.id }}</p>
-            <p class="my-booking-resort">Resort: {{ item.resort.name }}</p>
+            <p class="my-booking-id">ID бронирования: {{ item.id }}</p>
+            <p class="my-booking-resort">Курорт: {{ item.resort.name }}</p>
           </div>
           <div class="my-booking-item-body">
             <p>Тип инвентаря: {{ inv_types[item.inventory_id].name }}</p>

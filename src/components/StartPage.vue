@@ -84,7 +84,7 @@
         <button class="btn btn-primary" @click="getResorts">Поиск курорта</button>
       </div>
       <div v-if="resorts.length > 0">
-        <h3>Resorts in {{ selectedCity.name }}:</h3>
+        <h3>Курорты в городе {{ selectedCity.name }}:</h3>
         <ul class="list-group">
           <li class="list-group-item" v-for="resort in resorts" :key="resort.id">{{ resort.name }}
             <p class="my-2">Адрес: {{ resort.address }}</p>
@@ -100,8 +100,7 @@
                   endTime: endTime,
                  }
                 })">
-              See
-              Items
+              Посмотреть инвентарь
             </button>
 
           </li>
@@ -229,12 +228,6 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #45a049;
-}
-
-.form-container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
 }
 
 li {
