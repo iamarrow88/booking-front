@@ -15,7 +15,7 @@
       </div>
       <div class="form-group">
         <label for="passwordLogInput">Пароль:</label>
-        <input type="password" class="form-control" id="passwordLogInput" v-model="passwordLogin" @focusout="checkLoginPass(passwordLogin)">
+        <input type="password" class="form-control" id="passwordLogInput" v-model="passwordLogin">
         <div class="error-message" v-if="isPasswordLoginNull">Введите пароль</div>
       </div>
       <button class="btn btn-primary" @click="login">Login</button>
@@ -25,21 +25,21 @@
       <h3 class="subtitle">Регистрация</h3>
       <div class="form-group">
         <label for="firstNameInput">Фамилия:</label>
-        <input type="text" class="form-control" id="firstNameInput" v-model="firstName" @focusout="checkFirstNameInput(firstName)">
+        <input type="text" class="form-control" id="firstNameInput" v-model="firstName">
         <div class="error-message" v-if="isFirstNameWrong || isFirstNameNull">
           {{ isFirstNameWrong ? "Допускаются только буквы" :
             isFirstNameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="surnameInput">Имя:</label>
-        <input type="text" class="form-control" id="surnameInput" v-model="surname" @focusout="checkSurnameInput(surname)">
+        <input type="text" class="form-control" id="surnameInput" v-model="surname">
         <div class="error-message" v-if="isSurnameWrong || isSurnameNull">
           {{ isSurnameWrong ? "Допускаются только буквы" :
             isSurnameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="middleNameInput">Отчество:</label>
-        <input type="text" class="form-control" id="middleNameInput" v-model="middleName" @focusout="checkMiddleNameInput(middleName)">
+        <input type="text" class="form-control" id="middleNameInput" v-model="middleName">
         <div class="error-message" v-if="isMiddleNameWrong || isMiddleNameNull">
           {{ isMiddleNameWrong ? "Допускаются только буквы" :
             isMiddleNameNull ? "Поле обязательно для заполнения" : ""}}</div>
@@ -53,12 +53,12 @@
       </div>
       <div class="form-group">
         <label for="passwordRegInput">Пароль:</label>
-        <input type="password" class="form-control" id="passwordRegInput" v-model="passwordRegister" @focusout="checkRegPass(passwordRegister)">
+        <input type="password" class="form-control" id="passwordRegInput" v-model="passwordRegister" >
         <div class="error-message" v-if="isPasswordRegisterNull">Введите пароль</div>
       </div>
       <div class="form-group">
         <label for="phoneInput">Телефон:</label>
-        <input type="text" class="form-control" id="phoneInput" v-model="phone" @focusout="checkPhoneInput(phone)">
+        <input type="text" class="form-control" id="phoneInput" v-model="phone">
         <div class="error-message" v-if="isPhoneNumberWrong || isPhoneNumberNull">
           {{ isPhoneNumberWrong ? "Допускаются только цифры" :
             isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
@@ -127,7 +127,13 @@ export default {
   methods: {
     async register() {
       this.isPasswordRegisterNull = false;
-      if(this.passwordRegister.length > 0){
+      console.log(this.checkRegPass(this.passwordRegister));
+      if(!this.checkFirstNameInput(this.firstName) ||
+         !this.checkSurnameInput(this.surname) ||
+         !this.checkMiddleNameInput(this.middleName) ||
+         !this.checkMailReg(this.emailRegister) ||
+         !this.checkRegPass(this.passwordRegister) ||
+         !this.checkPhoneInput(this.phone)){
         try {
           const res = await fetch('/api/user/register', {
             method: 'POST',
@@ -241,34 +247,42 @@ export default {
 
     checkLoginPass(pass){
       this.isPasswordLoginNull = pass.length === 0;
+      return this.isPasswordLoginNull;
     },
 
     checkRegPass(pass){
       this.isPasswordRegisterNull = pass.length === 0;
+      return this.isPasswordRegisterNull;
     },
 
     checkFirstNameInput(val){
       this.isFirstNameNull = val.length === 0;
+      return this.isFirstNameNull;
     },
 
     checkSurnameInput(val){
       this.isSurnameNull = val.length === 0;
+      return this.isSurnameNull;
     },
 
     checkMiddleNameInput(val){
       this.isMiddleNameNull = val.length === 0;
+      return this.isMiddleNameNull;
     },
 
     checkMailLog(val){
       this.isEmailLoginNull = val.length === 0;
+      return this.isEmailLoginNull;
     },
 
     checkMailReg(val){
       this.isEmailRegisterNull = val.length === 0;
+      return this.isEmailRegisterNull;
     },
 
     checkPhoneInput(val){
       this.isPhoneNumberNull = val.length === 0;
+      return this.isPhoneNumberNull;
     },
   },
   watch: {
@@ -294,6 +308,12 @@ export default {
     passwordRegister() {
       this.isPasswordRegisterNull = false;
     },
+    emailLogin(){
+      this.isEmailLoginNull = false;
+    },
+    emailRegister(){
+      this.isEmailRegisterNull = false;
+    }
   }
 }
 </script>
