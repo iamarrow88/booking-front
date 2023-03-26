@@ -73,7 +73,7 @@
     </div>
 
 
-    <h3 class="items-for-resort-title">Items for {{ resortName }}:</h3>
+    <h3 class="items-for-resort-title">Инвентарь по курорту {{ resortName }}:</h3>
     <ul v-if="items.length > 0" class="items-for-resort-list">
       <equipment-item v-for="item in filteredItems"
                       class="items-for-resort-item"

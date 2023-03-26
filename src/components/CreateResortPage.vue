@@ -1,6 +1,6 @@
 <template>
   <div class="add-resort">
-    <h2>Страница создания карточки курорта</h2>
+    <h2>{{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Введите название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
@@ -35,8 +35,6 @@ export default {
   },
   data() {
     return {
-      /*createEditMode: null,*/
-
       cities: [],
       resorts: [],
 
@@ -57,7 +55,6 @@ export default {
     addResort () {
       console.log('create resort');
       this.$emit('updateResort', this.editMode, this.cityId, this.resortId, this.resortName, this.resortAddress, this.resortDescription, this.userId);
-      /*this.isEditComponent = false;*/
     },
     async getResorts() {
       try {
@@ -94,7 +91,6 @@ export default {
         this.cities.forEach(city => {
           if(city.id === this.cityId) this.cityName = city.name;
         })
-
       }
     })
   },
