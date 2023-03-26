@@ -127,7 +127,6 @@ export default {
   methods: {
     async register() {
       this.isPasswordRegisterNull = false;
-      console.log(this.checkRegPass(this.passwordRegister));
       if(!this.checkFirstNameInput(this.firstName) ||
          !this.checkSurnameInput(this.surname) ||
          !this.checkMiddleNameInput(this.middleName) ||
@@ -168,16 +167,14 @@ export default {
         } catch (err) {
           console.error(err);
         }
-      } else {
-        this.isPasswordRegisterNull = true;
       }
-
     },
 
     async login() {
       this.isPasswordLoginNull = false;
 
-      if(this.passwordLogin.length > 0){
+      if(!this.checkLoginPass(this.passwordLogin) ||
+          this.validateLoginMail(this.emailLogin)){
         try {
           const res = await fetch('/api/user/login', {
             method: 'POST',
@@ -202,15 +199,12 @@ export default {
             localStorage.setItem('userId', this.id);
             this.$emit('loggin', true);
             this.errorMessage = '';
-            //  this.$router.go();
 
             this.$router.push({path: '/mybooking', params: {id: this.id}});
           }
         } catch (err) {
           console.error(err);
         }
-      } else {
-        this.isPasswordLoginNull = true;
       }
     },
 
@@ -225,12 +219,16 @@ export default {
 
     validateRegMail(mail){
       this.checkMailReg(mail);
+      if(this.isEmailRegisterNull) return false;
       if(!this.isEmailRegisterNull) this.isEmailRegisterWrong = this.isMailInvalid(mail);
+      return this.isEmailRegisterWrong;
     },
 
     validateLoginMail(mail){
       this.checkMailLog(mail);
+      if(this.isEmailLoginNull) return false;
       if(!this.isEmailLoginNull) this.isEmailLoginWrong = this.isMailInvalid(mail);
+      return this.isEmailLoginWrong;
     },
 
     isMailInvalid(mail){
