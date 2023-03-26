@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     EditItem(itemId) {
-      // !! TODO проверить добавление снаряжения, сделать редактирование, удаление
+      // !! TODO сделать добавление снаряжения, редактирование, удаление
       console.log('edit', itemId);
     },
     DeleteItem(itemId) {

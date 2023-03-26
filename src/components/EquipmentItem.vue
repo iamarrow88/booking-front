@@ -1,16 +1,23 @@
 <template>
   <li class="items-for-resort-item">
     <div class="items-for-resort-item-header">
-      <p class="items-for-resort-item-type">{{ type.name }}</p>
-      <img class="items-for-resort-item-photo" :src="item.photo" alt="Item Photo">
-      <p class="items-for-resort-item-price">Час - {{ item.price }} RUB</p>
-      <p class="items-for-resort-item-price">Итого - {{ item.price * duration }} RUB</p>
+
+      <p class="items-for-resort-item-type column">{{ type.name }}</p>
+      <img class="items-for-resort-item-photo column" :src="item.photo" alt="Item Photo">
+      <p class="items-for-resort-item-price column">Час - <span>{{ item.price }} RUB</span></p>
+      <p class="items-for-resort-item-price column">Итого - <span>{{ item.price * duration }} RUB</span></p>
+
       <button @click="showPopUp"
-              v-if="!editMode">Забронировать</button>
-      <button v-if="editMode" @click="this.$emit('DeleteItem', item.id)">Удалить</button>
-      <button v-if="editMode" @click="this.$emit('EditItem', item.id)">Редактировать</button>
+              v-if="!editMode"
+              class="items-for-resort-btn">Забронировать</button>
+      <button v-if="editMode"
+              @click="this.$emit('DeleteItem', item.id)"
+              class="items-for-resort-btn">Удалить</button>
+      <button v-if="editMode"
+              @click="this.$emit('EditItem', item.id)"
+              class="items-for-resort-btn">Редактировать</button>
     </div>
-    <pop-up :item="item"
+    <pop-up v-if="!editMode" :item="item"
             :typeName="type.name"
             :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"
@@ -19,7 +26,7 @@
             :endTime="endTime"
             :total = "item.price * duration"
             @closePopUp="closePopUp"></pop-up>
-<!--    <modal-window :isOpen="isBooked" @closePopUp="closePopUp"></modal-window>-->
+    <modal-window :isOpen="isBooked" @closePopUp="closePopUp"></modal-window>
   </li>
 </template>
 
@@ -27,10 +34,10 @@
 
 
 import PopUp from "@/components/PopUp.vue";
-/*import ModalWindow from "@/components/ModalWindow.vue";*/
+import ModalWindow from "@/components/ModalWindow.vue";
 
 export default {
-  components: PopUp, /*ModalWindow,*/
+  components: PopUp, ModalWindow,
   name: "EquipmentItem",
   props: {
     item: {
@@ -40,6 +47,7 @@ export default {
       resort_id: Number,
       type_id: Number
     },
+    resortId: Number,
     types: Array,
     typeId: Number,
     resortName: String,
@@ -88,6 +96,11 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
+.column {
+  width: 200px;
+  text-align: left;
+}
 .items-for-resort-item-header {
   display: flex;
   justify-content: space-between;
@@ -104,6 +117,8 @@ export default {
 }
 
 .items-for-resort-item-price {
+  display: flex;
+  flex-wrap: wrap;
   margin: 0;
   font-size: 1.25rem;
   color: #666;
