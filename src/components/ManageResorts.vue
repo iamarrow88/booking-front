@@ -49,21 +49,7 @@ export default {
           },
         });
         if (response.ok) {
-          try {
-            const resorts = await fetch('/api/myresorts',
-                {
-                  method: 'GET',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                  },
-                });
-            this.allResorts = await resorts.json();
-            console.log(this.allResorts);
-            this.usersResorts = this.allResorts.filter(resort => resort.owner_id === +this.userId)
-          } catch (e) {
-            console.error(e);
-          }
+          this.wasChangeResorts += 1;
         }
       } catch (e) {
         console.error(e);
@@ -98,6 +84,7 @@ export default {
         if(response.ok){
           console.log('ok');
           this.wasChangeResorts += 1;
+          this.isEditComponent = false;
           this.resortName = '';
           this.resortAddress = '';
           this.resortDescription = '';
