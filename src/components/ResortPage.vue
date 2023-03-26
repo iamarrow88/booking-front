@@ -180,13 +180,21 @@ export default {
 }
 
 .filters {
-  margin: 0 auto;
+  margin: 0 auto 30px;
   padding: 1rem;
   width: 30vw;
 }
 
-.date-input, .type, .select-time, .select-time__start, .select-time__end {
+.date-input, .type, .select-time {
   width: 100%;
+}
+
+.select-time {
+  display: flex;
+  justify-content: space-between;
+}
+.select-time__start, .select-time__end {
+  width: 40%;
 }
 
 .items-for-resort-title {

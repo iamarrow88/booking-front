@@ -3,11 +3,11 @@
     <div class="pop-up-block">
       <div class="pop-up-text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
       <div class="pop-up-text">На курорте <b>{{ resortName }}</b></div>
-      <div class="pop-up-text">Когда: <b>{{ formattedDate }}</b> c <b>{{ startTime }}</b> по <b>{{ endTime }}</b></div>
-      <div class="pop-up-text">Стоимость: <b>{{ total }}  RUB</b></div>
+      <div class="pop-up-text">Когда: <b>{{ formattedDate }}</b> c <b>{{ startTime }}:00</b> по <b>{{ endTime }}:00</b></div>
+      <div class="pop-up-text">Стоимость: <b>{{ total }} RUB</b></div>
       <div class="pop-up-btns">
-        <button class="pop-up-btn" @click="bookingItem">Да</button>
-        <button class="pop-up-btn" @click="closePopUp">Нет</button>
+        <button class="pop-up-btn" @click="goPaymentPage">Оплатить</button>
+        <button class="pop-up-btn" @click="closePopUp">Отмена</button>
       </div>
     </div>
   </div>
@@ -112,6 +112,6 @@ export default {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  width: 80%;
 }
 </style>
