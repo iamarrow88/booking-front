@@ -338,7 +338,7 @@ export default {
   justify-content: left;
   align-items: stretch;
   max-width: 80vw;
-  margin: 0 auto;
+  margin: 15px auto 0;
 }
 
 .btn-search {

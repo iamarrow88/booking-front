@@ -1,7 +1,7 @@
 <template>
   <HeaderPage :isLoggedIn="isLoggedIn" @loggin="loggin"/>
   <div id="app">
-    <router-view :isLoggedIn="isLoggedIn" @loggin="loggin" />
+    <router-view :isLoggedIn="isLoggedIn" @loggin="loggin"/>
   </div>
 
 </template>
