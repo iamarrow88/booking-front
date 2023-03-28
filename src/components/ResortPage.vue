@@ -180,9 +180,7 @@ export default {
 }
 
 .filters {
-
   margin: 0 auto 30px;
-
   padding: 1rem;
   width: 30vw;
 }

@@ -192,10 +192,6 @@ export default {
 <style scoped>
 .container {
   width: 50%;
-  margin: 0 auto;
-}
-
-.container {
   max-width: 500px;
   margin: 0 auto;
   padding: 20px;
@@ -254,8 +250,7 @@ li {
   flex-direction: column;
   align-items: center;
   max-width: 500px;
-  margin: 0 auto;
-  margin-top: 15px;
+  margin: 15px auto 0;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;

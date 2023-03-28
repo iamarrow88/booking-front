@@ -38,4 +38,20 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.sub-btn {
+  padding: 7px;
+  background-color: transparent;
+  cursor: pointer;
+  color: #1c3b65;
+  text-decoration: underline;
+}
+
+.sub-btn:hover {
+  background-color: #d6e6ff;
+}
+
+button {
+  margin: 15px 5px;
+}
 </style>

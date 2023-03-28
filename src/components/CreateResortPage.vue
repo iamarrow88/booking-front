@@ -22,12 +22,29 @@
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
+
+    <div class="manage-equipment-block">
+      <button class="sub-btn"
+      @click="getEquipments">Управлять инвентарем</button>
+      <div class="equipment-list" v-if="!isEquipmManagingHide">
+        <equipment-item v-for="item in equipments"
+                        :key="item.id"
+                        :item="item"
+                        :types="types"
+                        :editMode="true"
+        @DeleteItem="deleteItem"
+        @EditItem="EditItem"></equipment-item>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 
+import addItem from "@/components/addItem.vue";
+
 export default {
+  components: addItem,
   name: "CreateResortPage",
   props: {
     resortIdFromParent: Number,
@@ -37,6 +54,7 @@ export default {
     return {
       cities: [],
       resorts: [],
+      types: [],
 
       resortId: null,
       cityId: null,
@@ -49,6 +67,10 @@ export default {
       userId: null,
       errorMessage: null,
       isEditComponent: null,
+
+      equipments: [],
+      isEquipmManagingHide: true,
+      counter: 0,
     }
   },
   methods: {
@@ -62,6 +84,40 @@ export default {
         this.resorts = await resorts.json();
       } catch (e) {
         console.error(e);
+      }
+    },
+    async getInventoryByResort(){
+      try {
+        const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
+        this.equipments = await equipments.json();
+        if(equipments.ok){
+          console.log('ok');
+        } else {
+          console.log('not ok');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    getEquipments(){
+      this.isEquipmManagingHide=!this.isEquipmManagingHide;
+      this.getInventoryByResort();
+    },
+    async deleteItem(id) {
+      const res = await fetch(`/api/inventories/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const ress = res.json();
+      console.log(ress);
+      if(res.ok) {
+        this.counter += 1;
+        console.log('inventory item deleted');
+      } else {
+        console.log('inventory item didn\'t delete')
+
       }
     }
   },
@@ -93,11 +149,35 @@ export default {
         })
       }
     })
+
+    try {
+      const types = await fetch('/api/inventories/types');
+      this.types = await types.json();
+    } catch (e) {
+      console.error(e);
+    }
+
+    /*try {
+      const types = await fetch('/api/')
+    }*/
   },
+  watch: {
+    counter() {
+      this.getInventoryByResort();
+    }
+  }
 }
 </script>
 
 <style scoped>
+  .add-resort {
+    margin: 30px auto;
+    padding: 1rem;
+    width: 50vw;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+  }
+
   input {
     margin: 0 auto;
     max-width: 500px;
