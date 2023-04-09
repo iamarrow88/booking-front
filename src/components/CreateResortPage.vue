@@ -26,14 +26,22 @@
     <div class="manage-equipment-block">
       <button class="sub-btn"
       @click="getEquipments">Управлять инвентарем</button>
-      <div class="equipment-list" v-if="!isEquipmManagingHide">
+      <div class="equipment-list" v-if="!isEquipmManagingHide && equipments.length > 0">
         <equipment-item v-for="item in equipments"
                         :key="item.id"
                         :item="item"
                         :types="types"
                         :editMode="true"
-        @DeleteItem="deleteItem"
-        @EditItem="EditItem"></equipment-item>
+                        @DeleteItem="deleteItem"
+                        @EditItem="editItem"></equipment-item>
+      </div>
+      <div class="add-item">
+        <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
+        <add-item :editEquipmModeFromParent="false"
+                  :resortIdFromParent="resortId"
+                  v-if="isAddingItemModeOn"
+                  @isAddItemBlockOpen="closeAddItem"></add-item>
+
       </div>
     </div>
   </div>
@@ -42,9 +50,10 @@
 <script>
 
 import addItem from "@/components/addItem.vue";
+import EquipmentItem from "@/components/EquipmentItem.vue";
 
 export default {
-  components: addItem,
+  components: addItem, EquipmentItem,
   name: "CreateResortPage",
   props: {
     resortIdFromParent: Number,
@@ -71,6 +80,8 @@ export default {
       equipments: [],
       isEquipmManagingHide: true,
       counter: 0,
+      isAddingItemModeOn: false,
+      itemsCounter: 0,
     }
   },
   methods: {
@@ -110,8 +121,7 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      const ress = res.json();
-      console.log(ress);
+      console.log(res.json());
       if(res.ok) {
         this.counter += 1;
         console.log('inventory item deleted');
@@ -119,6 +129,37 @@ export default {
         console.log('inventory item didn\'t delete')
 
       }
+    },
+    /*showWarn() {
+      console.log('here')
+      setTimeout(() => {
+        return 'На данном курорте снаряжения нет'
+      }, 1000)
+    }*/
+    async editItem(id, typeId, resortId, price, photo) {
+      console.log(id, typeId, resortId, price, photo)
+      /*const res = await fetch('/inventories', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: {
+          id: id,
+          type_id: typeId,
+          resort_id: resortId,
+          price: price,
+          photo: photo
+        }
+      })*/
+
+    },
+    addItem() {
+      this.isAddingItemModeOn = !this.isAddingItemModeOn;
+    },
+    closeAddItem(bool) {
+      this.isAddingItemModeOn = bool;
+      this.itemsCounter += 1;
     }
   },
   async created() {
@@ -163,6 +204,9 @@ export default {
   },
   watch: {
     counter() {
+      this.getInventoryByResort();
+    },
+    itemsCounter() {
       this.getInventoryByResort();
     }
   }

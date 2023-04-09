@@ -15,7 +15,7 @@
   <input type="number" class="create-price-input" v-model="price" min="1">
 
   <label class="create-upload" for="upload-img">Загрузите фото</label>
-  <input type="file" name="img" id="img" accept="image/*" @change="addImg">
+  <input type="file" name="img" id="img" accept="image/*" class="create-upload-file">
 
   <button @click="createItem">{{ editEquipmModeFromParent ? "Сохранить изменения" : "Создать" }}</button>
 </template>
@@ -24,7 +24,8 @@
 export default {
   name: "addItem",
   props: {
-    editEquipmModeFromParent: Boolean
+    editEquipmModeFromParent: Boolean,
+    resortIdFromParent: Number
   },
   data() {
     return {
@@ -37,15 +38,21 @@ export default {
       price: null,
       photo: null,
       editMode: null,
-
+      counter: 0,
     }
   },
   methods: {
-    addImg(event) {
-      this.photo = event.target.files[0];
-    },
     async createItem() {
+      this.photo = document.querySelector('.create-upload-file').files[0].webkitRelativePath;
       const id = Date.now();
+      const body = {
+        id: id,
+        type_id: +this.typeId,
+        resort_id: +this.resortId,
+        price: +this.price,
+        photo: this.photo
+      }
+      console.log(body);
 
       try {
         const response = await fetch('/api/inventories', {
@@ -54,26 +61,23 @@ export default {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`
           },
-          body: JSON.stringify({
-            id: id,
-            type_id: +this.typeId,
-            resort_id: +this.resortId,
-            price: +this.price,
-            photo: this.photo
-          })
+          body: JSON.stringify(body)
         });
-        const result = await response.json();
-        console.log(result);
-        if(result.ok){
-          console.log('here')
-          this.editMode = false;
+        if(response.ok) {
           this.$emit('isAddItemBlockOpen', false)
-        } else {
+          console.log('OK');
+        }
+        else {
           console.log('ошибка')
         }
       } catch (error) {
         console.error(error);
       }
+    },
+    getResortName() {
+      this.resorts.forEach(resort => {
+        if(resort.id === this.resortIdFromParent) this.resortName = resort.name;
+      })
     }
   },
   async created() {
@@ -91,6 +95,8 @@ export default {
     } catch (error) {
       console.error(error);
     }
+    this.resortId = this.resortIdFromParent ? this.resortIdFromParent : this.resorts[0];
+    this.getResortName();
 
   },
   watch: {
@@ -103,7 +109,7 @@ export default {
       for(let i = 0; i < this.resorts.length; i++) {
         if(this.resorts[i].name === newResort) this.resortId = this.resorts[i].id
       }
-    }
+    },
   }
 
 }

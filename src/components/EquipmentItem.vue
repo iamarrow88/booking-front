@@ -18,8 +18,13 @@
               @click="this.$emit('DeleteItem', item.id)"
               class="items-for-resort-btn">Удалить</button>
       <button v-if="editMode"
-              @click="this.$emit('EditItem', item.id)"
+              @click="showAddItemBlock"
               class="items-for-resort-btn">Редактировать</button>
+    </div>
+
+    <div v-if="isAddingItemModeOn">
+      <add-item :editEquipmModeFromParent="false"
+                :resortIdFromParent="resortId"></add-item>
     </div>
 
     <pop-up v-if="!editMode" :item="item"
@@ -69,6 +74,7 @@ export default {
       type: null,
       isBookingProcessStarted: false,
       isBooked: false,
+      isAddingItemModeOn: false,
     }
   },
   methods: {
@@ -86,6 +92,9 @@ export default {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
+    showAddItemBlock() {
+      this.isAddingItemModeOn = !this.isAddingItemModeOn;
+    }
   },
   computed: {
     duration() {
@@ -146,7 +155,7 @@ export default {
 }
 
 .buttons button {
-  margin: 5px auto;
+  margin: 5px;
 }
 @media (max-width: 767px) {
 
