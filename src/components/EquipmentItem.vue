@@ -31,6 +31,11 @@
       @isAddItemBlockOpen="closeAddItem"></add-item>
     </div>
 
+    <div v-if="isAddingItemModeOn">
+      <add-item :editEquipmModeFromParent="false"
+                :resortIdFromParent="resortId"></add-item>
+    </div>
+
     <pop-up v-if="!editMode" :item="item"
             :typeName="type.name"
             :isBookingProcessStarted="isBookingProcessStarted"
