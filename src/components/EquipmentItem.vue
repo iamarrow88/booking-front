@@ -15,16 +15,18 @@
               v-if="!editMode"
               class="items-for-resort-btn">Забронировать</button>
       <button v-if="editMode"
-              @click="this.$emit('DeleteItem', item.id)"
-              class="items-for-resort-btn">Удалить</button>
-      <button v-if="editMode"
               @click="showAddItemBlock"
               class="items-for-resort-btn">Редактировать</button>
+      <button v-if="editMode"
+              @click="this.$emit('DeleteItem', item.id)"
+              class="items-for-resort-btn">Удалить</button>
     </div>
 
     <div v-if="isAddingItemModeOn">
-      <add-item :editEquipmModeFromParent="false"
-                :resortIdFromParent="resortId"></add-item>
+      <add-item :IsEditEquipmModeOnFParent="true"
+                :resortIdFromParent="resortId"
+                :itemFromParent="item"
+      @isAddItemBlockOpen="closeAddItem"></add-item>
     </div>
 
     <pop-up v-if="!editMode" :item="item"
@@ -66,6 +68,7 @@ export default {
     resortName: String,
     editMode: Boolean,
     sel_date: null,
+    sel_date_end: null,
     startTime: String,
     endTime: String
   },
@@ -75,6 +78,8 @@ export default {
       isBookingProcessStarted: false,
       isBooked: false,
       isAddingItemModeOn: false,
+      itemsCounter: 0,
+      today: null,
     }
   },
   methods: {
@@ -94,11 +99,45 @@ export default {
     },
     showAddItemBlock() {
       this.isAddingItemModeOn = !this.isAddingItemModeOn;
-    }
+    },
+    closeAddItem(bool) {
+      this.isAddingItemModeOn = bool;
+      this.itemsCounter += 1;
+    },
+    async getInventoryByResort(){
+      try {
+        const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
+        this.equipments = await equipments.json();
+        if(equipments.ok){
+          console.log('ok');
+        } else {
+          console.log('not ok');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
   },
   computed: {
     duration() {
-      return +this.endTime - +this.startTime;
+      const startTime = this.startTime + ':00:00';
+      const endTime = (this.startTime == 23 ? '00:00:00' : this.endTime + ':00:00');
+      const startDateFull =  this.sel_date + 'T' + startTime + '.000Z';
+      const endDateFull = this.sel_date + 'T' + endTime + '.000Z';
+      /*let res = [];
+      for (let i = 0; i < startDateArr.length; i++) {
+        if(startDateArr[i] !== endDateArr[i]) {
+          res.push(+endDateArr[i] - +startDateArr[i]);
+        }
+      }*/
+      const diff = Math.ceil(((Date.parse(startDateFull) - Date.parse(endDateFull))/ 60 * 60 * 1000)) / 24
+      console.log(startDateFull, endDateFull, diff);
+      return (this.endTime == '00' ? '24' : +this.endTime) - +this.startTime;
+    }
+  },
+  watch: {
+    itemsCounter() {
+      this.getInventoryByResort();
     }
   },
   async created() {
@@ -109,6 +148,7 @@ export default {
       console.error(e);
     }*/
     this.getEquipmentType();
+    this.today = (new Date().toISOString().slice(0, 10));
   },
 }
 

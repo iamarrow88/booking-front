@@ -7,7 +7,6 @@
                         :editMode="false"
                         @updateResort="editResort"></create-resort-page>
   </div>
-  <router-link to="/resorts/equipment">Страница управления снаряжением</router-link>
   <div class="resorts-list" v-if="resorts.length > 0">
     <resort-item @editResortFromItem="editResort"
                  @deleteResort="deleteResort" v-for="resort in resorts"

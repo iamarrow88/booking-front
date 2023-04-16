@@ -23,21 +23,21 @@
       {{ errorMessage }}
     </div>
 
-    <div class="manage-equipment-block">
+    <div class="manage-equipment-block" v-if="editMode">
       <button class="sub-btn"
       @click="getEquipments">Управлять инвентарем</button>
       <div class="equipment-list" v-if="!isEquipmManagingHide && equipments.length > 0">
         <equipment-item v-for="item in equipments"
                         :key="item.id"
                         :item="item"
+                        :resortId="resortId"
                         :types="types"
                         :editMode="true"
-                        @DeleteItem="deleteItem"
-                        @EditItem="editItem"></equipment-item>
+                        @DeleteItem="deleteItem"></equipment-item>
       </div>
       <div class="add-item">
         <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
-        <add-item :editEquipmModeFromParent="false"
+        <add-item :IsEditEquipmModeOnFParent="false"
                   :resortIdFromParent="resortId"
                   v-if="isAddingItemModeOn"
                   @isAddItemBlockOpen="closeAddItem"></add-item>
@@ -129,30 +129,6 @@ export default {
         console.log('inventory item didn\'t delete')
 
       }
-    },
-    /*showWarn() {
-      console.log('here')
-      setTimeout(() => {
-        return 'На данном курорте снаряжения нет'
-      }, 1000)
-    }*/
-    async editItem(id, typeId, resortId, price, photo) {
-      console.log(id, typeId, resortId, price, photo)
-      /*const res = await fetch('/inventories', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-        body: {
-          id: id,
-          type_id: typeId,
-          resort_id: resortId,
-          price: price,
-          photo: photo
-        }
-      })*/
-
     },
     addItem() {
       this.isAddingItemModeOn = !this.isAddingItemModeOn;

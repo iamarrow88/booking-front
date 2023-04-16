@@ -4,66 +4,20 @@
     <p>Забронируйте свой любимый спортивный инвентарь онлайн!</p>
     <div class="container my-5">
       <div class="form-group">
-        <label for="Date">Дата:</label>
-        <input type="date" class="form-control" id="Date" v-model="sel_date">
+        <label for="Date">Дата с:</label>
+        <input type="date" class="form-control" id="date-start" v-model="selDateStartShort">
+        <label for="Date">Дата по:</label>
+        <input type="date" class="form-control" id="date-end" v-model="selDateEndShort">
       </div>
       <div class="form-group" style="display: flex; justify-content: space-between;">
         <div>
           <label for="startTime">Начало:</label>
-            <select name="startTime" id="startTime" v-model="startTime">
-              <option value="00">0:00</option>
-              <option value="01">1:00</option>
-              <option value="02">2:00</option>
-              <option value="03">3:00</option>
-              <option value="4">4:00</option>
-              <option value="05">5:00</option>
-              <option value="06">6:00</option>
-              <option value="07">7:00</option>
-              <option value="08">8:00</option>
-              <option value="09">9:00</option>
-              <option value="10">10:00</option>
-              <option value="11">11:00</option>
-              <option value="12">12:00</option>
-              <option value="13">13:00</option>
-              <option value="14">14:00</option>
-              <option value="15">15:00</option>
-              <option value="16">16:00</option>
-              <option value="17">17:00</option>
-              <option value="18">18:00</option>
-              <option value="19">19:00</option>
-              <option value="20">20:00</option>
-              <option value="21">21:00</option>
-              <option value="22">22:00</option>
-              <option value="23">23:00</option>
+            <select name="startTime" id="startTime" v-model="startTime" class="time-picker">
             </select>
         </div>
         <div>
           <label for="endTime">Конец:</label>
-          <select name="endTime" id="endTime" v-model="endTime">
-            <option value="00">0:00</option>
-            <option value="01">1:00</option>
-            <option value="02">2:00</option>
-            <option value="03">3:00</option>
-            <option value="04">4:00</option>
-            <option value="05">5:00</option>
-            <option value="06">6:00</option>
-            <option value="07">7:00</option>
-            <option value="08">8:00</option>
-            <option value="09">9:00</option>
-            <option value="10">10:00</option>
-            <option value="11">11:00</option>
-            <option value="12">12:00</option>
-            <option value="13">13:00</option>
-            <option value="14">14:00</option>
-            <option value="15">15:00</option>
-            <option value="16">16:00</option>
-            <option value="17">17:00</option>
-            <option value="18">18:00</option>
-            <option value="19">19:00</option>
-            <option value="20">20:00</option>
-            <option value="21">21:00</option>
-            <option value="22">22:00</option>
-            <option value="23">23:00</option>
+          <select name="endTime" id="endTime" v-model="endTime" class="time-picker">
           </select>
         </div>
       </div>
@@ -95,9 +49,10 @@
                  {
                   type_id: selectedType.id,
                   selectedCityId: selectedCity.id,
-                  sel_date: sel_date,
+                  sel_date: selDateStartShort,
+                  sel_date_end:selDateEndShort,
                   startTime: startTime,
-                  endTime: endTime,
+                  endTime: endTime
                  }
                 })">
               Посмотреть инвентарь
@@ -117,24 +72,69 @@
 export default {
   data() {
     return {
-      sel_date: null,
+      startDateFull: null,
+      todayDateFull: null,
+      todayShortDate: null,
+
+      selDateStartShort: null,
+      selDateEndShort: null,
+
       startTime: '',
       endTime: '',
+
       selectedCity: null,
       selectedType: null,
+
       cities: [],
       resorts: [],
       types: [],
+
       isNotFoundShown: false,
-      startDate: null,
-      todayDate: null,
     }
   },
   methods: {
+   getTimeNumber(dateFull) {
+      let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
+      timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
+      return timeNumber;
+    },
+    getShortDate(fullDate) {
+      return (fullDate.toISOString().slice(0, 10));
+    },
+    addDayToDate(dateFull, daysToAdd){
+      return new Date(dateFull.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
+    },
+    createStartOptions(startTime, isToday) {
+      const startTimeBlock = document.querySelector('#startTime');
+      const nowHour = this.todayDateFull.getHours();
+
+      startTimeBlock.innerHTML = '';
+
+      let i = isToday ? startTime : 0;
+      for (i; i < 24; i ++) {
+        const item = document.createElement('option');
+        item.value = i < 10 ? '0' + i : i;
+        item.innerHTML = (i < 10 ? '0' + i : i) + ':00';
+        if(isToday && nowHour > i) item.setAttribute('disabled', 'true');
+        startTimeBlock.appendChild(item);
+      }
+    },
+    createEndOptions(startTime) {
+      const endTimeBlock = document.querySelector('#endTime');
+      endTimeBlock.innerHTML = '';
+
+      for (let i = +startTime + 1; i < 25; i++) {
+        const item = document.createElement('option');
+        item.value = i < 10 ? '0' + i : i;
+        item.innerHTML = (i < 10 ? '0' + i : i) + ':00';
+        endTimeBlock.appendChild(item);
+      }
+    },
     async getResorts() {
-      console.log(`Getting resorts for ${this.selectedCity.name}`);
       const startTime = this.startTime + ':00:00';
-      const endTime = this.endTime + ':00:00';
+      const endTime = (this.endTime === 24 ? '23:59:59' : this.endTime + ':00:00');
+      console.log(`Getting resorts for ${this.selectedCity.name}`);
+
       try {
         const response = await fetch('/api/resorts/filter', {
           method: 'POST',
@@ -145,8 +145,8 @@ export default {
           body: JSON.stringify({
             city_id: this.selectedCity.id,
             type_id: this.selectedType.id,
-            start_time: this.sel_date + 'T' + startTime + '.000Z',
-            end_time: this.sel_date + 'T' + endTime + '.000Z',
+            start_time: this.selDateStartShort + 'T' + startTime + '.000Z',
+            end_time: this.selDateStartShort + 'T' + endTime + '.000Z',
           })
         });
         this.resorts = await response.json()
@@ -166,24 +166,40 @@ export default {
     } catch (error) {
       console.error(error)
     }
-    this.startDate = new Date(new Date().setHours(0, 0, 0, 0));
-    this.todayDate = new Date();
+    this.selDateStartShort = this.getShortDate(new Date());
+    this.startDateFull = new Date(new Date(this.selDateStartShort).setHours(0, 0, 0, 0));
+    this.todayDateFull = new Date();
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
-    this.sel_date = (new Date().toISOString().slice(0, 10));
-    let startTime = (+this.todayDate.toString().split(':')[0].slice(-3) + 1).toString();
-    startTime = startTime.length === 1 ? '0' + startTime : startTime;
-    startTime = startTime === '24' ? '00' : startTime;
-    this.startTime = startTime;
-
+    this.selDateEndShort = this.selDateStartShort;
+    this.startTime = this.getTimeNumber(this.todayDateFull);
+    this.createStartOptions(this.startTime, true);
+    this.createEndOptions(this.startTime);
+    this.todayShortDate = (new Date().toISOString().slice(0, 10));
+    document.querySelector('#date-start').setAttribute('min', this.todayShortDate)
+    document.querySelector('#date-end').setAttribute('min', this.selDateStartShort)
   },
   watch: {
     startTime(newTime) {
-      const MsInHour = 60 * 60 * 1000;
-      const hoursToAdd = (+newTime + 1) * MsInHour;
-      let endTime = +new Date(Date.parse(this.startDate) + hoursToAdd).toString().split(':')[0].slice(-2);
-      this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
-    }
+      this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
+      if(this.endTime > 24) {
+        const MsInHour = 60 * 60 * 1000;
+        const hoursToAdd = (+newTime + 1) * MsInHour;
+        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
+        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
+        this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
+      }
+      this.createEndOptions(newTime);
+    },
+    selDateStartShort(newDate) {
+      if(newDate !== this.todayShortDate) {
+        document.querySelector('#date-end').setAttribute('min', this.selDateStartShort)
+        this.startTime = '10';
+        this.selDateEndShort = newDate;
+        this.createStartOptions(this.startTime, false);
+        this.createEndOptions(this.startTime);
+      }
+    },
   }
 }
 </script>
@@ -224,6 +240,14 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #45a049;
+}
+
+.time-picker {
+  width: 10vw;
+}
+
+.time-picker option {
+  width: 10vw;
 }
 
 li {

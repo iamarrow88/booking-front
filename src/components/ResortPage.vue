@@ -2,8 +2,10 @@
   <div class="results">
     <div class="filters">
       <div class="filters__date-input date-input">
-        <label for="startDate">Дата:</label>
+        <label for="startDate">Дата с:</label>
         <input type="date" class="form-control" id="startDate" v-model="sel_date">
+        <label for="Date">Дата по:</label>
+        <input type="date" class="form-control" id="date_end" v-model="sel_date_end">
       </div>
 
       <div class="filters__type type">
@@ -17,7 +19,6 @@
         <div class="select-time__start">
           <label for="startTime">Начало бронирования:</label>
           <select name="startTime" id="startTime" v-model="startTime" class="form-control">
-            <option value="00">0:00</option>
             <option value="01">1:00</option>
             <option value="02">2:00</option>
             <option value="03">3:00</option>
@@ -41,12 +42,12 @@
             <option value="21">21:00</option>
             <option value="22">22:00</option>
             <option value="23">23:00</option>
+            <option value="24">24:00</option>
           </select>
         </div>
         <div class="select-time__end">
           <label for="endTime">Конец бронирования:</label>
           <select name="startTime" id="endTime" v-model="endTime" class="form-control">
-            <option value="00">0:00</option>
             <option value="01">1:00</option>
             <option value="02">2:00</option>
             <option value="03">3:00</option>
@@ -70,6 +71,7 @@
             <option value="21">21:00</option>
             <option value="22">22:00</option>
             <option value="23">23:00</option>
+            <option value="24">24:00</option>
           </select>
         </div>
       </div>
@@ -86,6 +88,7 @@
                       :resortName="resortName"
                       :editMode="false"
                       :sel_date="sel_date"
+                      :sel_date_end="sel_date_end"
                       :startTime="startTime"
                       :endTime="endTime"
       ></equipment-item>
@@ -110,6 +113,7 @@ export default {
       itemTypeId: null,
       notFilteredItems: [],
       sel_date: null,
+      sel_date_end: null,
       startTime: '',
       endTime: '',
       selectedType: null,
@@ -159,6 +163,7 @@ export default {
   async created() {
     this.itemTypeId = +this.$route.query.type_id;
     this.sel_date = this.$route.query.sel_date;
+    this.sel_date_end = this.sel_date;
     this.startTime = this.$route.query.startTime;
     this.endTime = this.$route.query.endTime;
     try {
@@ -167,8 +172,8 @@ export default {
     } catch (error) {
       console.error(error)
     }
+  },
 
-  }
 }
 </script>
 

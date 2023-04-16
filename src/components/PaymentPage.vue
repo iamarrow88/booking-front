@@ -1,17 +1,27 @@
 <template>
-  <div class="payment">
+  <div class="payment" v-if="!isPaymentOk">
+    <div>Сумма к оплате </div>
     <div>Введите номер карты :)</div>
 
     <button @click="bookingItem">Я ввел, честно</button>
   </div>
+  <div v-else>
+    <modal-window :isOpen="isOpen" @closePopUp="closePopUp"></modal-window>
+  </div>
 </template>
 
 <script>
+import ModalWindow from "@/components/ModalWindow.vue";
+
 export default {
   name: "PaymentPage",
+  components: ModalWindow,
   data(){
     return {
-      bookings: []
+      bookings: [],
+      isPaymentOk: false,
+      isOpen: true,
+      total: null,
     }
   },
   methods: {
@@ -35,6 +45,7 @@ export default {
         if(response.ok) {
           this.bookings = await response.json();
           console.log('ok');
+          this.isPaymentOk = true;
 
         } else {
           console.log('not ok');
@@ -42,8 +53,15 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+    closePopUp(bool1) {
+      this.isOpen = bool1;
+      this.$router.push('/mybooking')
     }
   },
+  created() {
+    this.total = this.$route.query.total;
+  }
 }
 </script>
 

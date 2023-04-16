@@ -50,6 +50,7 @@ export default {
           startTime: this.startTime,
           endTime: this.endTime,
           itemId: this.item.id,
+          total: this.total
         }});
     }
   },
