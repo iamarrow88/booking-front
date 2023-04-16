@@ -21,6 +21,7 @@
           </select>
         </div>
       </div>
+      <div class="duration">Бронь на {{duration}} {{hoursNaming}}</div>
       <div class="form-group">
         <label for="city">Город:</label>
         <select class="form-control" id="city" v-model="selectedCity">
@@ -52,7 +53,8 @@
                   sel_date: selDateStartShort,
                   sel_date_end:selDateEndShort,
                   startTime: startTime,
-                  endTime: endTime
+                  endTime: endTime,
+                  duration: duration
                  }
                 })">
               Посмотреть инвентарь
@@ -81,6 +83,8 @@ export default {
 
       startTime: '',
       endTime: '',
+      duration: null,
+      hoursNaming: 'час',
 
       selectedCity: null,
       selectedType: null,
@@ -155,8 +159,23 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+    calcDuration(){
+     const msPerHours = 60 * 60 * 1000;
+     const start = new Date(this.selDateStartShort + ' ' + this.startTime + ':00:00');
+     const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
+      return (end - start) / msPerHours
+    },
+    calcHoursNaming(duration){
+     if(duration >= 5 && duration <= 20 || +duration.toString()[0] >= 5 && +duration.toString()[0] <= 9){
+       this.hoursNaming = 'часов';
+     } else if(+duration.toString()[0] === 1){
+       this.hoursNaming = 'час';
+     } else {
+       this.hoursNaming = 'часа';
+     }
     }
-  },
+    },
   async created() {
     try {
       const response = await fetch('/api/cities')
@@ -190,6 +209,16 @@ export default {
         this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
       }
       this.createEndOptions(newTime);
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    endTime() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateEndShort() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
     },
     selDateStartShort(newDate) {
       if(newDate !== this.todayShortDate) {
@@ -199,6 +228,8 @@ export default {
         this.createStartOptions(this.startTime, false);
         this.createEndOptions(this.startTime);
       }
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
     },
   }
 }

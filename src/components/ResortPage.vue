@@ -116,6 +116,7 @@ export default {
       sel_date_end: null,
       startTime: '',
       endTime: '',
+      duration: null,
       selectedType: null,
       filteredItems: [],
     }
@@ -166,6 +167,7 @@ export default {
     this.sel_date_end = this.sel_date;
     this.startTime = this.$route.query.startTime;
     this.endTime = this.$route.query.endTime;
+    this.duration = this.$route.query.duration;
     try {
       const types = await fetch('/api/inventories/types')
       this.types = await types.json();
