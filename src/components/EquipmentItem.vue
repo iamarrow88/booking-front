@@ -32,8 +32,10 @@
     </div>
 
     <div v-if="isAddingItemModeOn">
-      <add-item :editEquipmModeFromParent="false"
-                :resortIdFromParent="resortId"></add-item>
+      <add-item :IsEditEquipmModeOnFParent="true"
+                :resortIdFromParent="resortId"
+                :itemFromParent="item"
+      @isAddItemBlockOpen="closeAddItem"></add-item>
     </div>
 
     <pop-up v-if="!editMode" :item="item"
