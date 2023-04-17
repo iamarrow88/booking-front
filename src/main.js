@@ -44,3 +44,15 @@ app.component('ResortItem', ResortItem);
 app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
+
+app.mixin({
+    methods: {
+        getTimeNumber(dateFull) {
+            let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
+            timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
+            return timeNumber;
+        },
+    }
+})
+
+

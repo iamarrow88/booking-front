@@ -5,19 +5,19 @@
     <div class="container my-5">
       <div class="form-group">
         <label for="Date">Дата с:</label>
-        <input type="date" class="form-control" id="date-start" v-model="selDateStartShort">
+        <input type="date" class="form-control" id="date-start" v-model="selDateStartShort" ref="dateStart">
         <label for="Date">Дата по:</label>
-        <input type="date" class="form-control" id="date-end" v-model="selDateEndShort">
+        <input type="date" class="form-control" id="date-end" v-model="selDateEndShort" ref="dateEnd">
       </div>
       <div class="form-group" style="display: flex; justify-content: space-between;">
         <div>
           <label for="startTime">Начало:</label>
-            <select name="startTime" id="startTime" v-model="startTime" class="time-picker">
+            <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTime">
             </select>
         </div>
         <div>
           <label for="endTime">Конец:</label>
-          <select name="endTime" id="endTime" v-model="endTime" class="time-picker">
+          <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTime">
           </select>
         </div>
       </div>
@@ -50,8 +50,8 @@
                  {
                   type_id: selectedType.id,
                   selectedCityId: selectedCity.id,
-                  sel_date: selDateStartShort,
-                  sel_date_end:selDateEndShort,
+                  selDateStartShort: selDateStartShort,
+                  selDateEndShort:selDateEndShort,
                   startTime: startTime,
                   endTime: endTime,
                   duration: duration
@@ -72,6 +72,9 @@
 
 <script>
 export default {
+/*
+  mixins: [getTimeNumber],
+*/
   data() {
     return {
       startDateFull: null,
@@ -109,7 +112,7 @@ export default {
       return new Date(dateFull.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
     },
     createStartOptions(startTime, isToday) {
-      const startTimeBlock = document.querySelector('#startTime');
+      const startTimeBlock = this.$refs.startTime;
       const nowHour = this.todayDateFull.getHours();
 
       startTimeBlock.innerHTML = '';
@@ -124,7 +127,7 @@ export default {
       }
     },
     createEndOptions(startTime) {
-      const endTimeBlock = document.querySelector('#endTime');
+      const endTimeBlock = this.$refs.endTime;
       endTimeBlock.innerHTML = '';
 
       for (let i = +startTime + 1; i < 25; i++) {
@@ -195,8 +198,8 @@ export default {
     this.createStartOptions(this.startTime, true);
     this.createEndOptions(this.startTime);
     this.todayShortDate = (new Date().toISOString().slice(0, 10));
-    document.querySelector('#date-start').setAttribute('min', this.todayShortDate)
-    document.querySelector('#date-end').setAttribute('min', this.selDateStartShort)
+    this.$refs.dateStart.setAttribute('min', this.todayShortDate);
+    this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
   },
   watch: {
     startTime(newTime) {
@@ -222,7 +225,7 @@ export default {
     },
     selDateStartShort(newDate) {
       if(newDate !== this.todayShortDate) {
-        document.querySelector('#date-end').setAttribute('min', this.selDateStartShort)
+        this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
         this.startTime = '10';
         this.selDateEndShort = newDate;
         this.createStartOptions(this.startTime, false);

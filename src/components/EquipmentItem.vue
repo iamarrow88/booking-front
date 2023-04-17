@@ -6,6 +6,8 @@
         <img class="items-for-resort-item-photo column" :src="item.photo" alt="Item Photo">
         <p class="items-for-resort-item-price column">Час - <span>{{ item.price }} RUB</span></p>
         <p class="items-for-resort-item-price column"
+           v-if="!editMode">Аренда на {{ duration }} {{hoursNaming}}</p>
+        <p class="items-for-resort-item-price column"
            v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></p>
       </div>
     </div>
@@ -33,10 +35,12 @@
             :typeName="type.name"
             :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"
-            :sel_date="sel_date"
+            :selDateStartShort="selDateStartShort"
+            :selDateEndShort="selDateEndShort"
             :startTime="startTime"
             :endTime="endTime"
             :total = "item.price * duration"
+            :duration = "duration"
             @closePopUp="closePopUp"></pop-up>
     <modal-window :isOpen="isBooked" @closePopUp="closePopUp"></modal-window>
   </div>
@@ -67,10 +71,12 @@ export default {
     typeId: Number,
     resortName: String,
     editMode: Boolean,
-    sel_date: null,
-    sel_date_end: null,
+    selDateStartShort: null,
+    selDateEndShort: null,
     startTime: String,
-    endTime: String
+    endTime: String,
+    duration: Number,
+    hoursNaming: String,
   },
   data() {
     return {
@@ -80,6 +86,8 @@ export default {
       isAddingItemModeOn: false,
       itemsCounter: 0,
       today: null,
+      componentDuration: null,
+
     }
   },
   methods: {
@@ -117,39 +125,30 @@ export default {
         console.error(e);
       }
     },
-  },
-  computed: {
-    duration() {
-      const startTime = this.startTime + ':00:00';
-      const endTime = (this.startTime == 23 ? '00:00:00' : this.endTime + ':00:00');
-      const startDateFull =  this.sel_date + 'T' + startTime + '.000Z';
-      const endDateFull = this.sel_date + 'T' + endTime + '.000Z';
-      /*let res = [];
-      for (let i = 0; i < startDateArr.length; i++) {
-        if(startDateArr[i] !== endDateArr[i]) {
-          res.push(+endDateArr[i] - +startDateArr[i]);
-        }
-      }*/
-      const diff = Math.ceil(((Date.parse(startDateFull) - Date.parse(endDateFull))/ 60 * 60 * 1000)) / 24
-      console.log(startDateFull, endDateFull, diff);
-      return (this.endTime == '00' ? '24' : +this.endTime) - +this.startTime;
-    }
+    calcDuration() {
+      const msPerHours = 60 * 60 * 1000;
+      const start = new Date(this.selDateStartShort + ' ' + this.startTime + ':00:00');
+      const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
+      return (end - start) / msPerHours
+    },
   },
   watch: {
     itemsCounter() {
       this.getInventoryByResort();
+    },
+    startTime() {
+      this.componentDuration = this.calcDuration();
+    },
+    endTime() {
+      this.componentDuration = this.calcDuration();
     }
   },
   async created() {
-    /*try {
-      const types = await fetch('/api/inventories/types');
-      this.types = await types.json();
-    } catch (e) {
-      console.error(e);
-    }*/
     this.getEquipmentType();
     this.today = (new Date().toISOString().slice(0, 10));
+    this.componentDuration = this.$route.query.duration;
   },
+
 }
 
 </script>

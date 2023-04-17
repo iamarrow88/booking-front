@@ -38,8 +38,8 @@ export default {
           },
           body: JSON.stringify({
             inventory_id: +this.$route.query.itemId,
-            start_time: this.$route.query.sel_date + 'T' + startTime + 'Z',
-            end_time: this.$route.query.sel_date + 'T' + endTime + 'Z'
+            start_time: this.$route.query.selDateStartShort + 'T' + startTime + 'Z',
+            end_time: this.$route.query.selDateStartShort + 'T' + endTime + 'Z'
           })
         });
         if(response.ok) {
