@@ -15,6 +15,8 @@ import ResortItem from "@/components/ResortItem.vue";
 import ModalWindow from "@/components/ModalWindow.vue";
 import BookingItem from "@/components/BookingItem.vue";
 import PaymentPage from "@/components/PaymentPage.vue";
+import '@/main.css'
+import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
 
 const router = createRouter({
     history: createWebHistory(),

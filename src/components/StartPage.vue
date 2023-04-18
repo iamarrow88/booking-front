@@ -1,49 +1,66 @@
 <template>
-  <div>
-    <h1>Бронирование спортивного инвентаря</h1>
-    <p>Забронируйте свой любимый спортивный инвентарь онлайн!</p>
-    <div class="container my-5">
-      <div class="form-group">
-        <label for="Date">Дата с:</label>
-        <input type="date" class="form-control" id="date-start" v-model="selDateStartShort" ref="dateStart">
-        <label for="Date">Дата по:</label>
-        <input type="date" class="form-control" id="date-end" v-model="selDateEndShort" ref="dateEnd">
-      </div>
-      <div class="form-group" style="display: flex; justify-content: space-between;">
-        <div>
-          <label for="startTime">Начало:</label>
-            <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTime">
-            </select>
-        </div>
-        <div>
-          <label for="endTime">Конец:</label>
-          <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTime">
-          </select>
-        </div>
-      </div>
-      <div class="duration">Бронь на {{duration}} {{hoursNaming}}</div>
-      <div class="form-group">
-        <label for="city">Город:</label>
-        <select class="form-control" id="city" v-model="selectedCity">
-          <option v-for="city in cities" :key="city.id" :value="city">{{ city.name }}</option>
-        </select>
-        <div class="form-group">
-          <label for="typeInput">Тип инвентаря</label>
-          <select class="form-control" id="typeInput" v-model="selectedType">
-            <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
-          </select>
-        </div>
-      </div>
+  <div class="start-page">
+     <div class="search-block">
+       <h1 class="search-block__header">Бронирование спортивного инвентаря</h1>
+       <p class="search-block__subheader">Забронируйте свой любимый спортивный инвентарь онлайн!</p>
+       <div class="container my-5">
+         <div class="form-group">
+           <label for="Date">Дата с:</label>
+           <input type="date" class="form-control" id="date-start" v-model="selDateStartShort" ref="dateStart">
+           <label for="Date">Дата по:</label>
+           <input type="date" class="form-control" id="date-end" v-model="selDateEndShort" ref="dateEnd">
+         </div>
+         <div class="form-group" style="display: flex; justify-content: space-between;">
+           <div>
+             <label for="startTime">Начало:</label>
+             <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTime">
+             </select>
+           </div>
+           <div>
+             <label for="endTime">Конец:</label>
+             <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTime">
+             </select>
+           </div>
+         </div>
+         <div class="duration">Бронь на {{duration}} {{hoursNaming}}</div>
+         <div class="form-group">
+           <label for="city">Город:</label>
+           <select class="form-control" id="city" v-model="selectedCity">
+             <option v-for="city in cities" :key="city.id" :value="city">{{ city.name }}</option>
+           </select>
+           <div class="form-group">
+             <label for="typeInput">Тип инвентаря</label>
+             <select class="form-control" id="typeInput" v-model="selectedType">
+               <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
+             </select>
+           </div>
+         </div>
 
-      <div class="form-group">
-        <button class="btn btn-primary" @click="getResorts">Поиск курорта</button>
+         <div class="form-group">
+           <button class="btn btn-primary" @click="getResorts">Поиск курорта</button>
+         </div>
+       </div>
       </div>
+    <div class="results-block">
       <div v-if="resorts.length > 0">
-        <h3>Курорты в городе {{ selectedCity.name }}:</h3>
+        <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
         <ul class="list-group">
-          <li class="list-group-item" v-for="resort in resorts" :key="resort.id">{{ resort.name }}
-            <p class="my-2">Адрес: {{ resort.address }}</p>
-            <p class="my-2">Описание: {{ resort.description }}</p>
+          <result-item-from-start-page v-for="resort in resorts"
+                                       :key="resort.id"
+          :resort="resort"
+          :selectedType="selectedType"
+          :selectedCity="selectedCity"
+          :selDateStartShort="selDateStartShort"
+          :selDateEndShort="selDateEndShort"
+          :startTime="startTime"
+          :endTime="endTime"
+          :duration="duration"></result-item-from-start-page>
+<!--          <li class="list-group-item" v-for="resort in resorts" :key="resort.id">
+            <p class="item__header">{{ resort.name }}</p>
+            <p class="my-2"><b>Адрес:</b> {{ resort.address }}</p>
+
+            <button @click="isMoreShown=!isMoreShown">Подробнее</button>
+            <p class="my-2" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
 
             <button
                 @click="$router.push({ path: '/resorts/' + resort.id, query:
@@ -60,7 +77,7 @@
               Посмотреть инвентарь
             </button>
 
-          </li>
+          </li>-->
         </ul>
       </div>
       <div v-else-if="isNotFoundShown">
@@ -71,10 +88,10 @@
 </template>
 
 <script>
+import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
+
 export default {
-/*
-  mixins: [getTimeNumber],
-*/
+  components: ResultItemFromStartPage,
   data() {
     return {
       startDateFull: null,
@@ -97,6 +114,7 @@ export default {
       types: [],
 
       isNotFoundShown: false,
+      isMoreShown: false,
     }
   },
   methods: {
@@ -252,6 +270,22 @@ h1, h3, p {
   text-align: center;
 }
 
+.start-page {
+  width: 100vw;
+}
+
+.search-block {
+  padding: 50px 50px 0;
+  background-image: url("../assets/11.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.search-block__header, .search-block__subheader {
+  color: #fff;
+}
+
 input[type="date"], input[type="number"], select {
   width: 100%;
   padding: 12px;
@@ -284,37 +318,29 @@ input[type="submit"]:hover {
   width: 10vw;
 }
 
-li {
-  margin-bottom: 10px;
-  list-style: none;
-}
-
-.btn {
-  margin-top: 10px;
-}
-
 .list-group {
-  max-width: 800px;
+  padding: 40px 80px;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  align-items: stretch;
+  max-width: 80vw;
   margin: 0 auto;
 }
 
-.my-2 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+.results-block {
+  padding-top: 40px;
+}
+.results-header {
+  font-size: 28px;
 }
 
-.list-group-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 500px;
-  margin: 15px auto 0;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  overflow: hidden;
 
-}
+/*.btn {
+  margin-top: 10px;
+}*/
+
 
 button {
   padding: 10px;
