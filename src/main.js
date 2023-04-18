@@ -44,6 +44,7 @@ app.component('ResortItem', ResortItem);
 app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
+app.component('ResultItemFromStartPage', ResultItemFromStartPage);
 
 app.mixin({
     methods: {
