@@ -158,8 +158,8 @@ export default {
       let i = isToday ? startTime : 0;
       for (i; i < 24; i ++) {
         const item = document.createElement('option');
-        item.value = i < 10 ? '0' + i : i;
-        item.innerHTML = (i < 10 ? '0' + i : i) + ':00';
+        item.value = i < 10 ? '0' + +i : +i;
+        item.innerHTML = (i < 10 ? '0' + +i : +i) + ':00';
         if(isToday && nowHour > i) item.setAttribute('disabled', 'true');
         startTimeBlock.appendChild(item);
       }
@@ -170,8 +170,8 @@ export default {
 
       for (let i = +startTime + 1; i < 25; i++) {
         const item = document.createElement('option');
-        item.value = i < 10 ? '0' + i : i;
-        item.innerHTML = (i < 10 ? '0' + i : i) + ':00';
+        item.value = i < 10 ? '0' + +i : +i;
+        item.innerHTML = (i < 10 ? '0' + +i : +i) + ':00';
         endTimeBlock.appendChild(item);
       }
     },
@@ -182,7 +182,6 @@ export default {
       return (end - start) / msPerHours
     },
     calcHoursNaming(duration){
-      console.log('here');
       if(duration >= 5 && duration <= 20 || +duration.toString()[0] >= 5 && +duration.toString()[0] <= 9){
         this.hoursNaming = 'часов';
       } else if(+duration.toString()[0] === 1){
@@ -206,6 +205,8 @@ export default {
     startTime(newTime) {
       if(this.startCounter !== 0) {
         this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
+      } else {
+        this.startCounter += 1;
       }
       if(this.endTime > 24) {
         const MsInHour = 60 * 60 * 1000;
