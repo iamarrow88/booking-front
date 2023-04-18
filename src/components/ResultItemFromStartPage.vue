@@ -1,0 +1,98 @@
+<template>
+  <li class="result-item">
+    <p class="item__header">{{ resort.name }}</p>
+    <p class="my-2"><b>Адрес:</b> {{ resort.address }}</p>
+
+    <button @click="isMoreShown=!isMoreShown"
+            class="cards-btn">Подробнее</button>
+    <p class="my-2" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
+
+    <button
+        @click="$router.push({ path: '/resorts/' + resort.id, query:
+                 {
+                  type_id: selectedType.id,
+                  selectedCityId: selectedCity.id,
+                  selDateStartShort: selDateStartShort,
+                  selDateEndShort:selDateEndShort,
+                  startTime: startTime,
+                  endTime: endTime,
+                  duration: duration
+                 }
+                })"
+    class="cards-btn">
+      Посмотреть инвентарь
+    </button>
+
+  </li>
+</template>
+
+<script>
+export default {
+  name: "ResultItemFromStartPage",
+  props: {
+    resort: {
+      id: Number,
+      name: String,
+      city_id: Number,
+      owner_id: Number,
+      description: String,
+      address: String
+    },
+    selectedType: {
+      id: Number,
+      name: String
+    },
+    selectedCity: {
+      id: Number,
+      name: String
+    },
+    selDateStartShort: String,
+    selDateEndShort: String,
+    startTime: String,
+    endTime: String,
+    duration: Number
+  },
+  data() {
+    return {
+      isMoreShown: false,
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+.result-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  margin: 30px 10px 0;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform .7s;
+  background-color: #f5fbfd;
+}
+
+.result-item:hover {
+  transform: scale(1.1);
+  transition: all .7s;
+}
+
+.my-2 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.item__header {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+
+
+
+</style>

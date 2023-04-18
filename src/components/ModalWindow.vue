@@ -1,11 +1,12 @@
 <template>
   <div v-show="isOpen" class="pop-up" @click="closePopUp">
     <div class="pop-up-block">
-      <div class="pop-up-text">Готово!
-      Проверить свои бронирования можно
+      <div class="pop-up-text">
+        <b>Готово!</b><br>
+        Проверить свои бронирования можно
       <router-link to="/mybooking"><b>здесь</b></router-link>
       </div>
-      <button class="pop-up-btn" @click="closePopUp">Х</button>
+      <button class="pop-up-btn cards-btn" @click="closePopUp">Х</button>
     </div>
   </div>
 </template>
@@ -18,7 +19,7 @@ export default {
   },
   methods: {
     closePopUp() {
-      this.$emit('closePopUp', false, false)
+      this.$emit('closePopUp', false);
     }
   }
 }
@@ -39,19 +40,20 @@ export default {
   position: absolute;
   top: 46%;
   left: 35%;
-  padding: 65px 25px 30px;
+  padding: 65px 35px 30px;
   background-color: #fff;
 }
 
 .pop-up-text {
   margin-bottom: 15px;
+  line-height: 1.5;
 }
 
 .pop-up-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 7px;
+  top: 0;
+  right: 5px;
+  padding: 3px 6px;
 }
 
 </style>
