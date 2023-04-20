@@ -23,17 +23,17 @@ import store from "@/store";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        {path: '/', component: StartPage},/**/
-        {path: '/resorts/:id', component: ResortPage},/**/
-        {path: '/login', component: LoginPage},/**/
-        {path: '/mybooking', component: BookingPage},/**/
+        {path: '/', component: StartPage},
+        {path: '/resorts/:id', component: ResortPage},
+        {path: '/login', component: LoginPage},
+        {path: '/mybooking', component: BookingPage},
        // {path: '/:notFound(.*)', redirect: '/'},
-        {path: '/resorts/bookings', component: BookingResortPage},/**/
+        {path: '/resorts/bookings', component: BookingResortPage},
         {path: '/addEquipment', component: AddItem},
         {path: '/addResort', component: CreateResortPage},
-        {path: '/resorts/manage', component: ManageResorts},/**/
-        {path: '/payment', component: PaymentPage},/**/
-        {path: '/profile', component: UserProfile},/**/
+        {path: '/resorts/manage', component: ManageResorts},
+        {path: '/payment', component: PaymentPage},
+        {path: '/profile', component: UserProfile},
     ]
 })
 
@@ -51,6 +51,7 @@ app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
 app.component('ResultItemFromStartPage', ResultItemFromStartPage);
+app.component('UserProfile', UserProfile);
 
 app.mixin({
     methods: {
