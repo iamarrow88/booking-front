@@ -83,11 +83,13 @@
 <script>
 
 /*import {createRouter as router} from "vue-router";*/
+import validationMixins from "@/components/mixins/validationMixins";
 
 export default {
   props: {
     isLoggedIn: Boolean,
   },
+  mixins: [validationMixins],
   data() {
     return {
       id: null,
@@ -103,7 +105,7 @@ export default {
       emailRegister: '',
       passwordRegister: '',
 
-      isFirstNameWrong: false,
+      /*isFirstNameWrong: false,
       isEmailLoginWrong: false,
       isSurnameWrong: false,
       isMiddleNameWrong: false,
@@ -121,7 +123,7 @@ export default {
       isPasswordRegisterNull: false,
 
       regexAlpha: /[^a-zA-ZА-яЁё]/gmi,
-      regexNumber: /[^0-9]/g,
+      regexNumber: /[^0-9]/g,*/
     }
   },
   methods: {
@@ -217,7 +219,7 @@ export default {
       this.$router.push({path: '/mybooking'});
     },
 
-    validateRegMail(mail){
+    /*validateRegMail(mail){
       this.checkMailReg(mail);
       if(this.isEmailRegisterNull) return false;
       if(!this.isEmailRegisterNull) this.isEmailRegisterWrong = this.isMailInvalid(mail);
@@ -281,9 +283,9 @@ export default {
     checkPhoneInput(val){
       this.isPhoneNumberNull = val.length === 0;
       return this.isPhoneNumberNull;
-    },
+    },*/
   },
-  watch: {
+  /*watch: {
     firstName(newName) {
       this.isFirstNameWrong = newName.match(this.regexAlpha);
       this.isFirstNameNull = false;
@@ -312,7 +314,7 @@ export default {
     emailRegister(){
       this.isEmailRegisterNull = false;
     }
-  }
+  }*/
 }
 </script>
 

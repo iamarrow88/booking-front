@@ -3,7 +3,8 @@
     <p class="item__header">{{ resort.name }}</p>
     <p class="my-2"><b>Адрес:</b> {{ resort.address }}</p>
 
-    <button @click="isMoreShown=!isMoreShown">Подробнее</button>
+    <button @click="isMoreShown=!isMoreShown"
+            class="cards-btn">Подробнее</button>
     <p class="my-2" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
 
     <button
@@ -17,7 +18,8 @@
                   endTime: endTime,
                   duration: duration
                  }
-                })">
+                })"
+    class="cards-btn">
       Посмотреть инвентарь
     </button>
 

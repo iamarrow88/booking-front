@@ -21,10 +21,10 @@
               <div class="profile-username">{{ surname }}</div>
             </div>
             <div class="profile-actions">
+              <button @click="showLoginModal" v-if="!isLoggedIn">Войти</button>
               <transition name="fade">
                 <div class="profile-auth" v-if="isHoverOnProfileIcon">
-                  <button @click="showLoginModal" v-if="!isLoggedIn">Войти</button>
-                  <button @click="console.log('вошли в профиль')" v-if="isLoggedIn">В профиль</button>
+                  <button @click="goToProfile" v-if="isLoggedIn">В профиль</button>
                   <button @click="logout" v-if="isLoggedIn">Выйти</button>
                 </div>
               </transition>
@@ -38,9 +38,11 @@
 
 <script>
 import LoginPage from "@/components/LoginPage.vue";
+import validationMixins from "@/components/mixins/validationMixins";
 
 export default {
   name: "HeaderPage",
+  mixins: [validationMixins],
   props: {
     isLoggedIn: Boolean,
   },
@@ -65,6 +67,7 @@ export default {
     logout() {
       localStorage.removeItem("token");
       this.$emit('loggin', false);
+
       this.$router.push('/login');
     },
 
@@ -80,6 +83,16 @@ export default {
     },
     goToResortManagingPage() {
       this.$router.push({path: '/resorts/manage'})
+    },
+    goToProfile() {
+      this.$router.push({path: '/profile', query: {
+          isOwnerParent: this.isOwner,
+          surnameParent: this.surname,
+          firstNameParent: this.firstName,
+          middleNameParent: this.middleName,
+          emailRegisterParent: this.emailRegister,
+          phoneParent: this.phone,
+        }})
     }
   }
 }

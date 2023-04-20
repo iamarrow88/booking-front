@@ -9,3 +9,18 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
     padding: 0;
 }
+
+button {
+    padding: 7px 20px;
+    border: 2px solid orangered;
+    border-radius: 7px;
+    background-color: transparent;
+}
+
+button:hover {
+    background-color: rgba(241, 96, 41, .5);
+}
+
+button.cards-btn {
+    background-color: orange;
+}

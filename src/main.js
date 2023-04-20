@@ -17,6 +17,7 @@ import BookingItem from "@/components/BookingItem.vue";
 import PaymentPage from "@/components/PaymentPage.vue";
 import '@/main.css'
 import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
+import UserProfile from "@/components/UserProfile.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -31,6 +32,7 @@ const router = createRouter({
         {path: '/addResort', component: CreateResortPage},
         {path: '/resorts/manage', component: ManageResorts},
         {path: '/payment', component: PaymentPage},
+        {path: '/profile', component: UserProfile},
     ]
 })
 
@@ -47,6 +49,7 @@ app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
 app.component('ResultItemFromStartPage', ResultItemFromStartPage);
+app.component('UserProfile', UserProfile);
 
 app.mixin({
     methods: {

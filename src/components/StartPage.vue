@@ -37,7 +37,7 @@
          </div>
 
          <div class="form-group">
-           <button class="btn btn-primary" @click="getResorts">Поиск курорта</button>
+           <button @click="getResorts">Поиск курорта</button>
          </div>
        </div>
       </div>
@@ -55,29 +55,6 @@
           :startTime="startTime"
           :endTime="endTime"
           :duration="duration"></result-item-from-start-page>
-<!--          <li class="list-group-item" v-for="resort in resorts" :key="resort.id">
-            <p class="item__header">{{ resort.name }}</p>
-            <p class="my-2"><b>Адрес:</b> {{ resort.address }}</p>
-
-            <button @click="isMoreShown=!isMoreShown">Подробнее</button>
-            <p class="my-2" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
-
-            <button
-                @click="$router.push({ path: '/resorts/' + resort.id, query:
-                 {
-                  type_id: selectedType.id,
-                  selectedCityId: selectedCity.id,
-                  selDateStartShort: selDateStartShort,
-                  selDateEndShort:selDateEndShort,
-                  startTime: startTime,
-                  endTime: endTime,
-                  duration: duration
-                 }
-                })">
-              Посмотреть инвентарь
-            </button>
-
-          </li>-->
         </ul>
       </div>
       <div v-else-if="isNotFoundShown">
