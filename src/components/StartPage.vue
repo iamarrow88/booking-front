@@ -345,6 +345,10 @@ export default {
   padding: 15px 20px;
 }
 
+.btn-search {
+  padding: 15px 20px;
+}
+
 .results-block {
   padding-top: 40px;
 }

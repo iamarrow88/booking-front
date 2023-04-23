@@ -51,7 +51,6 @@ app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
 app.component('ResultItemFromStartPage', ResultItemFromStartPage);
-app.component('UserProfile', UserProfile);
 
 app.mixin({
     methods: {
