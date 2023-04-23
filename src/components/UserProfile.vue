@@ -42,6 +42,7 @@
           {{ isPhoneNumberWrong ? "Допускаются только цифры" :
             isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
+      <button class="cards-btn">Обновить</button>
     </div>
   </div>
 </template>

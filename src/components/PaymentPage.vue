@@ -3,7 +3,7 @@
     <div>Сумма к оплате </div>
     <div>Введите номер карты :)</div>
 
-    <button @click="bookingItem">Я ввел, честно</button>
+    <button @click="bookingItem" class="cards-btn">Я ввел, честно</button>
   </div>
   <div v-else>
     <modal-window :isOpen="isOpen" @closePopUp="closePopUp"></modal-window>

@@ -1,4 +1,6 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -22,5 +24,17 @@ button:hover {
 }
 
 button.cards-btn {
-    background-color: orange;
+    background-color: #fba91c;
+}
+
+.sub-btn {
+    padding: 7px;
+    background-color: transparent;
+    cursor: pointer;
+    color: #1c3b65;
+    text-decoration: underline;
+}
+
+.sub-btn:hover {
+    background-color: #d6e6ff;
 }

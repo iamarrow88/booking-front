@@ -1,8 +1,8 @@
 <template>
     <div>
       <div>{{ resort.name }}</div>
-      <button @click="editResortDown">Редактировать</button>
-      <button @click="deleteResort">Удалить</button>
+      <button @click="editResortDown" class="cards-btn">Редактировать</button>
+      <button @click="deleteResort" class="cards-btn">Удалить</button>
       <div v-if="isEditComponent">
         <create-resort-page :resortIdFromParent="resort.id"
                             :editMode="isEditComponent"

@@ -18,7 +18,7 @@
         <input type="password" class="form-control" id="passwordLogInput" v-model="passwordLogin">
         <div class="error-message" v-if="isPasswordLoginNull">Введите пароль</div>
       </div>
-      <button class="btn btn-primary" @click="login">Войти в аккаунт</button>
+      <button class="btn btn-primary cards-btn" @click="login">Войти в аккаунт</button>
     </div>
 
     <div v-if="!isLoggedIn">
@@ -70,11 +70,11 @@
           <option value="3">Owner</option>
         </select>
       </div>
-      <button class="btn btn-primary" @click="register">Зарегистрироваться</button>
+      <button class="btn btn-primary cards-btn" @click="register">Зарегистрироваться</button>
     </div>
     <div v-else>
       <h3 class="subtitle">Здравствуйте, {{ surname }}</h3>
-      <button class="btn btn-primary" @click="logout">Выйти из аккаунта</button>
+      <button class="btn btn-primary cards-btn" @click="logout">Выйти из аккаунта</button>
     </div>
   </div>
 </template>

@@ -15,13 +15,13 @@
     <div class="buttons">
       <button @click="showPopUp"
               v-if="!editMode"
-              class="items-for-resort-btn">Забронировать</button>
+              class="items-for-resort-btn cards-btn">Забронировать</button>
       <button v-if="editMode"
               @click="showAddItemBlock"
-              class="items-for-resort-btn">Редактировать</button>
+              class="items-for-resort-btn cards-btn">Редактировать</button>
       <button v-if="editMode"
               @click="this.$emit('DeleteItem', item.id)"
-              class="items-for-resort-btn">Удалить</button>
+              class="items-for-resort-btn cards-btn">Удалить</button>
     </div>
 
     <div v-if="isAddingItemModeOn">

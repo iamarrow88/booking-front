@@ -6,8 +6,8 @@
       <div class="pop-up-text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{formattedEndDate}} {{ endTime }}:00</b></div>
       <div class="pop-up-text">Стоимость: <b>{{ total }} RUB</b></div>
       <div class="pop-up-btns">
-        <button class="pop-up-btn" @click="goPaymentPage">Оплатить</button>
-        <button class="pop-up-btn" @click="closePopUp">Отмена</button>
+        <button class="pop-up-btn cards-btn" @click="goPaymentPage">Оплатить</button>
+        <button class="pop-up-btn cards-btn" @click="closePopUp">Отмена</button>
       </div>
     </div>
   </div>

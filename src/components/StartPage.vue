@@ -3,48 +3,60 @@
      <div class="search-block">
        <h1 class="search-block__header">Бронирование спортивного инвентаря</h1>
        <p class="search-block__subheader">Забронируйте свой любимый спортивный инвентарь онлайн!</p>
-       <div class="container my-5">
-         <div class="form-group">
-           <label for="Date">Дата с:</label>
-           <input type="date" class="form-control" id="date-start" v-model="selDateStartShort" ref="dateStart">
-           <label for="Date">Дата по:</label>
-           <input type="date" class="form-control" id="date-end" v-model="selDateEndShort" ref="dateEnd">
+       <div class="filters-wrapper">
+         <div class="form-group form-group-dates">
+           <div class="dates__item">
+             <label for="date-start" class="form-title">Дата с:</label>
+             <input type="date" class="form-input" id="date-start" v-model="selDateStartShort" ref="dateStart">
+           </div>
+           <div class="dates__item">
+             <label for="date-end" class="form-title">Дата по:</label>
+             <input type="date" class="form-input" id="date-end" v-model="selDateEndShort" ref="dateEnd">
+           </div>
          </div>
-         <div class="form-group" style="display: flex; justify-content: space-between;">
-           <div>
-             <label for="startTime">Начало:</label>
+         <div class="form-group form-group-time">
+           <div class="drop-list">
+             <label for="startTime" class="form-title">Начало:</label>
              <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTime">
              </select>
            </div>
-           <div>
-             <label for="endTime">Конец:</label>
+           <div class="drop-list">
+             <label for="endTime" class="form-title">Конец:</label>
              <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTime">
              </select>
            </div>
          </div>
-         <div class="duration">Бронь на {{duration}} {{hoursNaming}}</div>
-         <div class="form-group">
-           <label for="city">Город:</label>
-           <select class="form-control" id="city" v-model="selectedCity">
-             <option v-for="city in cities" :key="city.id" :value="city">{{ city.name }}</option>
-           </select>
-           <div class="form-group">
-             <label for="typeInput">Тип инвентаря</label>
-             <select class="form-control" id="typeInput" v-model="selectedType">
-               <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
+<!--         <div class="duration form-title">Бронь на {{duration}} {{hoursNaming}}</div>-->
+         <div class="form-group form-group-options">
+           <div class="form-group form-group-city">
+             <label for="city" class="form-title">Город:</label>
+             <select class="form-select" id="city" v-model="selectedCity">
+               <option class="form-option"
+                       v-for="city in cities"
+                       :key="city.id"
+                       :value="city">{{ city.name }}</option>
+             </select>
+           </div>
+           <div class="form-group form-group-type">
+             <label for="typeItem" class="form-title">Тип инвентаря</label>
+             <select class="form-select" id="typeItem" v-model="selectedType">
+               <option class="form-option"
+                   v-for="type in types"
+                   :key="type.id"
+                   :value="type">{{ type.name }}</option>
              </select>
            </div>
          </div>
 
-         <div class="form-group">
-           <button @click="getResorts">Поиск курорта</button>
+         <div class="form-group form-group-submit">
+           <button @click="getResorts" class="btn-search">Поиск курорта</button>
          </div>
        </div>
       </div>
-    <div class="results-block">
-      <div v-if="resorts.length > 0">
+    <div>
+      <div v-if="resorts.length > 0" class="results-block">
         <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
-        <ul class="list-group">
+        <ul class="results-list">
           <result-item-from-start-page v-for="resort in resorts"
                                        :key="resort.id"
           :resort="resort"
@@ -57,7 +69,7 @@
           :duration="duration"></result-item-from-start-page>
         </ul>
       </div>
-      <div v-else-if="isNotFoundShown">
+      <div v-else-if="isNotFoundShown" class="results-none">
         Ничего на найдено, попробуйте другой город или другое снаряжение
       </div>
     </div>
@@ -235,17 +247,6 @@ export default {
 
 
 <style scoped>
-.container {
-  width: 50%;
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-}
-
-h1, h3, p {
-  text-align: center;
-}
 
 .start-page {
   width: 100vw;
@@ -257,35 +258,69 @@ h1, h3, p {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
+  text-align: center;
 }
 
 .search-block__header, .search-block__subheader {
   color: #fff;
 }
 
-input[type="date"], input[type="number"], select {
+.filters-wrapper {
+  width: 50%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group-dates {
+  gap: 20px;
+}
+
+.form-input, .time-picker, .form-select{
+  background-color: rgba(255, 255, 255, 0.7);
+  border-right: 7px;
+}
+
+.drop-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  width: 17vw;
+}
+
+.dates__item {
+  width: 17vw;
+}
+
+/*input[type="date"], input[type="number"], select {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
+!*  margin-top: 6px;
+  margin-bottom: 16px;*!
   resize: vertical;
-}
+}*/
 
-input[type="submit"] {
+/*input[type="submit"] {
   background-color: #4CAF50;
   color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
+}*/
 
-input[type="submit"]:hover {
+/*input[type="submit"]:hover {
   background-color: #45a049;
-}
+}*/
 
 .time-picker {
   width: 10vw;
@@ -306,6 +341,10 @@ input[type="submit"]:hover {
   margin: 0 auto;
 }
 
+.btn-search {
+  padding: 15px 20px;
+}
+
 .results-block {
   padding-top: 40px;
 }
@@ -313,14 +352,9 @@ input[type="submit"]:hover {
   font-size: 28px;
 }
 
-
-/*.btn {
-  margin-top: 10px;
-}*/
-
-
-button {
-  padding: 10px;
+.form-title {
+  color: #fff;
+  font-weight: 600;
 }
 
 </style>

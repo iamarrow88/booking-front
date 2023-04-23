@@ -6,7 +6,7 @@
         Проверить свои бронирования можно
       <router-link to="/mybooking"><b>здесь</b></router-link>
       </div>
-      <button class="pop-up-btn" @click="closePopUp">Х</button>
+      <button class="pop-up-btn cards-btn" @click="closePopUp">Х</button>
     </div>
   </div>
 </template>

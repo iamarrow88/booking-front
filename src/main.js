@@ -16,8 +16,8 @@ import ModalWindow from "@/components/ModalWindow.vue";
 import BookingItem from "@/components/BookingItem.vue";
 import PaymentPage from "@/components/PaymentPage.vue";
 import '@/main.css'
-import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
 import UserProfile from "@/components/UserProfile.vue";
+import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -49,7 +49,6 @@ app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
 app.component('ResultItemFromStartPage', ResultItemFromStartPage);
-app.component('UserProfile', UserProfile);
 
 app.mixin({
     methods: {

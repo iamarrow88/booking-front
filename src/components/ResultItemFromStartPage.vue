@@ -72,25 +72,21 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   overflow: hidden;
+  transition: transform .7s;
+  background-color: #f5fbfd;
 }
 
+.result-item:hover {
+  transform: scale(1.1);
+  transition: all .7s;
+}
 
 .my-2 {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  text-align: justify;
 }
-/*
-.list-group-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 20vw;
-  margin: 30px auto 0;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  overflow: hidden;
-}*/
+
 .item__header {
   font-size: 18px;
   font-weight: 800;

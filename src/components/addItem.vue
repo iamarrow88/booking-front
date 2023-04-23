@@ -17,7 +17,7 @@
   <label class="create-upload" for="upload-img">Загрузите фото</label>
   <input type="file" name="img" id="img" accept="image/*" class="create-upload-file">
 
-  <button @click="createItem">{{ IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать" }}</button>
+  <button @click="createItem" class="cards-btn">{{ IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать" }}</button>
 </template>
 
 <script>

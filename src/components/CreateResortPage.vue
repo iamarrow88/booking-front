@@ -17,7 +17,7 @@
       <input type="text" id="resortDescription" v-model="resortDescription">
     </div>
 
-    <button @click="addResort">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
+    <button @click="addResort" class="cards-btn">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
 
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
