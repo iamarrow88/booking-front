@@ -18,26 +18,28 @@ import PaymentPage from "@/components/PaymentPage.vue";
 import '@/main.css'
 import UserProfile from "@/components/UserProfile.vue";
 import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
+import store from "@/store";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        {path: '/', component: StartPage},
-        {path: '/resorts/:id', component: ResortPage},
-        {path: '/login', component: LoginPage},
-        {path: '/mybooking', component: BookingPage},
+        {path: '/', component: StartPage},/**/
+        {path: '/resorts/:id', component: ResortPage},/**/
+        {path: '/login', component: LoginPage},/**/
+        {path: '/mybooking', component: BookingPage},/**/
        // {path: '/:notFound(.*)', redirect: '/'},
-        {path: '/resorts/bookings', component: BookingResortPage},
+        {path: '/resorts/bookings', component: BookingResortPage},/**/
         {path: '/addEquipment', component: AddItem},
         {path: '/addResort', component: CreateResortPage},
-        {path: '/resorts/manage', component: ManageResorts},
-        {path: '/payment', component: PaymentPage},
-        {path: '/profile', component: UserProfile},
+        {path: '/resorts/manage', component: ManageResorts},/**/
+        {path: '/payment', component: PaymentPage},/**/
+        {path: '/profile', component: UserProfile},/**/
     ]
 })
 
 const app = createApp(App);
     app.use(router);
+    app.use(store);
     app.mount('#app');
 
 app.component('EquipmentItem', EquipmentItem);

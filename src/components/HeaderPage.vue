@@ -39,44 +39,31 @@
 <script>
 import LoginPage from "@/components/LoginPage.vue";
 import validationMixins from "@/components/mixins/validationMixins";
+import {mapMutations} from "vuex";
 
 export default {
   name: "HeaderPage",
   mixins: [validationMixins],
-  props: {
-    isLoggedIn: Boolean,
-  },
   data() {
     return {
-      surname: null,
       isHoverOnProfileIcon: false,
     }
   },
-  mounted() {
-    this.surname = localStorage.getItem('surname');
-  },
-  computed: {
-    isOwner() {
-      return localStorage.getItem('role_id') === 3 || localStorage.getItem('role_id') === '3';
-    }
-  },
   methods: {
+    ...mapMutations(['login']),
     showLoginModal() {
       this.$router.push({path: '/login', component: LoginPage})
     },
     logout() {
-      localStorage.removeItem("token");
-      this.$emit('loggin', false);
-
+      this.login(false);
       this.$router.push('/login');
     },
 
-    goToHomePage(e) {
-      console.log(e.target)
+    goToHomePage() {
       this.$router.push('/');
     },
     goToMyBooking() {
-      this.$router.push("/mybooking"); // navigate to "/mybooking" route
+      this.$router.push("/mybooking");
     },
     goToResortBookings() {
       this.$router.push({path: '/resorts/bookings'})
@@ -85,16 +72,29 @@ export default {
       this.$router.push({path: '/resorts/manage'})
     },
     goToProfile() {
-      this.$router.push({path: '/profile', query: {
-          isOwnerParent: this.isOwner,
-          surnameParent: this.surname,
-          firstNameParent: this.firstName,
-          middleNameParent: this.middleName,
-          emailRegisterParent: this.emailRegister,
-          phoneParent: this.phone,
-        }})
+      this.$router.push({path: '/profile'})
     }
-  }
+  },
+  mounted() {
+    if(localStorage.getItem('token')) {
+      this.login();
+      this.surname = localStorage.getItem('surname');//*//
+    } else {
+      this.login(false);
+    }
+
+  },
+  computed: {
+    isLoggedIn(){
+      return this.$store.state.authorization.isLoggedIn;
+    },
+    isOwner(){
+      return this.$store.state.authorization.isOwner;
+    },
+    surname(){
+      return this.$store.state.authorization.user.surname;
+    }
+  },
 }
 </script>
 

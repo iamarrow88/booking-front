@@ -60,6 +60,9 @@ export default {
     }
   },
   created() {
+    if(localStorage.getItem('firstName').length === 0) {
+      console.log(localStorage.getItem('firstName').length);
+    }
     this.total = this.$route.query.total;
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <HeaderPage :isLoggedIn="isLoggedIn" @loggin="loggin"/>
   <div id="app">
-    <router-view :isLoggedIn="isLoggedIn" @loggin="loggin"/>
+    <router-view :isLoggedIn="isLoggedIn" @loggin="loggin" />
   </div>
 
 </template>
@@ -15,13 +15,13 @@ export default {
   name: 'App',
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
     }
   },
   methods: {
     loggin(bool){
       this.isLoggedIn = bool;
-    }
+    },
   },
   mounted() {
     this.isLoggedIn = Boolean(localStorage.getItem('token')) || false;

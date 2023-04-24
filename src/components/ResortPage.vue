@@ -195,6 +195,9 @@ export default {
     },
   },
   async mounted() {
+    if(localStorage.getItem('firstName').length === 0) {
+      console.log(localStorage.getItem('firstName').length);
+    }
     try {
       const response = await fetch(`/api/resorts/${this.$route.params.id}`)
       const resort = await response.json()

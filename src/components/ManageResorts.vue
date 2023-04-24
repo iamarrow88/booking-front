@@ -121,6 +121,9 @@ export default {
     }
   },
   async mounted() {
+    if(localStorage.getItem('firstName').length === 0) {
+      console.log(localStorage.getItem('firstName').length);
+    }
     await  this.getUserResorts();
     try {
       const cities = await fetch('/api/cities');

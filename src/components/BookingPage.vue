@@ -11,6 +11,7 @@
 <script>
 
 import BookingItem from "@/components/BookingItem.vue";
+import {mapActions} from "vuex";
 
 export default {
   components: {BookingItem},
@@ -23,6 +24,7 @@ export default {
       inv_types: [],
     }
   },
+  methods: mapActions(['fetchInventoryTypes']),
   async mounted() {
     try {
       const res = await fetch('/api/user/bookings', {
@@ -42,7 +44,8 @@ export default {
     } catch (err) {
       console.error(err);
     }
-    try {
+    await this.fetchInventoryTypes();
+    /*try {
       const res = await fetch('/api/inventories/types', {
         method: 'GET',
         headers: {
@@ -59,7 +62,7 @@ export default {
       }
     } catch (err) {
       console.error(err);
-    }
+    }*/
 
     /* if(!this.isLoggedIn) {
        this.$router.push('/login');

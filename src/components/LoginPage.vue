@@ -84,11 +84,12 @@
 
 /*import {createRouter as router} from "vue-router";*/
 import validationMixins from "@/components/mixins/validationMixins";
+import {mapActions} from "vuex";
 
 export default {
-  props: {
+/*  props: {
     isLoggedIn: Boolean,
-  },
+  },*/
   mixins: [validationMixins],
   data() {
     return {
@@ -104,6 +105,15 @@ export default {
       passwordLogin: '',
       emailRegister: '',
       passwordRegister: '',
+
+
+      /*user: {
+        firstName: '',
+        surname: '',
+        middleName: '',
+        phone: '',
+        email: '',
+      }*/
 
       /*isFirstNameWrong: false,
       isEmailLoginWrong: false,
@@ -126,9 +136,32 @@ export default {
       regexNumber: /[^0-9]/g,*/
     }
   },
+/*  computed: mapGetters(['ISLOGGEDIN', 'ISOWNER']),*/
+  computed: {
+    isLoggedIn(){
+      return this.$store.state.authorization.isLoggedIn;
+    }
+  },
   methods: {
-    async register() {
+    ...mapActions(['registration', 'loginS']),
+    async register(){
       this.isPasswordRegisterNull = false;
+
+      const body = {
+        first_name: this.firstName,
+        surname: this.surname,
+        middle_name: this.middleName,
+        email: this.emailRegister,
+        password: this.passwordRegister,
+        phone: this.phone,
+        role_id: this.roleId
+      }
+      this.$store.dispatch('registration', body)
+    },
+    /*async register() {
+      this.isPasswordRegisterNull = false;
+      this.userEmail = this.emailRegister;
+
       if(!this.checkFirstNameInput(this.firstName) ||
          !this.checkSurnameInput(this.surname) ||
          !this.checkMiddleNameInput(this.middleName) ||
@@ -152,15 +185,20 @@ export default {
 
           if (!res.ok) {
             this.errorMessage = "Invalid data provided, please try again";
+            this.userEmail = '';
             this.$emit('loggin', false);
           } else {
             const data = await res.json();
             this.token = data.token;
             this.surname = data.surname;
+            console.log(data);
             localStorage.setItem('token', this.token);
-            localStorage.setItem('surname', this.surname);
-            localStorage.setItem('role_id', this.roleId);
             localStorage.setItem('userId', this.id);
+            localStorage.setItem('role_id', this.roleId);
+            localStorage.setItem('firstName', this.firstName);
+            localStorage.setItem('middleName', this.middleName);
+            localStorage.setItem('surname', this.surname);
+            localStorage.setItem('phone', this.phone);
             this.$emit('loggin', true);
             this.errorMessage = '';
             this.$router.push({path: '/mybooking', params: {id: this.id}});
@@ -170,24 +208,28 @@ export default {
           console.error(err);
         }
       }
-    },
+    },*/
 
     async login() {
       this.isPasswordLoginNull = false;
-
+      const body = {
+        email: this.emailLogin,
+        password: this.passwordLogin
+      }
       if(!this.checkLoginPass(this.passwordLogin) ||
           this.validateLoginMail(this.emailLogin)){
-        try {
+        this.$store.dispatch('loginS', body);
+        if(!this.$store.state.authorization.error) this.$router.push({path: '/mybooking', params: {id: this.$store.state.authorization.user.id}});
+
+        /*try {
           const res = await fetch('/api/user/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              email: this.emailLogin,
-              password: this.passwordLogin
-            })
+            body: JSON.stringify(body)
           });
           if (!res.ok) {
             this.errorMessage = "Invalid data provided, please try again";
+            this.userEmail = '';
             this.$emit('loggin', false);
           } else {
             const data = await res.json();
@@ -196,9 +238,13 @@ export default {
             this.roleId = data.role_id;
             this.id = data.id;
             localStorage.setItem('token', this.token);
-            localStorage.setItem('surname', this.surname);
-            localStorage.setItem('role_id', this.roleId);
             localStorage.setItem('userId', this.id);
+            localStorage.setItem('role_id', this.roleId);
+            localStorage.setItem('firstName', this.firstName);
+            localStorage.setItem('surname', this.surname);
+            localStorage.setItem('middleName', this.middleName);
+            localStorage.setItem('phone', this.phone);
+            console.log(localStorage);
             this.$emit('loggin', true);
             this.errorMessage = '';
 
@@ -206,7 +252,7 @@ export default {
           }
         } catch (err) {
           console.error(err);
-        }
+        }*/
       }
     },
 
