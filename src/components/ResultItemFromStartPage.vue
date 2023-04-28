@@ -9,7 +9,7 @@
         </p>
       </div>
       <div class="item__rate">
-        <stars-rate></stars-rate>
+        <stars-rate :rate="resort.rate"></stars-rate>
       </div>
 
       <button @click="showMore"
@@ -39,6 +39,7 @@
                     :review="review"
                     :users="users"
                     :key="review.id"
+                   :class="{active: review.index === this.currentReview}"
       @prev="prev"
       @next="next"></review-item>
     </div>
@@ -59,7 +60,8 @@ export default {
       city_id: Number,
       owner_id: Number,
       description: String,
-      address: String
+      address: String,
+      rate: Number
     },
     selectedType: {
       id: Number,
@@ -73,13 +75,15 @@ export default {
     selDateEndShort: String,
     startTime: String,
     endTime: String,
-    duration: Number
+    duration: Number,
+    rate: Number
   },
   data() {
     return {
       isMoreShown: false,
       users: [],
       reviews: [],
+      currentReview: 0,
     }
   },
   methods: {
@@ -108,15 +112,25 @@ export default {
         } else {
           console.log('there is no reviews')
         }
+        this.reviews.forEach((review, index) => {
+          return review.index = index;
+        })
       } catch (e) {
         console.error(e)
       }
     },
     prev() {
       console.log('prev');
+      this.currentReview -= 1;
+      if(this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
+      console.log(this.currentReview);
+
     },
     next() {
       console.log('next');
+      this.currentReview += 1;
+      if(this.currentReview >= this.reviews.length) this.currentReview = 0;
+      console.log(this.currentReview);
 
     }
   },
