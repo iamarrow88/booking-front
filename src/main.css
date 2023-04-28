@@ -36,7 +36,10 @@ button.cards-btn:hover {
 input, select {
     margin: 0 auto;
     background-color: rgba(255, 255, 255, 0.7);
-    border-right: 7px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .sub-btn {
@@ -49,4 +52,17 @@ input, select {
 
 .sub-btn:hover {
     background-color: #d6e6ff;
+}
+
+label, input {
+    margin: 0;
+    padding: 0;
+}
+
+input[type="date"], select{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
