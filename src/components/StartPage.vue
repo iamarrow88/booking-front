@@ -38,7 +38,7 @@
              </select>
            </div>
            <div class="form-group form-group-type">
-             <label for="typeItem" class="form-title">Тип инвентаря</label>
+             <label for="typeItem" class="form-title">Тип инвентаря:</label>
              <select class="form-select" id="typeItem" v-model="selectedType">
                <option class="form-option"
                    v-for="type in types"

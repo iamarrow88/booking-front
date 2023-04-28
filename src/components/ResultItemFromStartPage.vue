@@ -1,27 +1,36 @@
 <template>
   <li class="result-item">
-    <p class="item__header">{{ resort.name }}</p>
-    <p class="my-2"><b>Адрес:</b> {{ resort.address }}</p>
+    <div class="item">
+      <div class="item__header">{{ resort.name }}</div>
+      <div class="item__address">
+        <img class="address__img" src="../assets/icons/map-pin.svg" alt="pin">
+        <p class="address__text">
+          {{ resort.address }}
+        </p>
+      </div>
+      <div class="item__rate">
+        <stars-rate></stars-rate>
+      </div>
 
-    <button @click="isMoreShown=!isMoreShown"
-            class="cards-btn">Подробнее</button>
-    <p class="my-2" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
+      <button @click="showMore"
+              class="cards-btn">Подробнее</button>
+      <p class="item__description" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
 
-    <button
-        @click="$router.push({ path: '/resorts/' + resort.id, query:
-                 {
-                  type_id: selectedType.id,
-                  selectedCityId: selectedCity.id,
-                  selDateStartShort: selDateStartShort,
-                  selDateEndShort:selDateEndShort,
-                  startTime: startTime,
-                  endTime: endTime,
-                  duration: duration
-                 }
-                })"
-    class="cards-btn">
-      Посмотреть инвентарь
-    </button>
+      <button
+          @click="$router.push({ path: '/resorts/' + resort.id, query:
+                   {
+                    type_id: selectedType.id,
+                    selectedCityId: selectedCity.id,
+                    selDateStartShort: selDateStartShort,
+                    selDateEndShort:selDateEndShort,
+                    startTime: startTime,
+                    endTime: endTime,
+                    duration: duration
+                   }
+                  })"
+          class="cards-btn">
+        Посмотреть инвентарь
+      </button>
 
   </li>
 </template>
@@ -64,35 +73,156 @@ export default {
 
 .result-item {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 250px;
-  margin: 30px 10px 0;
-  padding: 10px;
+  justify-content: space-between;
+  padding: 30px 20px;
+  width: 280px;
+  min-height: 300px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   overflow: hidden;
   transition: transform .7s;
   background-color: #f5fbfd;
+  order: 2
+}
+
+.item {
+  /*padding: 30px 20px;*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /*width: 280px;
+  min-height: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform .7s;
+  background-color: #f5fbfd;
+  order: 2*/
 }
 
 .result-item:hover {
-  transform: scale(1.1);
+  transform: scale(1.01);
   transition: all .7s;
 }
 
-.my-2 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  text-align: justify;
-}
-
 .item__header {
-  font-size: 18px;
+  text-align: left;
+  text-transform: uppercase;
+  width: 83%;
+  padding-left: 13%;
+  font-size: 21px;
   font-weight: 800;
+  order: 2
 }
 
+.item__address {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: start;
+  gap: 7px;
+  width: 100%;
+  order: 2
+}
 
+.address__img {
+  width: 36px;
+}
+
+.item__rate {
+  margin-bottom: 10px;
+  width: 100%;
+  order: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.address__text {
+  width: 80%;
+  min-height: 57px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.cards-btn {
+  margin-bottom: 10px;
+  order: 2
+}
+.item__description {
+  order: 2;
+/*  width: 100%;*/
+  text-align: left;
+  align-self: start;
+}
+
+.rate__gray svg, .rate__yellow svg{
+  width: 100%;
+}
+
+.rate__gray svg use, .rate__yellow svg use {
+  width: 100%;
+}
+
+.rate__yellow svg use {
+  fill: yellow;
+}
+
+.showMore {
+  width: 93%;
+  order: 1;
+  transition: all .3ms;
+  padding: 40px;
+}
+
+.showMore .item {
+  width: 65%;
+  margin-right: 10px;
+  padding: 20px;
+}
+
+.showMore .item__header {
+  padding-left: 0;
+  width: 100%;
+  order: 1;
+  align-self: start;
+}
+
+.showMore .address__text {
+  width: 100%;
+}
+
+.showMore .item__rate {
+  width: 100%;
+  margin: 0;
+  order: 1;
+  align-self: start;
+
+}
+
+.showMore .cards-btn {
+  align-self: start;
+
+}
+
+.showMore .item__rate {
+  justify-content: start;
+}
+
+.reviews {
+  display: none;
+}
+
+.showMore .reviews {
+  display: block;
+  width: 50%;
+  text-align: left;
+}
+
+.reviews__title {
+  padding-left: 7%;
+  font-weight: 900;
+  font-size: 30px;
+}
 
 
 </style>
