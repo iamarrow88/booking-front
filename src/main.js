@@ -19,6 +19,9 @@ import '@/main.css'
 import UserProfile from "@/components/UserProfile.vue";
 import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
 import store from "@/store";
+import ItemDescription from "@/components/ItemDescritption.vue";
+import ReviewItem from "@/components/ReviewItem.vue";
+import StarsRate from "@/components/StarsRate.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -51,6 +54,9 @@ app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
 app.component('ResultItemFromStartPage', ResultItemFromStartPage);
+app.component('ItemDescription', ItemDescription);
+app.component('ReviewItem', ReviewItem);
+app.component('StarsRate', StarsRate);
 
 app.mixin({
     methods: {

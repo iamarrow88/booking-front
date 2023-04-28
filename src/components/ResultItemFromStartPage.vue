@@ -35,12 +35,6 @@
     </div>
     <div class="reviews">
       <div class="reviews__title">Отзывы</div>
-
-      <!--      <div>'bla-bls-bla' </div>
-            <div>'bla-bls-bla' </div>
-            <div>'bla-bls-bla' </div>
-            <div>'bla-bls-bla' </div>
-            <div>'bla-bls-bla' </div>-->
       <review-item v-for="review in reviews"
                     :review="review"
                     :users="users"
@@ -53,10 +47,11 @@
 
 <script>
 import starsRate from "@/components/StarsRate.vue";
+import ReviewItem from "@/components/ReviewItem.vue";
 
 export default {
   name: "ResultItemFromStartPage",
-  components: starsRate,
+  components: starsRate, ReviewItem,
   props: {
     resort: {
       id: Number,
@@ -118,6 +113,10 @@ export default {
       }
     },
     prev() {
+      console.log('prev');
+    },
+    next() {
+      console.log('next');
 
     }
   },

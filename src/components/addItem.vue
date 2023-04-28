@@ -14,8 +14,12 @@
   <label for="price" class="create-price">Введите стоимость</label>
   <input type="number" class="create-price-input" v-model="price" min="1">
 
-  <label class="create-upload" for="upload-img">Загрузите фото</label>
-  <input type="file" name="img" id="img" accept="image/*" class="create-upload-file">
+<!--  <label class="create-upload" for="upload-img">Загрузите фото</label>
+  <input type="file" name="img" id="img" accept="image/*" class="create-upload-file">-->
+  <form action="/upload" method="post" enctype="multipart/form-data" ref="uploadPhoto">
+    <input type="file" name="photo">
+    <input type="submit" value="Upload">
+  </form>
 
   <button @click="createItem" class="cards-btn">{{ IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать" }}</button>
 </template>
@@ -54,17 +58,16 @@ export default {
     async createItem() {
       const method = this.IsEditEquipmModeOnFParent ? 'PUT' : 'POST';
       const id = this.IsEditEquipmModeOnFParent ? this.itemFromParent.id : Date.now();
-      if(!this.IsEditEquipmModeOnFParent) {
+      /*if(!this.IsEditEquipmModeOnFParent) {
         this.photo = document.querySelector('.create-upload-file').files[0].webkitRelativePath;
-      }
+      }*/
       const body = {
         id: id,
         type_id: +this.typeId,
         resort_id: +this.resortId,
         price: +this.price,
-        photo: this.photo
       }
-
+      /*if(this.photo) body.photo = this.photo;*/
 
       console.log(body);
 
@@ -78,11 +81,39 @@ export default {
           body: JSON.stringify(body)
         });
         if(response.ok) {
+          await this.uploadPhoto(id);
           this.$emit('isAddItemBlockOpen', false)
           console.log('OK');
         }
         else {
           console.log('ошибка')
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async uploadPhoto(itemId){
+      const photoBlock = this.$refs.uploadPhoto;
+      const uploadPhotoForm = new FormData(photoBlock);
+      console.log(itemId);
+      for(let [name, value] in uploadPhotoForm){
+        console.log(`name - ${name}, value - ${value}`);
+      }
+
+      try {
+        const response = await fetch(`/api/inventories/update_img/${itemId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          },
+          body: uploadPhotoForm
+        });
+        if(response.ok) {
+          console.log('OK upload photo');
+        }
+        else {
+          console.log('ошибка upload photo')
         }
       } catch (error) {
         console.error(error);
