@@ -1,15 +1,30 @@
 <template>
   <div class="rating">
-    <input type="radio" name="rating" id="rating-5" ref="rating5">
-    <label for="rating-5"></label>
-    <input type="radio" name="rating" id="rating-4" ref="rating4">
-    <label for="rating-4"></label>
-    <input type="radio" name="rating" id="rating-3" ref="rating3">
-    <label for="rating-3"></label>
-    <input type="radio" name="rating" id="rating-2" ref="rating2">
-    <label for="rating-2"></label>
-    <input type="radio" name="rating" id="rating-1" ref="rating1">
-    <label for="rating-1"></label>
+    <div class="star" id="rating-5" ref="rating5">
+      <svg class="icon">
+        <use xlink:href="../assets/icons/sprite.svg#rating-star-4"></use>
+      </svg>
+    </div>
+    <div class="star" id="rating-4" ref="rating4">
+      <svg class="icon">
+        <use xlink:href="../assets/icons/sprite.svg#rating-star-3"></use>
+      </svg>
+    </div>
+    <div class="star" id="rating-3" ref="rating3">
+      <svg class="icon">
+        <use xlink:href="../assets/icons/sprite.svg#rating-star-2"></use>
+      </svg>
+    </div>
+    <div class="star" id="rating-2" ref="rating2">
+      <svg class="icon">
+        <use xlink:href="../assets/icons/sprite.svg#rating-star-1"></use>
+      </svg>
+    </div>
+    <div class="star" id="rating-1" ref="rating1">
+      <svg class="icon">
+        <use xlink:href="../assets/icons/sprite.svg#rating-star-0"></use>
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -19,16 +34,12 @@ export default {
   props: {
     rate: Number
   },
-  /*data() {
-    return{
-      rating: 3,
-    }
-  },*/
   methods: {
     applyRate(rate){
-      const refs = Object.keys(this.$refs).reverse()[rate - 1];
-      console.log(rate);
-      this.$refs[refs].setAttribute('checked', true);
+      for(let i = 0; i < rate; i++){
+        const star = Object.keys(this.$refs).reverse()[i];
+        this.$refs[star].classList.add('marked-star');
+      }
     }
   },
   mounted() {
@@ -50,34 +61,30 @@ export default {
   height: 2em;
   position: relative;
 }
-input, label {
-  pointer-events: none;
-}
 
 .rating > input {
   display: none;
 }
 
-.rating > label {
+.rating > .star {
   cursor: pointer;
   width: 40px;
   height: 40px;
-  margin-top: auto;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23e3e3e3' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 76%;
-  transition: .3s;
 }
 
-.rating > input:checked ~ label,
-.rating > input:checked ~ label ~ label {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23fcd93a' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+.rating > .star svg {
+  width: 100%;
+  height: 100%;
 }
 
-.rating > input:not(:checked) ~ label:hover,
-.rating > input:not(:checked) ~ label:hover ~ label {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23d8b11e' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+.rating > .star svg use{
+  width: 100%;
+  height: 100%;
+  fill: #d0cece;
+}
+
+.rating > .star.marked-star svg use{
+  fill: #fb946d;
 }
 
 </style>

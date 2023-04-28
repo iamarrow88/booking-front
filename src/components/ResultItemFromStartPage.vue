@@ -120,17 +120,13 @@ export default {
       }
     },
     prev() {
-      console.log('prev');
       this.currentReview -= 1;
       if(this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
-      console.log(this.currentReview);
 
     },
     next() {
-      console.log('next');
       this.currentReview += 1;
       if(this.currentReview >= this.reviews.length) this.currentReview = 0;
-      console.log(this.currentReview);
 
     }
   },
@@ -162,6 +158,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   /*width: 280px;
   min-height: 300px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
