@@ -24,7 +24,13 @@ button:hover {
 }
 
 button.cards-btn {
-    background-color: #fba91c;
+    background-color: transparent;
+    color: #fba91c;
+}
+
+button.cards-btn:hover {
+    background-color: rgba(241, 96, 41, .5);
+    color: #fff;
 }
 
 input, select {

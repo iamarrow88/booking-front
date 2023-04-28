@@ -253,7 +253,7 @@ export default {
 }
 
 .search-block {
-  padding: 50px 50px 0;
+  padding: 50px 50px;
   background-image: url("../assets/11.jpg");
   background-position: center center;
   background-repeat: no-repeat;
@@ -278,49 +278,31 @@ export default {
   justify-content: space-between;
 }
 
-.form-group-dates {
+.form-group-dates, .form-group-time {
   gap: 20px;
 }
 
-.form-input, .time-picker, .form-select{
-  background-color: rgba(255, 255, 255, 0.7);
-  border-right: 7px;
-}
-
-.drop-list {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  width: 17vw;
+.form-group-time {
+  margin-bottom: 45px;
 }
 
 .dates__item {
   width: 17vw;
+  max-width: 300px;
 }
 
-/*input[type="date"], input[type="number"], select {
+.drop-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: end;
+  width: 17vw;
+  max-width: 300px;
+}
+
+.drop-list label {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-!*  margin-top: 6px;
-  margin-bottom: 16px;*!
-  resize: vertical;
-}*/
-
-/*input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}*/
-
-/*input[type="submit"]:hover {
-  background-color: #45a049;
-}*/
+}
 
 .time-picker {
   width: 10vw;
@@ -330,15 +312,35 @@ export default {
   width: 10vw;
 }
 
-.list-group {
-  padding: 40px 80px;
-  list-style: none;
+.drop-list select {
+  width: 100%;
+}
+
+.form-group-options {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  align-items: stretch;
-  max-width: 80vw;
-  margin: 0 auto;
+  flex-direction: column;
+}
+
+.form-group-city {
+  margin-bottom: 45px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.form-group-city select, .form-group-type select {
+  margin: 0;
+  width: 19vw;
+}
+
+.form-group-city label, .form-group-type label {
+  margin: 0;
+  align-self: end;
+}
+
+.form-group-submit {
+  display: flex;
+  justify-content: center;
 }
 
 .btn-search {
@@ -349,7 +351,17 @@ export default {
   padding-top: 40px;
 }
 .results-header {
-  font-size: 28px;
+  margin-bottom: 35px;
+  font-size: 2em;
+}
+
+.results-list {
+  margin: 0 auto;
+  width: 76vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 30px;
 }
 
 .form-title {
