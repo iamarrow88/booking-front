@@ -1,27 +1,29 @@
 <template>
-  <div class="items-for-resort-item">
-    <div class="about">
-      <div class="items-for-resort-item-header">
-        <p class="items-for-resort-item-type column">{{ type.name }}</p>
-        <img class="items-for-resort-item-photo column" :src="item.photo" alt="Item Photo">
-        <p class="items-for-resort-item-price column">Час - <span>{{ item.price }} RUB</span></p>
-        <p class="items-for-resort-item-price column"
-           v-if="!editMode">Аренда на {{ duration }} {{hoursNaming}}</p>
-        <p class="items-for-resort-item-price column"
-           v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></p>
+  <div class="equipment-item">
+    <div class="equipment-item__about">
+      <div class="equipment-item__type-name">{{ type.name }}</div>
+      <img class="equipment-item__photo"
+           :src="item.photo"
+           alt="Item Photo">
+      <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
+      <div class="equipment-item__summary">
+        <div class="summary__duration"
+             v-if="!editMode">Аренда на {{ duration }} {{hoursNaming}}</div>
+        <div class="summary__total"
+             v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
       </div>
     </div>
 
     <div class="buttons">
       <button @click="showPopUp"
               v-if="!editMode"
-              class="items-for-resort-btn cards-btn">Забронировать</button>
+              class="btn cards-btn">Забронировать</button>
       <button v-if="editMode"
               @click="showAddItemBlock"
-              class="items-for-resort-btn cards-btn">Редактировать</button>
+              class="btn cards-btn">Редактировать</button>
       <button v-if="editMode"
               @click="this.$emit('DeleteItem', item.id)"
-              class="items-for-resort-btn cards-btn">Удалить</button>
+              class="btn cards-btn">Удалить</button>
     </div>
 
     <div v-if="isAddingItemModeOn">
@@ -124,9 +126,9 @@ export default {
         const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
         this.equipments = await equipments.json();
         if(equipments.ok){
-          console.log('ok');
+          console.log('получили данные по инвентарю с курорта ' + this.resortName);
         } else {
-          console.log('not ok');
+          console.log('не удалось получить данные по инвентарю с курорта ' + this.resortName);
         }
       } catch (e) {
         console.error(e);
@@ -161,56 +163,55 @@ export default {
 </script>
 
 <style scoped>
-.items-for-resort-item {
+.equipment-item {
+  padding: 20px;
+  border: 0 solid #899bb0;
+  box-shadow: 7px 7px 20px #c5daf3;
+  font-size: 1.25rem;
+}
+
+.equipment-item__about {
   display: flex;
   flex-direction: column;
 }
 
-.column {
-  width: 200px;
-  text-align: left;
-}
-.items-for-resort-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-grow: 1;
-  margin-right: 1rem;
+.equipment-item__type-name {
+  margin-bottom: 20px;
   width: 100%;
-}
-
-.items-for-resort-item-type {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.items-for-resort-item-price {
   display: flex;
+  justify-content: start;
+  font-size: 28px;
+}
+
+.equipment-item__photo {
+  width: 90%;
+  min-height: 150px;
+  max-height: 300px;
+  margin-bottom: 15px;
+}
+
+.equipment-item__price {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: start;
+}
+
+.equipment-item__summary {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: start;
   flex-wrap: wrap;
-  margin: 0;
-  font-size: 1.25rem;
-  color: #666;
-}
-
-.items-for-resort-item-photo {
-  height: 100%;
-  max-height: 10rem;
-  object-fit: cover;
-  border-radius: 0.5rem;
-}
-
-.buttons button {
-  margin: 5px;
+  gap: 10px;
+  width: 100%;
 }
 @media (max-width: 767px) {
 
-  .items-for-resort-item-type {
+  .equipment-item {
     font-size: 1rem;
   }
 
-  .items-for-resort-item-price {
-    font-size: 1rem;
+  .equipment-item__type-name {
+    font-size: 1.25rem;
   }
 }
 </style>

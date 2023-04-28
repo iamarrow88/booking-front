@@ -1,56 +1,90 @@
 <template>
-  <div class="results">
+  <div class="resort-page">
     <div class="resort-name">Курорт {{ resortName }}</div>
     <div class="filters">
-      <div class="filters__date-input date-input">
-        <label for="startDate">Дата с:</label>
-        <input type="date" class="form-control" id="startDate" v-model="selDateStartShort" ref="dateStart">
-        <label for="Date">Дата по:</label>
-        <input type="date" class="form-control" id="dateEnd" v-model="selDateEndShort" ref="dateEnd">
+      <div class="filters__img">
+        <img src="../assets/3.jpg" alt="forest">
       </div>
+      <div class="filters__wrapper">
+        <div class="filters__date date">
+          <div class="date__block">
+            <label for="startDate" class="date__label">Дата с:</label>
+            <input type="date"
+                   class="date__input"
+                   id="startDate"
+                   v-model="selDateStartShort"
+                   ref="dateStart">
+          </div>
+          <div class="date__block">
+            <label for="dateEnd" class="date__label">Дата по:</label>
+            <input type="date"
+                   class="date__input"
+                   id="dateEnd"
+                   v-model="selDateEndShort"
+                   ref="dateEnd">
+          </div>
+        </div>
 
-      <div class="filters__type type">
-        <label for="typeInput">Тип инвентаря</label>
-        <select class="form-control" id="typeInput" v-model="selectedType">
-          <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
-        </select>
-      </div>
+        <div class="filters__time time">
+          <div class="time__start">
+            <label for="startTime" class="time__label">Начало бронирования:</label>
+            <select name="startTime"
+                    id="startTime"
+                    v-model="startTime"
+                    class="time__select"
+                    ref="startTime">
+            </select>
+          </div>
+          <div class="time__end">
+            <label for="endTime" class="time__label">Конец бронирования:</label>
+            <select name="endTime"
+                    id="endTime"
+                    v-model="endTime"
+                    class="time__select"
+                    ref="endTime">
+            </select>
+          </div>
+        </div>
 
-      <div class="select-time">
-        <div class="select-time__start">
-          <label for="startTime">Начало бронирования:</label>
-          <select name="startTime" id="startTime" v-model="startTime" class="form-control" ref="startTime">
+        <div class="filters__type type">
+          <label for="typeInput" class="type__label">Тип инвентаря</label>
+          <select class="type__select" id="typeInput" v-model="selectedType">
+            <option v-for="type in types"
+                    :key="type.id"
+                    :value="type"
+                    class="type__option">{{ type.name }}</option>
           </select>
         </div>
-        <div class="select-time__end">
-          <label for="endTime">Конец бронирования:</label>
-          <select name="endTime" id="endTime" v-model="endTime" class="form-control" ref="endTime">
-          </select>
-        </div>
+
+
       </div>
     </div>
 
-    <h3 class="items-for-resort-title">Инвентарь в "{{ resortName }}":</h3>
-    <ul v-if="items.length > 0" class="items-for-resort-list">
-      <equipment-item v-for="item in filteredItems"
-                      class="items-for-resort-item"
-                      :key="item.id"
-                      :item="item"
-                      :types="types"
-                      :typeId="item.type_id"
-                      :resortName="resortName"
-                      :editMode="false"
-                      :selDateStartShort="selDateStartShort"
-                      :selDateEndShort="selDateEndShort"
-                      :startTime="startTime"
-                      :endTime="endTime"
-                      :duration="duration"
-                      :hoursNaming="hoursNaming"
-      ></equipment-item>
 
-    </ul>
-    <div v-else>
-      Ничего не найдено
+
+    <div class="results">
+      <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
+      <ul v-if="items.length > 0" class="results__list">
+        <equipment-item v-for="item in filteredItems"
+                        class="results__item"
+                        :key="item.id"
+                        :item="item"
+                        :types="types"
+                        :typeId="item.type_id"
+                        :resortName="resortName"
+                        :editMode="false"
+                        :selDateStartShort="selDateStartShort"
+                        :selDateEndShort="selDateEndShort"
+                        :startTime="startTime"
+                        :endTime="endTime"
+                        :duration="duration"
+                        :hoursNaming="hoursNaming"
+        ></equipment-item>
+
+      </ul>
+      <div v-else class="results__empty-list-error">
+        Ничего не найдено
+      </div>
     </div>
   </div>
 </template>
@@ -244,88 +278,103 @@ export default {
 </script>
 
 <style>
-.results {
-  padding: 1rem;
+
+input, select, option {
+  margin: 0;
+  padding: 0;
+}
+
+
+.resort-page {
+  margin: 0 auto;
+  padding: 3rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
+  width: 90vw;
 }
 
 .resort-name {
+  margin-bottom: 30px;
   text-align: left;
   font-size: 36px;
   font-weight: 900;
 }
 
 .filters {
-  margin: 0 auto 30px;
-  padding: 1rem;
-  width: 30vw;
-}
-
-.date-input, .type, .select-time {
+  margin-bottom: 50px;
   width: 100%;
-}
-
-.select-time {
   display: flex;
   justify-content: space-between;
 }
 
-.select-time__start, .select-time__end {
-  width: 40%;
+.filters__img {
+  width: 50%;
 }
 
-.items-for-resort-title {
-  margin-top: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
+.filters__img img {
+  width: 100%;
 }
 
-.items-for-resort-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.filters__wrapper {
+  width: 45%;
 }
 
-.items-for-resort-item {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
+.filters__wrapper > div{
+  margin: 0 auto 15px;
+  width: 80%;
+}
+
+.date, .time{
   display: flex;
   justify-content: space-between;
-  align-items: center;
+
 }
 
-input[type="date"] {
+label.date__label, label.time__label, label.type__label {
+  margin-bottom: 10px;
+}
+
+.date > .date__block > input {
+  resize: none;
+}
+
+.date__block, .time > div {
+  width: 45%;
+}
+
+.time > div select {
+  border-right: auto;
+}
+
+.results {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
+}
+
+.results__title {
+  font-size: 26px;
+}
+
+.results__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 20px;
+  width: 100%;
+}
+
+.results__item {
+  width: 18%;
 }
 
 @media (max-width: 767px) {
-  .items-for-resort-title {
-    font-size: 1.25rem;
+
+  .results__item {
+    width: 25%;
+  }
+  .resort-page {
+    font-size: 1rem;
   }
 
-  .filters {
-    width: 50vw;
-  }
 }
 
-input[type="date"], input[type="number"], select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
-}
 </style>

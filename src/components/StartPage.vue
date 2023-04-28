@@ -59,15 +59,15 @@
         <ul class="results-list">
           <result-item-from-start-page v-for="resort in resorts"
                                        :key="resort.id"
-          :resort="resort"
-          :selectedType="selectedType"
-          :selectedCity="selectedCity"
-          :selDateStartShort="selDateStartShort"
-          :selDateEndShort="selDateEndShort"
-          :startTime="startTime"
-          :endTime="endTime"
-          :duration="duration"
-          :rate="resort.rate"/>
+                                      :resort="resort"
+                                      :selectedType="selectedType"
+                                      :selectedCity="selectedCity"
+                                      :selDateStartShort="selDateStartShort"
+                                      :selDateEndShort="selDateEndShort"
+                                      :startTime="startTime"
+                                      :endTime="endTime"
+                                      :duration="duration"
+                                      :rate="resort.rate"/>
         </ul>
       </div>
       <div v-else-if="isNotFoundShown" class="results-none">
@@ -294,6 +294,10 @@ export default {
 .dates__item {
   width: 17vw;
   max-width: 300px;
+}
+
+.dates__item > input {
+  resize: none;
 }
 
 .drop-list {
