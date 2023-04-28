@@ -66,7 +66,8 @@
           :selDateEndShort="selDateEndShort"
           :startTime="startTime"
           :endTime="endTime"
-          :duration="duration"></result-item-from-start-page>
+          :duration="duration"
+          :rate="resort.rate"/>
         </ul>
       </div>
       <div v-else-if="isNotFoundShown" class="results-none">
@@ -163,7 +164,8 @@ export default {
             end_time: this.selDateStartShort + 'T' + endTime + '.000Z',
           })
         });
-        this.resorts = await response.json()
+        this.resorts = await response.json();
+        this.resorts.forEach(resort => resort.rate = this.setStars())
         console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
         this.isNotFoundShown = this.resorts.length === 0;
       } catch (error) {
@@ -184,6 +186,9 @@ export default {
      } else {
        this.hoursNaming = 'часа';
      }
+    },
+    setStars() {
+      return Math.floor((Math.random() * 5) + 1);
     }
     },
   async created() {

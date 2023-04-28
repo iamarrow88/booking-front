@@ -1,6 +1,9 @@
 <template>
   <div class="block">
-    <button class="up" @click="previous">Previous</button>
+    <div class="block__btns">
+      <button class="up" @click="previous">Previous</button>
+      <button class="down" @click="next">Next</button>
+    </div>
     <div class="review">
       <div class="review__author"><img src='../assets/admin.png' alt="avatar" class="author__img">
         <div class="author__name">{{user.name}}</div>
@@ -11,7 +14,6 @@
       </div>
       <div class="review__date">22/04/22</div>
     </div>
-    <button class="down" @click="next">Next</button>
   </div>
 
 </template>
@@ -60,6 +62,14 @@ export default {
   .block {
     width: 27vw;
     padding: 30px;
+    display: none;
+  }
+
+  .block__btns {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    width: 17vw;
   }
 
   button {
@@ -112,6 +122,10 @@ export default {
 
   .review__date {
     font-weight: 700;
+  }
+
+  .active {
+    display: block;
   }
 
 </style>

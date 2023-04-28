@@ -1,14 +1,14 @@
 <template>
   <div class="rating">
-    <input type="radio" name="rating" id="rating-5" ref="rating-5">
+    <input type="radio" name="rating" id="rating-5" ref="rating5">
     <label for="rating-5"></label>
-    <input type="radio" name="rating" id="rating-4" ref="rating-4">
+    <input type="radio" name="rating" id="rating-4" ref="rating4">
     <label for="rating-4"></label>
-    <input type="radio" name="rating" id="rating-3" ref="rating-3">
+    <input type="radio" name="rating" id="rating-3" ref="rating3">
     <label for="rating-3"></label>
-    <input type="radio" name="rating" id="rating-2" ref="rating-2">
+    <input type="radio" name="rating" id="rating-2" ref="rating2">
     <label for="rating-2"></label>
-    <input type="radio" name="rating" id="rating-1" ref="rating-1">
+    <input type="radio" name="rating" id="rating-1" ref="rating1">
     <label for="rating-1"></label>
   </div>
 </template>
@@ -16,18 +16,23 @@
 <script>
 export default {
   name: "StarsRate",
-  data() {
+  props: {
+    rate: Number
+  },
+  /*data() {
     return{
       rating: 3,
     }
-  },
+  },*/
   methods: {
-    applyRate(){
-      /*document.querySelector(`#rating-${rate}`).setAttribute('checked', true);*/
+    applyRate(rate){
+      const refs = Object.keys(this.$refs).reverse()[rate - 1];
+      console.log(rate);
+      this.$refs[refs].setAttribute('checked', true);
     }
   },
-  created() {
-    this.applyRate(this.rating);
+  mounted() {
+    this.applyRate(this.rate);
   }
 }
 </script>
@@ -44,6 +49,9 @@ export default {
   flex-direction: row-reverse;
   height: 2em;
   position: relative;
+}
+input, label {
+  pointer-events: none;
 }
 
 .rating > input {
