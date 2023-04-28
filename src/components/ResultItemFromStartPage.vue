@@ -32,12 +32,31 @@
         Посмотреть инвентарь
       </button>
 
+    </div>
+    <div class="reviews">
+      <div class="reviews__title">Отзывы</div>
+
+      <!--      <div>'bla-bls-bla' </div>
+            <div>'bla-bls-bla' </div>
+            <div>'bla-bls-bla' </div>
+            <div>'bla-bls-bla' </div>
+            <div>'bla-bls-bla' </div>-->
+      <review-item v-for="review in reviews"
+                    :review="review"
+                    :users="users"
+                    :key="review.id"
+      @prev="prev"
+      @next="next"></review-item>
+    </div>
   </li>
 </template>
 
 <script>
+import starsRate from "@/components/StarsRate.vue";
+
 export default {
   name: "ResultItemFromStartPage",
+  components: starsRate,
   props: {
     resort: {
       id: Number,
@@ -64,7 +83,47 @@ export default {
   data() {
     return {
       isMoreShown: false,
+      users: [],
+      reviews: [],
     }
+  },
+  methods: {
+    showMore(e){
+      const parent = e.target.parentNode;
+      parent.parentElement.classList.toggle('showMore');
+      this.isMoreShown = !this.isMoreShown;
+    },
+    async getUsers(){
+      try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/users');
+        if(res.ok) {
+          this.users = await res.json();
+        } else {
+          console.log('there is no users')
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async getReviews(){
+      try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+        if(res.ok) {
+          this.reviews = await res.json();
+        } else {
+          console.log('there is no reviews')
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    prev() {
+
+    }
+  },
+  mounted() {
+    this.getUsers();
+    this.getReviews();
   }
 }
 </script>
