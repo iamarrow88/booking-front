@@ -83,6 +83,8 @@ export default {
       this.login(false);
     }
 
+    this.$store.dispatch('fetchInventoryTypes');
+
   },
   computed: {
     isLoggedIn(){
