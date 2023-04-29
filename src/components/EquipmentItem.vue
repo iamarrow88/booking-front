@@ -2,8 +2,11 @@
   <div class="equipment-item">
     <div class="equipment-item__about">
       <div class="equipment-item__type-name">{{ type.name }}</div>
-      <img class="equipment-item__photo"
-           :src="item.photo"
+      <img v-if="item.photo" class="equipment-item__photo"
+           src="item.photo"
+           alt="Item Photo">
+      <img v-else class="equipment-item__photo"
+           src="../assets/no-photo.jpg"
            alt="Item Photo">
       <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
       <div class="equipment-item__summary">
@@ -111,6 +114,14 @@ export default {
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
     },
     closePopUp(bool1, bool2){
+      const body = document.querySelector('body');
+      const height = window.innerHeight;
+      console.log(height)
+      if(bool1){
+        body.classList.add('no-scroll');
+      } else {
+        body.classList.remove('no-scroll');
+      }
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
@@ -203,6 +214,12 @@ export default {
   flex-wrap: wrap;
   gap: 10px;
   width: 100%;
+}
+
+.no-scroll {
+  overflow: hidden;
+  background-color: rgba(178, 178, 178, .3);
+  z-index: 10;
 }
 @media (max-width: 767px) {
 
