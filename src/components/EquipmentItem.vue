@@ -114,8 +114,6 @@ export default {
     },
     showPopUp() {
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
-      const pageHeight = document.documentElement.scrollHeight;
-      console.log(pageHeight);
     },
     closePopUp(bool1, bool2){
       this.isBookingProcessStarted = bool1;
