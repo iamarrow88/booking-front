@@ -23,6 +23,9 @@ import ItemDescription from "@/components/ItemDescritption.vue";
 import ReviewItem from "@/components/ReviewItem.vue";
 import StarsRate from "@/components/StarsRate.vue";
 
+
+
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -39,7 +42,6 @@ const router = createRouter({
         {path: '/profile', component: UserProfile},
     ]
 })
-
 const app = createApp(App);
     app.use(router);
     app.use(store);
