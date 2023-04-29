@@ -74,36 +74,5 @@ export default {
 </script>
 
 <style scoped>
-.pop-up {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(178, 178, 178, .3);
-  z-index: 10;
-}
 
-.pop-up__block {
-  position: absolute;
-  top: 46%;
-  left: 35%;
-  padding: 3em;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 16px;
-}
-
-.pop-up__btns {
-  margin: 23px auto 0;
-  display: flex;
-  justify-content: space-between;
-  width: 70%;
-}
-.action {
-  background-color: #fad4c6;
-  color: #ff673c;
-}
 </style>

@@ -1,12 +1,14 @@
 <template>
   <div v-show="isOpen" class="pop-up" @click="closePopUp">
-    <div class="pop-up-block">
+    <div class="pop-up__block">
       <div class="pop-up-text">
-        <b>Готово!</b><br>
-        Проверить свои бронирования можно
-      <router-link to="/mybooking"><b>здесь</b></router-link>
+        <b>Готово!</b>
       </div>
-      <button class="pop-up-btn cards-btn" @click="closePopUp">Х</button>
+      <div class="pop-up-text">
+        Проверить свои бронирования можно в
+      <router-link to="/mybooking"><b> Вашем аккаунте</b></router-link>
+      </div>
+      <button class="pop-up__close-btn cards-btn" @click="closePopUp">Х</button>
     </div>
   </div>
 </template>
@@ -36,24 +38,18 @@ export default {
   z-index: 10;
 }
 
-.pop-up-block {
-  position: absolute;
-  top: 46%;
-  left: 35%;
-  padding: 65px 35px 30px;
-  background-color: #fff;
-}
 
 .pop-up-text {
-  margin-bottom: 15px;
+  margin-bottom: .5em;
   line-height: 1.5;
+  font-size: 20px;
 }
 
-.pop-up-btn {
+.pop-up__close-btn {
   position: absolute;
-  top: 0;
-  right: 5px;
-  padding: 3px 6px;
+  top: 17px;
+  right: 17px;
+  padding: 5px 9px;
 }
 
 </style>

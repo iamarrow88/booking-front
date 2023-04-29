@@ -140,6 +140,7 @@ export default {
   border: 2px solid green;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
 }
 
 .avatar {

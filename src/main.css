@@ -78,3 +78,28 @@ input[type="date"], select{
     overflow: hidden;
     overflow-y: auto;
 }
+
+.pop-up__block {
+    position: absolute;
+    top: 46%;
+    left: 35%;
+    padding: 3em;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 16px;
+    border-radius: 6px;
+    box-shadow: 1px 1px 12px #fdd4bd;
+}
+
+.pop-up__btns {
+    margin: 23px auto 0;
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+}
+button.action {
+    background-color: #fad4c6;
+    color: #ff673c;
+}
