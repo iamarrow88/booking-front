@@ -9,40 +9,50 @@
     <div class="user-data">
       <div class="form-group">
         <label for="firstNameInput">Фамилия:</label>
-        <input type="text" class="form-control" id="firstNameInput" v-model="firstName">
+        <input type="text" class="form-control" id="firstNameInput" v-model="firstName" v-if="isEditModeOn">
+        <div class="form-control" v-if="!isEditModeOn">{{firstName}}</div>
+
         <div class="error-message" v-if="isFirstNameWrong || isFirstNameNull">
           {{ isFirstNameWrong ? "Допускаются только буквы" :
             isFirstNameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="surnameInput">Имя:</label>
-        <input type="text" class="form-control" id="surnameInput" v-model="surname">
+        <input type="text" class="form-control" id="surnameInput" v-model="surname" v-if="isEditModeOn">
+        <div class="form-control" v-if="!isEditModeOn">{{surname}}</div>
+
         <div class="error-message" v-if="isSurnameWrong || isSurnameNull">
           {{ isSurnameWrong ? "Допускаются только буквы" :
             isSurnameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="middleNameInput">Отчество:</label>
-        <input type="text" class="form-control" id="middleNameInput" v-model="middleName">
+        <input type="text" class="form-control" id="middleNameInput" v-model="middleName" v-if="isEditModeOn">
+        <div class="form-control" v-if="!isEditModeOn">{{middleName}}</div>
+
         <div class="error-message" v-if="isMiddleNameWrong || isMiddleNameNull">
           {{ isMiddleNameWrong ? "Допускаются только буквы" :
             isMiddleNameNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="emailRegInput">Email:</label>
-        <input type="email" class="form-control" id="emailRegInput" v-model="emailRegister" @focusout="validateRegMail(emailRegister)">
+        <input type="email" class="form-control" id="emailRegInput" v-model="emailRegister" v-if="isEditModeOn" @focusout="validateRegMail(emailRegister)">
+        <div class="form-control" v-if="!isEditModeOn">{{emailRegister}}</div>
+
         <div class="error-message" v-if="isEmailRegisterWrong || isEmailRegisterNull">
           {{ isEmailRegisterWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
             isEmailRegisterNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
       <div class="form-group">
         <label for="phoneInput">Телефон:</label>
-        <input type="text" class="form-control" id="phoneInput" v-model="phone">
+        <input type="text" class="form-control" id="phoneInput" v-model="phone" v-if="isEditModeOn">
+        <div class="form-control" v-if="!isEditModeOn">{{phone}}</div>
+
         <div class="error-message" v-if="isPhoneNumberWrong || isPhoneNumberNull">
           {{ isPhoneNumberWrong ? "Допускаются только цифры" :
             isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
       </div>
-      <button class="cards-btn">Обновить</button>
+      <button class="cards-btn" @click="editUserData">{{ isEditModeOn ? 'Обновить' : 'Редактировать'}}</button>
     </div>
   </div>
 </template>
@@ -68,6 +78,7 @@ export default {
       middleName: '',
       emailRegister: '',
       phone: '',
+      isEditModeOn: false,
       /*isFirstNameWrong: false,
       isEmailLoginWrong: false,
       isSurnameWrong: false,
@@ -87,6 +98,14 @@ export default {
     }
   },
   methods: {
+    editUserData() {
+      if(this.isEditModeOn){
+        console.log('отредактировали');
+      } else {
+        console.log('ща как отредактируем!');
+      }
+      this.isEditModeOn = !this.isEditModeOn;
+    }
     /*validateRegMail(mail){
       this.checkMailReg(mail);
       if(this.isEmailRegisterNull) return false;
@@ -157,5 +176,28 @@ export default {
 </script>
 
 <style scoped>
+  .profile {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    column-gap: 50px;
+    width: 90%;
+  }
+
+  .profile-photo img {
+    max-width: 100%;
+  }
+
+  .form-group {
+    display: grid;
+    grid-template-columns: 20% 80%;
+  }
+
+  .form-group label {
+    font-weight: 800;
+  }
+
+  .form-group > div {
+    text-align: left;
+  }
 
 </style>
