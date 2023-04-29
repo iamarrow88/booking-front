@@ -104,7 +104,7 @@ button.action {
     color: #ff673c;
 }
 
-.my-booking {
+.my-booking, .profile {
     margin: 0 auto;
     padding: 1rem;
     border: 1px solid #ccc;
