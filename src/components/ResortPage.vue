@@ -353,6 +353,7 @@ label.date__label, label.time__label, label.type__label {
 
 .results__title {
   font-size: 26px;
+  margin-bottom: 50px;
 }
 
 .results__list {
