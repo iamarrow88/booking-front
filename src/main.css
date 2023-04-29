@@ -103,3 +103,73 @@ button.action {
     background-color: #fad4c6;
     color: #ff673c;
 }
+
+.my-booking {
+    margin: 0 auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+}
+
+.my-booking__title {
+    margin: 0 0 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.my-booking-item {
+    margin: 0 auto 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    width: 80%;
+    display: grid;
+    grid-template-columns: 25% 75%;
+}
+
+.my-booking-item__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+}
+
+.my-booking-item__id {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    width: 100%;
+    text-align: left;
+}
+
+.my-booking-item__resort {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #666;
+    width: 100%;
+    text-align: left;
+}
+
+.my-booking-item__body {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    justify-items: center;
+}
+
+.body__term {
+    text-align: left;
+}
+
+@media (max-width: 767px) {
+    .my-booking-item__id {
+        font-size: 1rem;
+    }
+
+    .my-booking-item__resort {
+        font-size: 1rem;
+    }
+
+}
