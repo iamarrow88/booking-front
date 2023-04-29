@@ -64,24 +64,26 @@
 
     <div class="results">
       <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
-      <ul v-if="items.length > 0" class="results__list">
-        <equipment-item v-for="item in filteredItems"
-                        class="results__item"
-                        :key="item.id"
-                        :item="item"
-                        :types="types"
-                        :typeId="item.type_id"
-                        :resortName="resortName"
-                        :editMode="false"
-                        :selDateStartShort="selDateStartShort"
-                        :selDateEndShort="selDateEndShort"
-                        :startTime="startTime"
-                        :endTime="endTime"
-                        :duration="duration"
-                        :hoursNaming="hoursNaming"
-        ></equipment-item>
+      <div class="results__wrapper" v-if="items.length > 0">
+        <ul class="results__list">
+          <equipment-item v-for="item in filteredItems"
+                          class="results__item"
+                          :key="item.id"
+                          :item="item"
+                          :types="types"
+                          :typeId="item.type_id"
+                          :resortName="resortName"
+                          :editMode="false"
+                          :selDateStartShort="selDateStartShort"
+                          :selDateEndShort="selDateEndShort"
+                          :startTime="startTime"
+                          :endTime="endTime"
+                          :duration="duration"
+                          :hoursNaming="hoursNaming"
+          ></equipment-item>
 
-      </ul>
+        </ul>
+      </div>
       <div v-else class="results__empty-list-error">
         Ничего не найдено
       </div>
@@ -251,7 +253,6 @@ export default {
     } else {
       this.items = this.notFilteredItems;
     }
-
   },
   async created() {
     this.itemTypeId = +this.$route.query.type_id;
@@ -355,15 +356,16 @@ label.date__label, label.time__label, label.type__label {
 }
 
 .results__list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  width: 100%;
+  justify-items: stretch;
 }
 
 .results__item {
-  width: 18%;
+  padding: 1em;
 }
 
 @media (max-width: 767px) {

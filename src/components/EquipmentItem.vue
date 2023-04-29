@@ -2,12 +2,14 @@
   <div class="equipment-item">
     <div class="equipment-item__about">
       <div class="equipment-item__type-name">{{ type.name }}</div>
-      <img v-if="item.photo" class="equipment-item__photo"
-           src="item.photo"
-           alt="Item Photo">
-      <img v-else class="equipment-item__photo"
-           src="../assets/no-photo.jpg"
-           alt="Item Photo">
+      <div class="equipment-item__photo-block">
+        <img v-if="item.photo" class="equipment-item__photo"
+             src="item.photo"
+             alt="Item Photo">
+        <img v-else class="equipment-item__photo"
+             src="../assets/no-photo.jpg"
+             alt="Item Photo">
+      </div>
       <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
       <div class="equipment-item__summary">
         <div class="summary__duration"
@@ -112,16 +114,10 @@ export default {
     },
     showPopUp() {
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
+      document.querySelector('.layout').classList.add('pop-up');
     },
     closePopUp(bool1, bool2){
-      const body = document.querySelector('body');
-      const height = window.innerHeight;
-      console.log(height)
-      if(bool1){
-        body.classList.add('no-scroll');
-      } else {
-        body.classList.remove('no-scroll');
-      }
+      document.querySelector('.layout').classList.remove('pop-up');
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
@@ -194,11 +190,15 @@ export default {
   font-size: 28px;
 }
 
-.equipment-item__photo {
+.equipment-item__photo-block {
+  margin: 0 auto 30px;
   width: 90%;
   min-height: 150px;
-  max-height: 300px;
-  margin-bottom: 15px;
+}
+
+.equipment-item__photo {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .equipment-item__price {
