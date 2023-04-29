@@ -107,10 +107,10 @@ export default {
     },
     showPopUp() {
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
-      document.querySelector('.layout').classList.add('pop-up');
+      const pageHeight = document.documentElement.scrollHeight;
+      console.log(pageHeight);
     },
     closePopUp(bool1, bool2){
-      document.querySelector('.layout').classList.remove('pop-up');
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },

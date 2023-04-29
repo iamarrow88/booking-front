@@ -1,9 +1,8 @@
 <template>
   <HeaderPage :isLoggedIn="isLoggedIn" @loggin="loggin"/>
-  <div id="app">
+  <div id="main">
     <router-view :isLoggedIn="isLoggedIn" @loggin="loggin"/>
   </div>
-
 </template>
 <script>
 import HeaderPage from "@/components/HeaderPage.vue";
@@ -32,7 +31,7 @@ export default {
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Raleway:wght@400;500;700&family=Roboto:wght@400;500;700;900&display=swap');
-#app {
+#main {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -43,5 +42,10 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+#app {
+  position: relative;
+}
+
 
 </style>

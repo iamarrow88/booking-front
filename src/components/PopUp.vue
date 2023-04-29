@@ -1,13 +1,15 @@
 <template>
-  <div v-show="isBookingProcessStarted" class="pop-up" @click="closePopUp">
-    <div class="pop-up-block">
-      <div class="pop-up-text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
-      <div class="pop-up-text">На курорте <b>{{ resortName }}</b></div>
-      <div class="pop-up-text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{formattedEndDate}} {{ endTime }}:00</b></div>
-      <div class="pop-up-text">Стоимость: <b>{{ total }} RUB</b></div>
-      <div class="pop-up-btns">
-        <button class="pop-up-btn cards-btn" @click="goPaymentPage">Оплатить</button>
-        <button class="pop-up-btn cards-btn" @click="closePopUp">Отмена</button>
+  <div v-show="isBookingProcessStarted"
+       class="pop-up"
+       @click="closePopUp">
+    <div class="pop-up__block">
+      <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
+      <div class="pop-up__text">На курорте <b>{{ resortName }}</b></div>
+      <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{formattedEndDate}} {{ endTime }}:00</b></div>
+      <div class="pop-up__text">Стоимость: <b>{{ total }} RUB</b></div>
+      <div class="pop-up__btns">
+        <button class="pop-up__btn cards-btn" @click="goPaymentPage">Оплатить</button>
+        <button class="pop-up__btn cards-btn" @click="closePopUp">Отмена</button>
       </div>
     </div>
   </div>
@@ -76,13 +78,13 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  bottom: 0;
+  right: 0;
   background-color: rgba(178, 178, 178, .3);
   z-index: 10;
 }
 
-.pop-up-block {
+.pop-up__block {
   position: absolute;
   top: 46%;
   left: 35%;
@@ -90,11 +92,11 @@ export default {
   background-color: #fff;
 }
 
-.pop-up-text {
+.pop-up__text {
   margin-bottom: 15px;
 }
 
-.pop-up-btns {
+.pop-up__btns {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
