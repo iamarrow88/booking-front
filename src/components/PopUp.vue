@@ -3,12 +3,12 @@
        class="pop-up"
        @click="closePopUp">
     <div class="pop-up__block">
-      <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
+      <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимостью <b>{{ item.price }} RUB в час</b></div>
       <div class="pop-up__text">На курорте <b>{{ resortName }}</b></div>
       <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{formattedEndDate}} {{ endTime }}:00</b></div>
-      <div class="pop-up__text">Стоимость: <b>{{ total }} RUB</b></div>
+      <div class="pop-up__text">Итоговая стоимость: <b>{{ total }} RUB</b></div>
       <div class="pop-up__btns">
-        <button class="pop-up__btn cards-btn" @click="goPaymentPage">Оплатить</button>
+        <button class="pop-up__btn cards-btn action" @click="goPaymentPage">Оплатить</button>
         <button class="pop-up__btn cards-btn" @click="closePopUp">Отмена</button>
       </div>
     </div>
@@ -88,18 +88,22 @@ export default {
   position: absolute;
   top: 46%;
   left: 35%;
-  padding: 25px;
+  padding: 3em;
   background-color: #fff;
-}
-
-.pop-up__text {
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 16px;
 }
 
 .pop-up__btns {
-  margin: 0 auto;
+  margin: 23px auto 0;
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 70%;
+}
+.action {
+  background-color: #fad4c6;
+  color: #ff673c;
 }
 </style>
