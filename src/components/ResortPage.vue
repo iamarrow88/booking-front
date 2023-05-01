@@ -1,98 +1,92 @@
 <template>
-  <div class="results">
+  <div class="resort-page">
+    <div class="resort-name">Курорт {{ resortName }}</div>
     <div class="filters">
-      <div class="filters__date-input date-input">
-        <label for="startDate">Дата:</label>
-        <input type="date" class="form-control" id="startDate" v-model="sel_date">
+      <div class="filters__img">
+        <img src="../assets/3.jpg" alt="forest">
       </div>
+      <div class="filters__wrapper">
+        <div class="filters__date date">
+          <div class="date__block">
+            <label for="startDate" class="date__label">Дата с:</label>
+            <input type="date"
+                   class="date__input"
+                   id="startDate"
+                   v-model="selDateStartShort"
+                   ref="dateStart">
+          </div>
+          <div class="date__block">
+            <label for="dateEnd" class="date__label">Дата по:</label>
+            <input type="date"
+                   class="date__input"
+                   id="dateEnd"
+                   v-model="selDateEndShort"
+                   ref="dateEnd">
+          </div>
+        </div>
 
-      <div class="filters__type type">
-        <label for="typeInput">Тип инвентаря</label>
-        <select class="form-control" id="typeInput" v-model="selectedType">
-          <option v-for="type in types" :key="type.id" :value="type">{{ type.name }}</option>
-        </select>
-      </div>
+        <div class="filters__time time">
+          <div class="time__start">
+            <label for="startTime" class="time__label">Начало бронирования:</label>
+            <select name="startTime"
+                    id="startTime"
+                    v-model="startTime"
+                    class="time__select"
+                    ref="startTime">
+            </select>
+          </div>
+          <div class="time__end">
+            <label for="endTime" class="time__label">Конец бронирования:</label>
+            <select name="endTime"
+                    id="endTime"
+                    v-model="endTime"
+                    class="time__select"
+                    ref="endTime">
+            </select>
+          </div>
+        </div>
 
-      <div class="select-time">
-        <div class="select-time__start">
-          <label for="startTime">Начало бронирования:</label>
-          <select name="startTime" id="startTime" v-model="startTime" class="form-control">
-            <option value="00">0:00</option>
-            <option value="01">1:00</option>
-            <option value="02">2:00</option>
-            <option value="03">3:00</option>
-            <option value="04">4:00</option>
-            <option value="05">5:00</option>
-            <option value="06">6:00</option>
-            <option value="07">7:00</option>
-            <option value="08">8:00</option>
-            <option value="09">9:00</option>
-            <option value="10">10:00</option>
-            <option value="11">11:00</option>
-            <option value="12">12:00</option>
-            <option value="13">13:00</option>
-            <option value="14">14:00</option>
-            <option value="15">15:00</option>
-            <option value="16">16:00</option>
-            <option value="17">17:00</option>
-            <option value="18">18:00</option>
-            <option value="19">19:00</option>
-            <option value="20">20:00</option>
-            <option value="21">21:00</option>
-            <option value="22">22:00</option>
-            <option value="23">23:00</option>
+        <div class="filters__type type">
+          <label for="typeInput" class="type__label">Тип инвентаря</label>
+          <select class="type__select" id="typeInput" v-model="selectedType">
+            <option v-for="type in types"
+                    :key="type.id"
+                    :value="type"
+                    class="type__option">{{ type.name }}</option>
           </select>
         </div>
-        <div class="select-time__end">
-          <label for="endTime">Конец бронирования:</label>
-          <select name="startTime" id="endTime" v-model="endTime" class="form-control">
-            <option value="00">0:00</option>
-            <option value="01">1:00</option>
-            <option value="02">2:00</option>
-            <option value="03">3:00</option>
-            <option value="04">4:00</option>
-            <option value="05">5:00</option>
-            <option value="06">6:00</option>
-            <option value="07">7:00</option>
-            <option value="08">8:00</option>
-            <option value="09">9:00</option>
-            <option value="10">10:00</option>
-            <option value="11">11:00</option>
-            <option value="12">12:00</option>
-            <option value="13">13:00</option>
-            <option value="14">14:00</option>
-            <option value="15">15:00</option>
-            <option value="16">16:00</option>
-            <option value="17">17:00</option>
-            <option value="18">18:00</option>
-            <option value="19">19:00</option>
-            <option value="20">20:00</option>
-            <option value="21">21:00</option>
-            <option value="22">22:00</option>
-            <option value="23">23:00</option>
-          </select>
-        </div>
+
+
       </div>
     </div>
 
-    <h3 class="items-for-resort-title">Инвентарь в "{{ resortName }}":</h3>
-    <ul v-if="items.length > 0" class="items-for-resort-list">
-      <equipment-item v-for="item in filteredItems"
-                      class="items-for-resort-item"
-                      :key="item.id"
-                      :item="item"
-                      :types="types"
-                      :typeId="item.type_id"
-                      :resortName="resortName"
-                      :editMode="false"
-                      :sel_date="sel_date"
-                      :startTime="startTime"
-                      :endTime="endTime"
-      ></equipment-item>
 
-    </ul>
-    <div v-else>
-      Ничего не найдено
+
+    <div class="results">
+      <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
+      <div class="results__wrapper" v-if="items.length > 0">
+        <ul class="results__list">
+          <equipment-item v-for="item in filteredItems"
+                          class="results__item"
+                          :key="item.id"
+                          :item="item"
+                          :types="types"
+                          :typeId="item.type_id"
+                          :resortName="resortName"
+                          :editMode="false"
+                          :selDateStartShort="selDateStartShort"
+                          :selDateEndShort="selDateEndShort"
+                          :startTime="startTime"
+                          :endTime="endTime"
+                          :duration="duration"
+                          :hoursNaming="hoursNaming"
+          ></equipment-item>
+
+        </ul>
+      </div>
+      <div v-else class="results__empty-list-error">
+        Ничего не найдено
+      </div>
     </div>
   </div>
 </template>
@@ -104,16 +98,26 @@ export default {
   components: EquipmentItem,
   data() {
     return {
-      resortName: '',
       items: [],
       types: [],
-      itemTypeId: null,
       notFilteredItems: [],
-      sel_date: null,
+      filteredItems: [],
+
+      itemTypeId: null,
+      selectedType: null,
+      resortName: '',
+
+      selDateStartShort: null,
+      selDateEndShort: null,
+      todayDateFull: null,
+
       startTime: '',
       endTime: '',
-      selectedType: null,
-      filteredItems: [],
+      duration: null,
+      hoursNaming: 'час',
+      isToday: '',
+
+      startCounter: 0,
     }
   },
   methods: {
@@ -124,6 +128,57 @@ export default {
         }
       })
     },
+    getTimeNumber(dateFull) {
+      let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
+      timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
+      return timeNumber;
+    },
+    getShortDate(fullDate) {
+      return (fullDate.toISOString().slice(0, 10));
+    },
+    addDayToDate(dateFull, daysToAdd){
+      return new Date(dateFull.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
+    },
+    createStartOptions(startTime, isToday) {
+      const startTimeBlock = document.querySelector('#startTime');
+      const nowHour = this.todayDateFull.getHours();
+      startTimeBlock.innerHTML = '';
+
+      let i = isToday ? startTime : 0;
+      for (i; i < 24; i ++) {
+        const item = document.createElement('option');
+        item.value = i < 10 ? '0' + +i : +i;
+        item.innerHTML = (i < 10 ? '0' + +i : +i) + ':00';
+        if(isToday && nowHour > i) item.setAttribute('disabled', 'true');
+        startTimeBlock.appendChild(item);
+      }
+    },
+    createEndOptions(startTime) {
+      const endTimeBlock = document.querySelector('#endTime');
+      endTimeBlock.innerHTML = '';
+
+      for (let i = +startTime + 1; i < 25; i++) {
+        const item = document.createElement('option');
+        item.value = i < 10 ? '0' + +i : +i;
+        item.innerHTML = (i < 10 ? '0' + +i : +i) + ':00';
+        endTimeBlock.appendChild(item);
+      }
+    },
+    calcDuration(){
+      const msPerHours = 60 * 60 * 1000;
+      const start = new Date(this.selDateStartShort + ' ' + this.startTime + ':00:00');
+      const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
+      return (end - start) / msPerHours
+    },
+    calcHoursNaming(duration){
+      if(duration >= 5 && duration <= 20 || +duration.toString()[0] >= 5 && +duration.toString()[0] <= 9){
+        this.hoursNaming = 'часов';
+      } else if(+duration.toString()[0] === 1){
+        this.hoursNaming = 'час';
+      } else {
+        this.hoursNaming = 'часа';
+      }
+    }
   },
   watch: {
     selectedType: {
@@ -132,6 +187,47 @@ export default {
         this.filteredItems = this.notFilteredItems.filter(item => item.type_id === newValue.id)
 
       }
+    },
+    duration(newDuration){
+      this.calcHoursNaming(newDuration);
+    },
+    startTime(newTime) {
+      if(this.startCounter !== 0) {
+        this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
+      } else {
+        this.startCounter += 1;
+      }
+      if(this.endTime > 24) {
+        const MsInHour = 60 * 60 * 1000;
+        const hoursToAdd = (+newTime + 1) * MsInHour;
+        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
+        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
+        this.selDateEndShort = this.addDayToDate(this.todayDateFull, 1);
+      }
+      this.createEndOptions(newTime);
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    endTime() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateEndShort() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateStartShort(newDate) {
+      if(newDate !== this.todayShortDate) {
+        document.querySelector('#dateEnd').setAttribute('min', this.selDateStartShort);
+        if(this.startCounter !== 0) {
+          this.startTime = '10';
+          this.selDateEndShort = newDate;
+        }
+        this.createStartOptions(this.startTime, false);
+        this.createEndOptions(this.startTime);
+      }
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
     },
   },
   async mounted() {
@@ -154,103 +250,131 @@ export default {
     } else {
       this.items = this.notFilteredItems;
     }
-
   },
   async created() {
     this.itemTypeId = +this.$route.query.type_id;
-    this.sel_date = this.$route.query.sel_date;
+    this.selDateStartShort = this.$route.query.selDateStartShort;
+    this.selDateEndShort = this.$route.query.selDateEndShort;
     this.startTime = this.$route.query.startTime;
     this.endTime = this.$route.query.endTime;
+    this.duration = this.$route.query.duration;
+    this.todayDateFull = new Date();
+    this.isToday = this.getShortDate(this.todayDateFull) === this.selDateStartShort;
     try {
       const types = await fetch('/api/inventories/types')
       this.types = await types.json();
     } catch (error) {
       console.error(error)
     }
+    this.createStartOptions(this.startTime, this.isToday);
+    this.createEndOptions(this.startTime);
+    this.$refs.dateStart.setAttribute('min', this.todayShortDate);
+    this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
+  },
 
-  }
 }
 </script>
 
 <style>
-.results {
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-}
 
-.filters {
-
-  margin: 0 auto 30px;
-
-  padding: 1rem;
-  width: 30vw;
-}
-
-.date-input, .type, .select-time {
-  width: 100%;
-}
-
-.select-time {
-  display: flex;
-  justify-content: space-between;
-}
-
-.select-time__start, .select-time__end {
-  width: 40%;
-}
-
-.items-for-resort-title {
-  margin-top: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.items-for-resort-list {
-  list-style: none;
+input, select, option {
   margin: 0;
   padding: 0;
 }
 
-.items-for-resort-item {
-  margin-bottom: 1rem;
-  padding: 1rem;
+
+.resort-page {
+  margin: 0 auto;
+  padding: 3rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  width: 90vw;
 }
 
-input[type="date"] {
+.resort-name {
+  margin-bottom: 30px;
+  text-align: left;
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.filters {
+  margin-bottom: 50px;
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters__img {
+  width: 50%;
+}
+
+.filters__img img {
+  width: 100%;
+}
+
+.filters__wrapper {
+  width: 45%;
+}
+
+.filters__wrapper > div{
+  margin: 0 auto 15px;
+  width: 80%;
+}
+
+.date, .time{
+  display: flex;
+  justify-content: space-between;
+
+}
+
+label.date__label, label.time__label, label.type__label {
+  margin-bottom: 10px;
+}
+
+.date > .date__block > input {
+  resize: none;
+}
+
+.date__block, .time > div {
+  width: 45%;
+}
+
+.time > div select {
+  border-right: auto;
+}
+
+.results {
+  width: 100%;
+}
+
+.results__title {
+  font-size: 26px;
+  margin-bottom: 50px;
+}
+
+.results__list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  justify-items: stretch;
+}
+
+.results__item {
+  padding: 1em;
 }
 
 @media (max-width: 767px) {
-  .items-for-resort-title {
-    font-size: 1.25rem;
+
+  .results__item {
+    width: 25%;
+  }
+  .resort-page {
+    font-size: 1rem;
   }
 
-  .filters {
-    width: 50vw;
-  }
 }
 
-input[type="date"], input[type="number"], select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
-}
 </style>

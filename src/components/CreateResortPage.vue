@@ -17,17 +17,43 @@
       <input type="text" id="resortDescription" v-model="resortDescription">
     </div>
 
-    <button @click="addResort">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
+    <button @click="addResort" class="cards-btn">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
 
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
+    </div>
+
+    <div class="manage-equipment-block" v-if="editMode">
+      <button class="sub-btn"
+      @click="getEquipments">Управлять инвентарем</button>
+      <div class="equipment-list" v-if="!isEquipmManagingHide && equipments.length > 0">
+        <equipment-item v-for="item in equipments"
+                        :key="item.id"
+                        :item="item"
+                        :resortId="resortId"
+                        :types="types"
+                        :editMode="true"
+                        @DeleteItem="deleteItem"></equipment-item>
+      </div>
+      <div class="add-item">
+        <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
+        <add-item :IsEditEquipmModeOnFParent="false"
+                  :resortIdFromParent="resortId"
+                  v-if="isAddingItemModeOn"
+                  @isAddItemBlockOpen="closeAddItem"></add-item>
+
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 
+import addItem from "@/components/addItem.vue";
+import EquipmentItem from "@/components/EquipmentItem.vue";
+
 export default {
+  components: addItem, EquipmentItem,
   name: "CreateResortPage",
   props: {
     resortIdFromParent: Number,
@@ -37,6 +63,7 @@ export default {
     return {
       cities: [],
       resorts: [],
+      types: [],
 
       resortId: null,
       cityId: null,
@@ -49,6 +76,12 @@ export default {
       userId: null,
       errorMessage: null,
       isEditComponent: null,
+
+      equipments: [],
+      isEquipmManagingHide: true,
+      counter: 0,
+      isAddingItemModeOn: false,
+      itemsCounter: 0,
     }
   },
   methods: {
@@ -63,6 +96,46 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    async getInventoryByResort(){
+      try {
+        const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
+        this.equipments = await equipments.json();
+        if(equipments.ok){
+          console.log('ok');
+        } else {
+          console.log('not ok');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    getEquipments(){
+      this.isEquipmManagingHide=!this.isEquipmManagingHide;
+      this.getInventoryByResort();
+    },
+    async deleteItem(id) {
+      const res = await fetch(`/api/inventories/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      console.log(res.json());
+      if(res.ok) {
+        this.counter += 1;
+        console.log('inventory item deleted');
+      } else {
+        console.log('inventory item didn\'t delete')
+
+      }
+    },
+    addItem() {
+      this.isAddingItemModeOn = !this.isAddingItemModeOn;
+    },
+    closeAddItem(bool) {
+      this.isAddingItemModeOn = bool;
+      this.itemsCounter += 1;
     }
   },
   async created() {
@@ -93,11 +166,38 @@ export default {
         })
       }
     })
+
+    try {
+      const types = await fetch('/api/inventories/types');
+      this.types = await types.json();
+    } catch (e) {
+      console.error(e);
+    }
+
+    /*try {
+      const types = await fetch('/api/')
+    }*/
   },
+  watch: {
+    counter() {
+      this.getInventoryByResort();
+    },
+    itemsCounter() {
+      this.getInventoryByResort();
+    }
+  }
 }
 </script>
 
 <style scoped>
+  .add-resort {
+    margin: 30px auto;
+    padding: 1rem;
+    width: 50vw;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+  }
+
   input {
     margin: 0 auto;
     max-width: 500px;

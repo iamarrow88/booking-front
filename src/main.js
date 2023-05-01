@@ -12,10 +12,18 @@ import AddItem from "@/components/addItem.vue";
 import CreateResortPage from "@/components/CreateResortPage.vue";
 import ManageResorts from "@/components/ManageResorts.vue";
 import ResortItem from "@/components/ResortItem.vue";
-import ManageEquipment from "@/components/ManageEquipment.vue";
 import ModalWindow from "@/components/ModalWindow.vue";
 import BookingItem from "@/components/BookingItem.vue";
 import PaymentPage from "@/components/PaymentPage.vue";
+import '@/main.css'
+import UserProfile from "@/components/UserProfile.vue";
+import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
+import ItemDescription from "@/components/ItemDescritption.vue";
+import ReviewItem from "@/components/ReviewItem.vue";
+import StarsRate from "@/components/StarsRate.vue";
+
+
+
 
 const router = createRouter({
     history: createWebHistory(),
@@ -29,11 +37,10 @@ const router = createRouter({
         {path: '/addEquipment', component: AddItem},
         {path: '/addResort', component: CreateResortPage},
         {path: '/resorts/manage', component: ManageResorts},
-        {path: '/resorts/equipment', component: ManageEquipment},
         {path: '/payment', component: PaymentPage},
+        {path: '/profile', component: UserProfile},
     ]
 })
-
 const app = createApp(App);
     app.use(router);
     app.mount('#app');
@@ -43,7 +50,22 @@ app.component('PopUp', PopUp);
 app.component('AddItem', AddItem);
 app.component('CreateResortPage', CreateResortPage);
 app.component('ResortItem', ResortItem);
-app.component('ManageEquipment', ManageEquipment);
 app.component('ModalWindow', ModalWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
+app.component('ResultItemFromStartPage', ResultItemFromStartPage);
+app.component('ItemDescription', ItemDescription);
+app.component('ReviewItem', ReviewItem);
+app.component('StarsRate', StarsRate);
+
+app.mixin({
+    methods: {
+        getTimeNumber(dateFull) {
+            let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
+            timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
+            return timeNumber;
+        },
+    }
+})
+
+

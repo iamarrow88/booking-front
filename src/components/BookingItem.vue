@@ -1,13 +1,15 @@
 <template>
   <div class="my-booking-item">
-    <div class="my-booking-item-header">
-      <p class="my-booking-id"><b>ID бронирования:</b> {{ item.id }}</p>
-      <p class="my-booking-resort"><b>Курорт:</b> {{ item.resort.name }}</p>
+    <div class="my-booking-item__header">
+      <div class="my-booking-item__id"><b>ID бронирования:</b> {{ item.id }}</div>
+      <div class="my-booking-item__resort"><b>Курорт:</b> {{ item.resort.name }}</div>
     </div>
-    <div class="my-booking-item-body">
+    <div class="my-booking-item__body">
       <p><b>Тип инвентаря:</b> {{ getInvTypeName }}</p>
-      <p><b>Начало:</b> {{ startTimeFormatted }}</p>
-      <p><b>Конец:</b> {{ endTimeFormatted }}</p>
+      <div class="body__term">
+        <p><span>Начало:</span> {{ startTimeFormatted }}</p>
+        <p><b>Конец:</b> {{ endTimeFormatted }}</p>
+      </div>
       <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
     </div>
   </div>
@@ -65,53 +67,5 @@ export default {
 </script>
 
 <style scoped>
-.my-booking-item {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-}
 
-.my-booking-item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.my-booking-id {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.my-booking-resort {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #666;
-}
-
-.my-booking-item-body {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-}
-
-.my-booking-item-body p {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-@media (max-width: 767px) {
-  .my-booking-id {
-    font-size: 1rem;
-  }
-
-  .my-booking-resort {
-    font-size: 1rem;
-  }
-
-  .my-booking-item-body p {
-    font-size: 0.9rem;
-  }
-}
 </style>

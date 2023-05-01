@@ -1,33 +1,56 @@
 <template>
-  <li class="items-for-resort-item">
-    <div class="items-for-resort-item-header">
+  <div class="equipment-item">
+    <div class="equipment-item__about">
+      <div class="equipment-item__type-name">{{ type.name }}</div>
+      <div class="equipment-item__photo-block">
+        <img v-if="item.photo" class="equipment-item__photo"
+             src="item.photo"
+             alt="Item Photo">
+        <img v-else class="equipment-item__photo"
+             src="../assets/no-photo.jpg"
+             alt="Item Photo">
+      </div>
+      <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
+      <div class="equipment-item__summary">
+        <div class="summary__duration"
+             v-if="!editMode">Аренда на {{ duration }} {{hoursNaming}}</div>
+        <div class="summary__total"
+             v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
+      </div>
+    </div>
 
-      <p class="items-for-resort-item-type column">{{ type.name }}</p>
-      <img class="items-for-resort-item-photo column" :src="item.photo" alt="Item Photo">
-      <p class="items-for-resort-item-price column">Час - <span>{{ item.price }} RUB</span></p>
-      <p class="items-for-resort-item-price column">Итого - <span>{{ item.price * duration }} RUB</span></p>
-
+    <div class="buttons">
       <button @click="showPopUp"
               v-if="!editMode"
-              class="items-for-resort-btn">Забронировать</button>
+              class="btn cards-btn">Забронировать</button>
+      <button v-if="editMode"
+              @click="showAddItemBlock"
+              class="btn cards-btn">Редактировать</button>
       <button v-if="editMode"
               @click="this.$emit('DeleteItem', item.id)"
-              class="items-for-resort-btn">Удалить</button>
-      <button v-if="editMode"
-              @click="this.$emit('EditItem', item.id)"
-              class="items-for-resort-btn">Редактировать</button>
+              class="btn cards-btn">Удалить</button>
     </div>
+
+    <div v-if="isAddingItemModeOn">
+      <add-item :IsEditEquipmModeOnFParent="true"
+                :resortIdFromParent="resortId"
+                :itemFromParent="item"
+      @isAddItemBlockOpen="closeAddItem"></add-item>
+    </div>
+
     <pop-up v-if="!editMode" :item="item"
             :typeName="type.name"
             :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"
-            :sel_date="sel_date"
+            :selDateStartShort="selDateStartShort"
+            :selDateEndShort="selDateEndShort"
             :startTime="startTime"
             :endTime="endTime"
             :total = "item.price * duration"
+            :duration = "duration"
             @closePopUp="closePopUp"></pop-up>
     <modal-window :isOpen="isBooked" @closePopUp="closePopUp"></modal-window>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -48,25 +71,36 @@ export default {
       type_id: Number
     },
     resortId: Number,
-    types: Array,
+    types: {
+      id: Number,
+      name: String
+    },
     typeId: Number,
     resortName: String,
     editMode: Boolean,
-    sel_date: null,
+    selDateStartShort: null,
+    selDateEndShort: null,
     startTime: String,
-    endTime: String
+    endTime: String,
+    duration: Number,
+    hoursNaming: String,
   },
   data() {
     return {
       type: null,
       isBookingProcessStarted: false,
-      isBooked: false
+      isBooked: false,
+      isAddingItemModeOn: false,
+      itemsCounter: 0,
+      today: null,
+      componentDuration: null,
+
     }
   },
   methods: {
     getEquipmentType() {
       this.types.forEach(type => {
-        if(type.id === this.typeId) {
+        if(type.id === this.item.type_id) {
           this.type = type;
         }
       })
@@ -78,66 +112,114 @@ export default {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
+    showAddItemBlock() {
+      this.isAddingItemModeOn = !this.isAddingItemModeOn;
+    },
+    closeAddItem(bool) {
+      this.isAddingItemModeOn = bool;
+      this.itemsCounter += 1;
+    },
+    async getInventoryByResort(){
+      try {
+        const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
+        this.equipments = await equipments.json();
+        if(equipments.ok){
+          console.log('получили данные по инвентарю с курорта ' + this.resortName);
+        } else {
+          console.log('не удалось получить данные по инвентарю с курорта ' + this.resortName);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    calcDuration() {
+      const msPerHours = 60 * 60 * 1000;
+      const start = new Date(this.selDateStartShort + ' ' + this.startTime + ':00:00');
+      const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
+      return (end - start) / msPerHours
+    },
   },
-  computed: {
-    duration() {
-      return +this.endTime - +this.startTime;
+  watch: {
+    itemsCounter() {
+      this.getInventoryByResort();
+    },
+    startTime() {
+      this.componentDuration = this.calcDuration();
+    },
+    endTime() {
+      this.componentDuration = this.calcDuration();
     }
   },
-  created() {
+  async created() {
     this.getEquipmentType();
+    this.today = (new Date().toISOString().slice(0, 10));
+    this.componentDuration = this.$route.query.duration;
   },
+
 }
 
 </script>
 
 <style scoped>
-.items-for-resort-item {
+.equipment-item {
+  padding: 20px;
+  border: 0 solid #899bb0;
+  box-shadow: 7px 7px 20px #c5daf3;
+  font-size: 1.25rem;
+}
+
+.equipment-item__about {
   display: flex;
   flex-direction: column;
 }
 
-.column {
-  width: 200px;
-  text-align: left;
-}
-.items-for-resort-item-header {
+.equipment-item__type-name {
+  margin-bottom: 20px;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-grow: 1;
-  margin-right: 1rem;
+  justify-content: start;
+  font-size: 28px;
+}
+
+.equipment-item__photo-block {
+  margin: 0 auto 30px;
+  width: 90%;
+  min-height: 150px;
+}
+
+.equipment-item__photo {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.equipment-item__price {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: start;
+}
+
+.equipment-item__summary {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+  gap: 10px;
   width: 100%;
 }
 
-.items-for-resort-item-type {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.items-for-resort-item-price {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-  font-size: 1.25rem;
-  color: #666;
-}
-
-.items-for-resort-item-photo {
-  height: 100%;
-  max-height: 10rem;
-  object-fit: cover;
-  border-radius: 0.5rem;
+.no-scroll {
+  overflow: hidden;
+  background-color: rgba(178, 178, 178, .3);
+  z-index: 10;
 }
 @media (max-width: 767px) {
 
-  .items-for-resort-item-type {
+  .equipment-item {
     font-size: 1rem;
   }
 
-  .items-for-resort-item-price {
-    font-size: 1rem;
+  .equipment-item__type-name {
+    font-size: 1.25rem;
   }
 }
 </style>

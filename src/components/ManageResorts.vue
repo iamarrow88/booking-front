@@ -7,7 +7,6 @@
                         :editMode="false"
                         @updateResort="editResort"></create-resort-page>
   </div>
-  <router-link to="/resorts/equipment">Страница управления снаряжением</router-link>
   <div class="resorts-list" v-if="resorts.length > 0">
     <resort-item @editResortFromItem="editResort"
                  @deleteResort="deleteResort" v-for="resort in resorts"
@@ -49,21 +48,7 @@ export default {
           },
         });
         if (response.ok) {
-          try {
-            const resorts = await fetch('/api/myresorts',
-                {
-                  method: 'GET',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                  },
-                });
-            this.allResorts = await resorts.json();
-            console.log(this.allResorts);
-            this.usersResorts = this.allResorts.filter(resort => resort.owner_id === +this.userId)
-          } catch (e) {
-            console.error(e);
-          }
+          this.wasChangeResorts += 1;
         }
       } catch (e) {
         console.error(e);
@@ -98,6 +83,7 @@ export default {
         if(response.ok){
           console.log('ok');
           this.wasChangeResorts += 1;
+          this.isEditComponent = false;
           this.resortName = '';
           this.resortAddress = '';
           this.resortDescription = '';

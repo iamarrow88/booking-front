@@ -1,13 +1,15 @@
 <template>
-  <div v-show="isBookingProcessStarted" class="pop-up" @click="closePopUp">
-    <div class="pop-up-block">
-      <div class="pop-up-text">Вы бронируете <b>{{ typeName }}</b>, стоимость <b>{{ item.price }} RUB</b></div>
-      <div class="pop-up-text">На курорте <b>{{ resortName }}</b></div>
-      <div class="pop-up-text">Когда: <b>{{ formattedDate }}</b> c <b>{{ startTime }}:00</b> по <b>{{ endTime }}:00</b></div>
-      <div class="pop-up-text">Стоимость: <b>{{ total }} RUB</b></div>
-      <div class="pop-up-btns">
-        <button class="pop-up-btn" @click="goPaymentPage">Оплатить</button>
-        <button class="pop-up-btn" @click="closePopUp">Отмена</button>
+  <div v-show="isBookingProcessStarted"
+       class="pop-up"
+       @click="closePopUp">
+    <div class="pop-up__block">
+      <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимостью <b>{{ item.price }} RUB в час</b></div>
+      <div class="pop-up__text">На курорте <b>{{ resortName }}</b></div>
+      <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{formattedEndDate}} {{ endTime }}:00</b></div>
+      <div class="pop-up__text">Итоговая стоимость: <b>{{ total }} RUB</b></div>
+      <div class="pop-up__btns">
+        <button class="pop-up__btn cards-btn action" @click="goPaymentPage">Оплатить</button>
+        <button class="pop-up__btn cards-btn" @click="closePopUp">Отмена</button>
       </div>
     </div>
   </div>
@@ -27,7 +29,8 @@ export default {
     typeName: String,
     isBookingProcessStarted: Boolean,
     resortName: String,
-    sel_date: String,
+    selDateStartShort: String,
+    selDateEndShort: String,
     startTime: String,
     endTime: String,
     total: Number
@@ -44,51 +47,32 @@ export default {
       this.$props.isBookingProcessStarted = false;
       this.$emit('closePopUp', false, this.isBooked)
     },
+    formatDate(date){
+      let arr = date.split('-');
+      return arr.reverse().join('.');
+    },
 
     async goPaymentPage() {
-      this.$router.push({path: '/payment', query: { sel_date: this.sel_date,
+      this.$router.push({path: '/payment', query: {
+          selDateStartShort: this.selDateStartShort,
           startTime: this.startTime,
           endTime: this.endTime,
           itemId: this.item.id,
+          total: this.total
         }});
     }
   },
   computed: {
-    formattedDate() {
-      let arr = this.sel_date.split('-');
-      return arr.reverse().join('.');
+    formattedStartDate() {
+      return this.formatDate(this.selDateStartShort);
+    },
+    formattedEndDate(){
+      return this.formatDate(this.selDateEndShort);
     }
   },
 }
 </script>
 
 <style scoped>
-.pop-up {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(178, 178, 178, .3);
-  z-index: 10;
-}
 
-.pop-up-block {
-  position: absolute;
-  top: 46%;
-  left: 35%;
-  padding: 25px;
-  background-color: #fff;
-}
-
-.pop-up-text {
-  margin-bottom: 15px;
-}
-
-.pop-up-btns {
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-}
 </style>
