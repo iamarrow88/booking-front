@@ -8,14 +8,16 @@ const store = createStore({
 
     },
     state: {
-
+        errorMessage: '',
     },
     getters: {
-
+        GET_ERROR_MESSAGE(state){
+            return state.errorMessage;
+        }
     },
     mutations: {
         updateErrorMessage(state, errorMsg){
-            state.error = errorMsg;
+            state.errorMessage = errorMsg;
         },
     },
 

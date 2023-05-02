@@ -4,7 +4,7 @@
       <nav class="header-nav">
         <div>
           <div @click="goToHomePage" class="logo">
-            <img class="logo-img" src="../assets/logo1.png" alt="logo">
+            <img class="logo-img" src="../../assets/logo1.png" alt="logo">
             <div class="logo-title">Домашняя страница</div>
           </div>
         </div>
@@ -16,8 +16,8 @@
           </div>
           <div class="profile">
             <div v-if="isLoggedIn" class="profile-img" @click="isHoverOnProfileIcon=!isHoverOnProfileIcon">
-              <img class="avatar" v-if="!isOwner" src="../assets/user.png" alt="avatar"><br>
-              <img class="avatar" v-if="isOwner" src="../assets/admin.png" alt="avatar"><br>
+              <img class="avatar" v-if="!isOwner" src="../../assets/user.png" alt="avatar"><br>
+              <img class="avatar" v-if="isOwner" src="../../assets/admin.png" alt="avatar"><br>
               <div class="profile-username">{{ surname }}</div>
             </div>
             <div class="profile-actions">
@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import LoginPage from "@/components/LoginPage.vue";
+import LoginPage from "@/components/pages/user/LoginPage.vue";
 import validationMixins from "@/components/mixins/validationMixins";
-import {mapMutations} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "HeaderPage",
@@ -50,7 +50,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['login']),
+    ...mapMutations(['login', 'checkLogin']),
+    ...mapGetters(['GET_USER_SURNAME', 'IS_USER_OWNER']),
     showLoginModal() {
       this.$router.push({path: '/login', component: LoginPage})
     },
@@ -76,13 +77,8 @@ export default {
     }
   },
   mounted() {
-    if(localStorage.getItem('token')) {
-      this.login();
-      this.surname = localStorage.getItem('surname');//*//
-    } else {
-      this.login(false);
-    }
-
+    this.$store.commit('bringUserDataFromLS');
+    this.$store.commit('checkLogin');
     this.$store.dispatch('fetchInventoryTypes');
 
   },
@@ -91,10 +87,10 @@ export default {
       return this.$store.state.authorization.isLoggedIn;
     },
     isOwner(){
-      return this.$store.state.authorization.isOwner;
+      return this.$store.getters.IS_USER_OWNER;
     },
     surname(){
-      return this.$store.state.authorization.user.surname;
+      return this.$store.getters.GET_USER_SURNAME;
     }
   },
 }

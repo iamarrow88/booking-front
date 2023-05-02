@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <h1 class="title">Вход/Регистрация</h1>
-    <div v-if="errorMessage" class="error-message">
-      {{ errorMessage }}
+    <div v-if="GET_ERROR_MESSAGE" class="error-message">
+      {{ GET_ERROR_MESSAGE }}
     </div>
     <div v-if="!isLoggedIn">
       <h3 class="subtitle">Войти</h3>
@@ -84,7 +84,7 @@
 
 /*import {createRouter as router} from "vue-router";*/
 import validationMixins from "@/components/mixins/validationMixins";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
 /*  props: {
@@ -100,7 +100,6 @@ export default {
       phone: '',
       roleId: 2,
       token: '',
-      errorMessage: '',
       emailLogin: '',
       passwordLogin: '',
       emailRegister: '',
@@ -138,12 +137,14 @@ export default {
   },
 /*  computed: mapGetters(['ISLOGGEDIN', 'ISOWNER']),*/
   computed: {
+    ...mapGetters(['ISLOGGEDIN', 'GET_ERROR_MESSAGE']),
     isLoggedIn(){
-      return this.$store.state.authorization.isLoggedIn;
-    }
+      return this.$store.getters.ISLOGGEDIN;
+    },
   },
   methods: {
-    ...mapActions(['registration', 'loginS']),
+    ...mapActions(['registerUser', 'loginUser']),
+    ...mapGetters(['GET_ERROR_MESSAGE']),
     async register(){
       this.isPasswordRegisterNull = false;
 
@@ -156,7 +157,7 @@ export default {
         phone: this.phone,
         role_id: this.roleId
       }
-      this.$store.dispatch('registration', body)
+      this.$store.dispatch('registerUser', body)
     },
     /*async register() {
       this.isPasswordRegisterNull = false;
@@ -218,9 +219,8 @@ export default {
       }
       if(!this.checkLoginPass(this.passwordLogin) ||
           this.validateLoginMail(this.emailLogin)){
-        this.$store.dispatch('loginS', body);
-        if(!this.$store.state.authorization.error) this.$router.push({path: '/mybooking', params: {id: this.$store.state.authorization.user.id}});
-
+        this.$store.dispatch('loginUser', body);
+        if(!this.$store.getters.GET_ERROR_MESSAGE) this.$router.push({path: '/mybooking', params: {id: this.$store.state.authorization.user.id}});
         /*try {
           const res = await fetch('/api/user/login', {
             method: 'POST',
