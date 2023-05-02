@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
+import ResultItemFromStartPage from "@/components/items/start-page/ResultItemFromStartPage.vue";
 
 export default {
   components: ResultItemFromStartPage,
@@ -259,7 +259,7 @@ export default {
 
 .search-block {
   padding: 50px 50px 0;
-  background-image: url("../assets/11.jpg");
+  background-image: url("../../../assets/11.jpg");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;

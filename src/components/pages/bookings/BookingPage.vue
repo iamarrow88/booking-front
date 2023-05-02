@@ -10,8 +10,8 @@
 
 <script>
 
-import BookingItem from "@/components/BookingItem.vue";
-import {mapActions} from "vuex";
+import BookingItem from "@/components/items/bookings/BookingItem.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   components: {BookingItem},
@@ -22,10 +22,14 @@ export default {
     return {
       booking: [],
       inv_types: [],
+      ...mapGetters(['GET_ALL_USER_INFO'])
     }
   },
   methods: mapActions(['fetchInventoryTypes']),
   async mounted() {
+    console.log(this.$store.getters.GET_ALL_USER_INFO);
+    const token = localStorage.getItem('token');
+    console.log('token ' + token);
     try {
       const res = await fetch('/api/user/bookings', {
         method: 'GET',

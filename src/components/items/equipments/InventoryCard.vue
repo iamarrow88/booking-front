@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: "addItem",
+  name: "InventoryCard",
   props: {
     IsEditEquipmModeOnFParent: Boolean,
     resortIdFromParent: Number,

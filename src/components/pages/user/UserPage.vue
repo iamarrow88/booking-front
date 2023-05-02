@@ -1,8 +1,8 @@
 <template>
   <div class="profile">
     <div class="profile-photo">
-      <img src="../assets/user.png" v-if="!isOwner" alt="avatar">
-      <img class="avatar" v-if="isOwner" src="../assets/admin.png" alt="avatar">
+      <img src="../../../assets/user.png" v-if="!isOwner" alt="avatar">
+      <img class="avatar" v-if="isOwner" src="../../../assets/admin.png" alt="avatar">
 
       <p>{{ surname }}</p>
     </div>
@@ -60,7 +60,7 @@
 <script>
 import validationMixins from "@/components/mixins/validationMixins";
 export default {
-  name: "UserProfile",
+  name: "UserPage",
   mixins: [validationMixins],
   props: {
     isOwnerParent: Boolean,

@@ -5,7 +5,7 @@
 
 <script>
 export default {
-  name: "ItemDescription",
+  name: "ResortDescritption",
   props: {
     description: String,
     isMoreShown: Boolean

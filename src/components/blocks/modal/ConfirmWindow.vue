@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "PopUp",
+  name: "ConfirmWindow",
   props: {
     item: {
       id: Number,

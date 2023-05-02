@@ -3,9 +3,9 @@
   <div class="add-resort">
     <button class="sub-btn"
             @click="editComponent">Добавить курорт</button>
-    <create-resort-page v-if="isEditComponent"
+    <create-resort-block v-if="isEditComponent"
                         :editMode="false"
-                        @updateResort="editResort"></create-resort-page>
+                        @updateResort="editResort"></create-resort-block>
   </div>
   <div class="resorts-list" v-if="resorts.length > 0">
     <resort-item @editResortFromItem="editResort"
@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import ResortItem from "@/components/ResortItem.vue";
-import CreateResortPage from "@/components/CreateResortPage.vue";
+import ResortItem from "@/components/items/resorts/ResortItem.vue";
+import CreateResortBlock from "@/components/blocks/resorts/CreateResortBlock.vue";
 
 export default {
-  name: "ManageResorts",
-  components: {CreateResortPage, ResortItem},
+  name: "ManageResortCard",
+  components: ResortItem, CreateResortBlock,
   data() {
     return {
       resorts: [],

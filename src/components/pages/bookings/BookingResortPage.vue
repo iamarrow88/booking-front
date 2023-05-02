@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import BookingItem from "@/components/BookingItem.vue";
+import BookingItem from "@/components/items/bookings/BookingItem.vue";
 
 export default {
   components: {BookingItem},

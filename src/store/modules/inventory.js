@@ -14,8 +14,7 @@ export default {
                     this.errorMessage = "Invalid data provided, please try again";
                 } else {
                     const types = await res.json();
-                    context.commit('setInventoryTypes', types)
-                    console.log(this.$store.state.inventoryTypes)
+                    context.commit('setInventoryTypes', types);
                 }
             } catch (err) {
                 console.error(err);
@@ -25,6 +24,7 @@ export default {
     mutations: {
         setInventoryTypes(state, newTypesArray){
             state.inventoryTypes = newTypesArray;
+            console.log(state.inventoryTypes);
         }
     },
     state: {
