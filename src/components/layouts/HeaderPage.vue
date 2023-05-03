@@ -67,7 +67,7 @@ export default {
       this.$router.push(paths.UserBookingPage);
     },
     goToResortBookings() {
-      this.$router.push(paths.ResortBookingPage)
+      this.$router.push(paths.ResortBookingsPage)
     },
     goToResortManagingPage() {
       this.$router.push(paths.ManageResort)

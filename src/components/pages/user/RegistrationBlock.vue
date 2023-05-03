@@ -1,26 +1,5 @@
 <template>
-  <div class="container">
-    <h1 class="title">Вход/Регистрация</h1>
-    <div v-if="GET_ERROR_MESSAGE" class="error-message">
-      {{ GET_ERROR_MESSAGE }}
-    </div>
-    <div v-if="!IS_LOGGED_IN">
-      <h3 class="subtitle">Войти</h3>
-      <div class="form-group">
-        <label for="emailLogInput">Email:</label>
-        <input type="email" class="form-control" id="emailLogInput" v-model="emailLogin" @focusout="validateLoginMail(emailLogin)">
-        <div class="error-message" v-if="isEmailLoginWrong || isEmailLoginNull">
-          {{ isEmailLoginWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
-            isEmailLoginNull ? "Поле обязательно для заполнения" : ""}}</div>
-      </div>
-      <div class="form-group">
-        <label for="passwordLogInput">Пароль:</label>
-        <input type="password" class="form-control" id="passwordLogInput" v-model="passwordLogin">
-        <div class="error-message" v-if="isPasswordLoginNull">Введите пароль</div>
-      </div>
-      <button class="btn btn-primary cards-btn" @click="login">Войти в аккаунт</button>
-    </div>
-
+  <div class="registration-block">
     <div v-if="!IS_LOGGED_IN">
       <h3 class="subtitle">Регистрация</h3>
       <div class="form-group">
@@ -71,24 +50,20 @@
         </select>
       </div>
       <button class="btn btn-primary cards-btn" @click="register">Зарегистрироваться</button>
-    </div>
-    <div v-else>
-      <h3 class="subtitle">Здравствуйте, {{ surname }}</h3>
-      <button class="btn btn-primary cards-btn" @click="logout">Выйти из аккаунта</button>
+      <button @click="this.$emit('entryBlockToggle', true)"
+              class="sub-btn">У меня уже есть аккаунт</button>
     </div>
   </div>
 </template>
 
-
 <script>
-
-
-import validationMixins from "@/components/mixins/validationMixins.js";
 import {mapActions, mapGetters} from "vuex";
-import paths from "@/data-and-functions/constants/paths.js";
+import validationMixins from "@/components/mixins/validationMixins.js";
+import paths from "@/data-and-functions/constants/paths";
+
 
 export default {
-  mixins: [validationMixins],
+  name: "RegistrationBlock",
   data() {
     return {
       id: null,
@@ -105,15 +80,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['IS_LOGGED_IN', 'GET_ERROR_MESSAGE']),
+    ...mapGetters(['IS_LOGGED_IN'])
   },
-  /*watch: {
-    firstName() {
-      this.$store.commit('updateUser', this);
-    }
-  },*/
+  mixins: [validationMixins],
   methods: {
-    ...mapActions(['registerUser', 'loginUser']),
+    ...mapActions(['registerUser']),
     async register(){
       this.isPasswordRegisterNull = false;
 
@@ -130,99 +101,10 @@ export default {
       this.$store.dispatch('registerUser', body);
       if(this.$store.getters.IS_LOGGED_IN) this.$router.push({ path: paths.UserPage, params: {id: this.$store.state.authorization.user.id}});
     },
-
-    async login() {
-      this.isPasswordLoginNull = false;
-
-      const body = {
-        email: this.emailLogin,
-        password: this.passwordLogin
-      }
-
-      if(!this.checkLoginPass(this.passwordLogin) ||
-          this.validateLoginMail(this.emailLogin)){
-        this.$store.dispatch('loginUser', body);
-        if(this.$store.getters.IS_LOGGED_IN) this.$router.push({path: paths.UserPage, params: {id: this.$store.state.authorization.user.id}});
-      }
-    },
-
-    logout() {
-      this.$store.commit('logoutUser');
-    },
-  },
+  }
 }
 </script>
 
-<style>
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.form-group {
-  margin-bottom: 25px;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 18px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-select {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #d8d8d8;
-  transition: border-color 0.2s ease-in-out;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-select:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-button {
-  display: inline-block;
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-button:hover {
-  background-color: #0069d9;
-}
-
-.error-message {
-  color: #dc3545;
-  font-size: 16px;
-  margin-top: 10px;
-}
-
-.title {
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.subtitle {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 15px;
-}
+<style scoped>
 
 </style>

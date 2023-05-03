@@ -92,17 +92,37 @@ export default {
             localStorage.clear();
             this.commit('login', false);
         },
+        updateField(state, field, value, instance){
+            if(instance) {
+                state[instance][field] = value;
+            } else {
+                state[field] = value;
+            }
+        },
         updateUser(state, userData){
             state.user.id = userData.id;
             state.user.token = userData.token;
-            state.user.firstName = userData.first_name;
-            state.user.middleName = userData.middle_name;
+            if(userData.first_name) {
+                state.user.firstName = userData.first_name;
+            } else {
+                state.user.firstName = userData.firstName;
+            }
+            if(userData.middle_name) {
+                state.user.middleName = userData.middle_name;
+            } else {
+                state.user.middleName = userData.middleName;
+            }
             state.user.surname = userData.surname;
             state.user.phone = userData.phone;
-            state.user.role_id = userData.role_id;
+            state.user.email = userData.email;
+            if(userData.role_id) {
+                state.user.role_id = userData.role_id;
+            } else {
+                state.user.role_id = userData.roleId;
+            }
+
         },
         updateLocalStorage(state, userData){
-            console.log('updateLocalStorage');
             localStorage.setItem('token', state.user.token);
             localStorage.setItem('userId', state.user.id);
             localStorage.setItem('role_id', userData.role_id);
@@ -110,20 +130,17 @@ export default {
             localStorage.setItem('middleName', state.user.middleName);
             localStorage.setItem('surname', state.user.surname);
             localStorage.setItem('phone', state.user.phone);
-            console.log(state);
-
+            localStorage.setItem('email', state.user.email);
         },
         bringUserDataFromLS(state){
-            console.log('bringUserDataFromLS');
             state.user.token = localStorage.getItem('token');
             state.user.id = localStorage.getItem('userId');
             state.user.firstName = localStorage.getItem('firstName');
             state.user.middleName = localStorage.getItem('middleName');
             state.user.surname = localStorage.getItem('surname');
             state.user.phone = localStorage.getItem('phone');
+            state.user.email = localStorage.getItem('email');
             state.user.role_id = +localStorage.getItem('role_id');
-            console.log(state);
-
         },
         checkLogin(state){
             state.isLoggedIn = !!localStorage.getItem('token');

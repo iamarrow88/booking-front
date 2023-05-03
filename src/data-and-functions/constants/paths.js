@@ -6,7 +6,7 @@ export default {
     ManageResort: '/resorts/manage',
     CreateResortBlock: '/resorts/add-resort',
     AddInventoryCard: '/add-equipment',
-    ResortBookingPage: '/resorts/bookings',
+    ResortBookingsPage: '/resorts/bookings',
     UserBookingPage: '/user/bookings',
     PaymentPage: '/payment',
 }
