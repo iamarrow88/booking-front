@@ -39,8 +39,14 @@ const user = {
 }
 
 const dataArrays = {
-    cities: ['api/cities', 'GET'],
-    inventoryTypes: ['api/inventories/types', 'GET'],
+    cities: {
+        URL: 'api/cities',
+        METHOD: 'GET',
+    },
+    inventoryTypes: {
+        URL: 'api/inventories/types',
+        METHOD: 'GET',
+    },
 
     cityModel: {
         id: null,
@@ -49,14 +55,38 @@ const dataArrays = {
 }
 
 const resorts = {
-    allResorts: ['api/resorts', 'GET'],
-    createResort: ['api/resorts', 'POST'],
-    updateResort: ['api/resorts', 'PUT'],
-    filteredResorts: ['api/resorts/filter', 'POST'],
-    allMyResorts: ['api/myresorts', 'GET'],
-    getInventoryInResort: ['api/resorts/inventories/', 'GET'],
-    getResortByID: ['api/resorts/', 'GET'],
-    deleteResortByID: ['api/resorts/', 'DELETE'],
+    allResorts: {
+        URL: 'api/resorts',
+        METHOD: 'GET',
+    },
+    createResort: {
+        URL: 'api/resorts',
+        METHOD: 'POST',
+    },
+    updateResort: {
+        URL: 'api/resorts',
+        METHOD: 'PUT',
+    },
+    filteredResorts: {
+        URL: 'api/resorts/filter',
+        METHOD: 'POST',
+    },
+    allMyResorts: {
+        URL: 'api/myresorts',
+        METHOD: 'GET',
+    },
+    getInventoryInResort: {
+        URL: 'api/resorts/inventories/',
+        METHOD: 'GET',
+    },
+    getResortByID: {
+        URL: 'api/resorts/',
+        METHOD: 'GET',
+    },
+    deleteResortByID: {
+        URL: 'api/resorts/',
+        METHOD: 'DELETE',
+    },
 
     resortModel: {
         id: null,
@@ -69,14 +99,34 @@ const resorts = {
 }
 
 const inventory = {
-    getInventoriesByID: ['api/inventories/', 'GET'],
-    filteredInventories: ['api/inventories/filter', 'POST'],
-    updateInventoryImgByID: ['api/inventories/update_img/', 'POST'],
-    getInventoryImgByID: ['api/inventories/get_img/', 'GET'],
-    createInventory: ['api/inventories', 'POST'],
-    updateInventory: ['api/inventories', 'PUT'],
-    deleteInventoryByID: ['api/inventories/', 'DELETE'],
-
+    getInventoriesByID: {
+        URL: 'api/inventories/',
+        METHOD: 'GET',
+    },
+    filteredInventories: {
+        URL: 'api/inventories/filter',
+        METHOD: 'POST',
+    },
+    updateInventoryImgByID: {
+        URL: 'api/inventories/update_img/',
+        METHOD: 'POST',
+    },
+    getInventoryImgByID: {
+        URL: 'api/inventories/get_img/',
+        METHOD: 'GET',
+    },
+    createInventory: {
+        URL: 'api/inventories',
+        METHOD: 'POST',
+    },
+    updateInventory: {
+        URL: 'api/inventories',
+        METHOD: 'PUT',
+    },
+    deleteInventoryByID: {
+        URL: 'api/inventories/',
+        METHOD: 'DELETE',
+    },
 
     itemModel: {
         id: null,
@@ -106,10 +156,23 @@ const inventory = {
 }
 
 const bookings ={
-    getBookingByID: ['api/booking/', 'GET'],
-    getBookingInResortByID: ['api/resorts/bookings/', 'GET'],
-    getBookingByOwner: ['api/resorts/bookings', 'GET'],
-    createBooking: ['api/booking', 'POST'],
+    getBookingByID: {
+        URL: 'api/booking/',
+        METHOD: 'GET',
+    },
+    getBookingInResortByID: {
+        URL: 'api/resorts/bookings/',
+        METHOD: 'GET',
+    },
+    getBookingByOwner: {
+        URL: 'api/resorts/bookings',
+        METHOD: 'GET',
+    },
+    createBooking: {
+        URL: 'api/booking',
+        METHOD: 'POST',
+    },
+
 
     model: {
         id: null,
