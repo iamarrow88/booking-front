@@ -4,7 +4,7 @@
     <div v-if="GET_ERROR_MESSAGE" class="error-message">
       {{ GET_ERROR_MESSAGE }}
     </div>
-    <div v-if="!isLoggedIn">
+    <div v-if="!IS_LOGGED_IN">
       <h3 class="subtitle">Войти</h3>
       <div class="form-group">
         <label for="emailLogInput">Email:</label>
@@ -21,7 +21,7 @@
       <button class="btn btn-primary cards-btn" @click="login">Войти в аккаунт</button>
     </div>
 
-    <div v-if="!isLoggedIn">
+    <div v-if="!IS_LOGGED_IN">
       <h3 class="subtitle">Регистрация</h3>
       <div class="form-group">
         <label for="firstNameInput">Фамилия:</label>
@@ -82,14 +82,11 @@
 
 <script>
 
-/*import {createRouter as router} from "vue-router";*/
+
 import validationMixins from "@/components/mixins/validationMixins";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-/*  props: {
-    isLoggedIn: Boolean,
-  },*/
   mixins: [validationMixins],
   data() {
     return {
@@ -135,16 +132,11 @@ export default {
       regexNumber: /[^0-9]/g,*/
     }
   },
-/*  computed: mapGetters(['ISLOGGEDIN', 'ISOWNER']),*/
   computed: {
-    ...mapGetters(['ISLOGGEDIN', 'GET_ERROR_MESSAGE']),
-    isLoggedIn(){
-      return this.$store.getters.ISLOGGEDIN;
-    },
+    ...mapGetters(['IS_LOGGED_IN', 'GET_ERROR_MESSAGE']),
   },
   methods: {
     ...mapActions(['registerUser', 'loginUser']),
-    ...mapGetters(['GET_ERROR_MESSAGE']),
     async register(){
       this.isPasswordRegisterNull = false;
 
@@ -159,58 +151,6 @@ export default {
       }
       this.$store.dispatch('registerUser', body)
     },
-    /*async register() {
-      this.isPasswordRegisterNull = false;
-      this.userEmail = this.emailRegister;
-
-      if(!this.checkFirstNameInput(this.firstName) ||
-         !this.checkSurnameInput(this.surname) ||
-         !this.checkMiddleNameInput(this.middleName) ||
-         !this.checkMailReg(this.emailRegister) ||
-         !this.checkRegPass(this.passwordRegister) ||
-         !this.checkPhoneInput(this.phone)){
-        try {
-          const res = await fetch('/api/user/register', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              first_name: this.firstName,
-              surname: this.surname,
-              middle_name: this.middleName,
-              email: this.emailRegister,
-              password: this.passwordRegister,
-              phone: this.phone,
-              role_id: this.roleId
-            })
-          });
-
-          if (!res.ok) {
-            this.errorMessage = "Invalid data provided, please try again";
-            this.userEmail = '';
-            this.$emit('loggin', false);
-          } else {
-            const data = await res.json();
-            this.token = data.token;
-            this.surname = data.surname;
-            console.log(data);
-            localStorage.setItem('token', this.token);
-            localStorage.setItem('userId', this.id);
-            localStorage.setItem('role_id', this.roleId);
-            localStorage.setItem('firstName', this.firstName);
-            localStorage.setItem('middleName', this.middleName);
-            localStorage.setItem('surname', this.surname);
-            localStorage.setItem('phone', this.phone);
-            this.$emit('loggin', true);
-            this.errorMessage = '';
-            this.$router.push({path: '/mybooking', params: {id: this.id}});
-
-          }
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    },*/
-
     async login() {
       this.isPasswordLoginNull = false;
       const body = {
@@ -220,49 +160,12 @@ export default {
       if(!this.checkLoginPass(this.passwordLogin) ||
           this.validateLoginMail(this.emailLogin)){
         this.$store.dispatch('loginUser', body);
-        if(!this.$store.getters.GET_ERROR_MESSAGE) this.$router.push({path: '/mybooking', params: {id: this.$store.state.authorization.user.id}});
-        /*try {
-          const res = await fetch('/api/user/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(body)
-          });
-          if (!res.ok) {
-            this.errorMessage = "Invalid data provided, please try again";
-            this.userEmail = '';
-            this.$emit('loggin', false);
-          } else {
-            const data = await res.json();
-            this.token = data.token;
-            this.surname = data.surname;
-            this.roleId = data.role_id;
-            this.id = data.id;
-            localStorage.setItem('token', this.token);
-            localStorage.setItem('userId', this.id);
-            localStorage.setItem('role_id', this.roleId);
-            localStorage.setItem('firstName', this.firstName);
-            localStorage.setItem('surname', this.surname);
-            localStorage.setItem('middleName', this.middleName);
-            localStorage.setItem('phone', this.phone);
-            console.log(localStorage);
-            this.$emit('loggin', true);
-            this.errorMessage = '';
-
-            this.$router.push({path: '/mybooking', params: {id: this.id}});
-          }
-        } catch (err) {
-          console.error(err);
-        }*/
+        if(this.$store.getters.IS_LOGGED_IN) this.$router.push({path: '/mybooking', params: {id: this.$store.state.authorization.user.id}});
       }
     },
 
-    async logout() {
-      this.$emit('loggin', false);
-      this.surname = null
-      localStorage.removeItem("token");
-      localStorage.setItem('surname', this.surname);
-      localStorage.setItem('role_id', this.roleId);
-      this.$router.push({path: '/mybooking'});
+    logout() {
+      this.$store.commit('logoutUser');
     },
 
     /*validateRegMail(mail){

@@ -1,10 +1,29 @@
 const user = {
-    register: ['api/user/register', 'POST'],
-    login: ['api/user/login', 'POST'],
-    bookings: ['api/user/bookings', 'GET'],
-    getUser: ['api/user', 'GET'],
-    updateUser: ['api/user', 'PUT'],
-    deleteUser: ['api/user', 'DELETE'],
+    register: {
+        URL: 'api/user/register',
+        METHOD: 'POST',
+    },
+    login: {
+        URL: 'api/user/login',
+        METHOD: 'POST',
+    },
+    bookings: {
+        URL: 'api/user/bookings',
+        METHOD: 'GET',
+    },
+    getUser: {
+        URL: 'api/user',
+        METHOD: 'GET',
+    },
+    updateUser: {
+        URL: 'api/user',
+        METHOD: 'PUT',
+    },
+    deleteUser: {
+        URL: 'api/user',
+        METHOD: 'DELETE',
+    },
+
 
     userModel: {
         id: null,
