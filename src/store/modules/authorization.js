@@ -6,9 +6,11 @@ export default {
     actions: {
         async registerUser(context, body) {
             /*const token = this.$store.getters.GET_USER_TOKEN;*/
+            console.log(body);
             const res = await asyncRequest(user.register.URL, body, user.register.METHOD, headerAPI);
             if(res.status === 200) {
                 console.log('не вошли в акк');
+                console.log(res);
                 context.commit('updateErrorMessage', 'Не удалось войти в аккаунт. Проверьте введенные данные.');
                 context.commit('login', false);
             } else {
@@ -42,6 +44,7 @@ export default {
             }
         },
         async updateUser(context, body){
+            console.log(body);
             try {
                 const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, headerWithToken);
                 console.log('обновляем данные пользователя');
@@ -70,6 +73,36 @@ export default {
             } catch (err) {
                 console.error(err);
             }
+        },
+        async deleteUser(context, body){
+            try {
+                const res = await asyncRequest(user.deleteUser.URL, body, user.deleteUser.METHOD, headerWithToken);
+                console.log('удаляем аккаунт');
+
+                if (!res.ok) {
+                    console.log('не удалили, ошибка');
+                    const options = {
+                        typeError: 'isUpdateErrorDetected',
+                        boolean: true
+                    }
+                    context.commit('detectError', options);
+                    context.commit('updateErrorMessage', 'Не удалось удалить аккаунт :(');
+                } else {
+                    console.log('удален успешно');
+
+                    this.$store.commit('logoutUser');
+                    const options = {
+                        typeError: 'isUpdateErrorDetected',
+                        boolean: false
+                    }
+                    context.commit('detectError', options);
+                    /*const userData = await res.json();
+                    context.commit('updateUser', userData);
+                    context.commit('updateLocalStorage', userData);*/
+                }
+            } catch (err) {
+                console.error(err);
+            }
         }
 
     },
@@ -89,6 +122,7 @@ export default {
         isUpdateErrorDetected: false,
         isLoginErrorDetected: false,
         isRegErrorDetected: false,
+        isDeleteUserErrorDetected: false,
         updateKey: 1,
     },
     getters: {
