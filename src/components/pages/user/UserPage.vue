@@ -1,177 +1,133 @@
 <template>
-  <div class="profile">
-    <div class="profile-photo">
-      <img src="../../../assets/user.png" v-if="!isOwner" alt="avatar">
-      <img class="avatar" v-if="isOwner" src="../../../assets/admin.png" alt="avatar">
+  <div class="user-block">
+    <div class="profile" v-key="GET_UPDATE_KEY">
+      <div class="profile-photo">
+        <img src="../../../assets/user.png" v-if="!IS_USER_OWNER" alt="avatar">
+        <img class="avatar" v-if="IS_USER_OWNER" src="../../../assets/admin.png" alt="avatar">
 
-      <p>{{ surname }}</p>
+        <p>{{ GET_ALL_USER_INFO.surname }}</p>
+      </div>
+      <div class="user-data">
+        <div class="form-group">
+          <label for="firstNameInput">Фамилия:</label>
+          <input type="text" class="form-control" id="firstNameInput" v-model="firstName" v-if="isEditModeOn">
+          <div class="form-control" v-if="!isEditModeOn">{{ GET_ALL_USER_INFO.firstName }}</div>
+
+          <div class="error-message" v-if="isFirstNameWrong || isFirstNameNull">
+            {{ isFirstNameWrong ? "Допускаются только буквы" :
+              isFirstNameNull ? "Поле обязательно для заполнения" : ""}}</div>
+        </div>
+        <div class="form-group">
+          <label for="surnameInput">Имя:</label>
+          <input type="text" class="form-control" id="surnameInput" v-model="surname" v-if="isEditModeOn">
+          <div class="form-control" v-if="!isEditModeOn">{{ GET_ALL_USER_INFO.surname }}</div>
+
+          <div class="error-message" v-if="isSurnameWrong || isSurnameNull">
+            {{ isSurnameWrong ? "Допускаются только буквы" :
+              isSurnameNull ? "Поле обязательно для заполнения" : ""}}</div>
+        </div>
+        <div class="form-group">
+          <label for="middleNameInput">Отчество:</label>
+          <input type="text" class="form-control" id="middleNameInput" v-model="middleName" v-if="isEditModeOn">
+          <div class="form-control" v-if="!isEditModeOn">{{ GET_ALL_USER_INFO.middleName}}</div>
+
+          <div class="error-message" v-if="isMiddleNameWrong || isMiddleNameNull">
+            {{ isMiddleNameWrong ? "Допускаются только буквы" :
+              isMiddleNameNull ? "Поле обязательно для заполнения" : ""}}</div>
+        </div>
+        <div class="form-group">
+          <label for="emailRegInput">Email:</label>
+          <input type="email" class="form-control" id="emailRegInput" v-model="email" v-if="isEditModeOn" @focusout="validateRegMail(emailRegister)">
+          <div class="form-control" v-if="!isEditModeOn">{{ GET_ALL_USER_INFO.email }}</div>
+
+          <div class="error-message" v-if="isEmailRegisterWrong || isEmailRegisterNull">
+            {{ isEmailRegisterWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
+              isEmailRegisterNull ? "Поле обязательно для заполнения" : ""}}</div>
+        </div>
+        <div class="form-group">
+          <label for="phoneInput">Телефон:</label>
+          <input type="text" class="form-control" id="phoneInput" v-model="phone" v-if="isEditModeOn">
+          <div class="form-control" v-if="!isEditModeOn">{{ GET_ALL_USER_INFO.phone }}</div>
+
+          <div class="error-message" v-if="isPhoneNumberWrong || isPhoneNumberNull">
+            {{ isPhoneNumberWrong ? "Допускаются только цифры" :
+              isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
+        </div>
+        <button class="cards-btn" @click="editUserData">{{ isEditModeOn ? 'Обновить' : 'Редактировать'}}</button>
+        <button class="cards-btn" @click="editUserData" v-show="!isEditModeOn">Удалить аккаунт</button>
+      </div>
     </div>
-    <div class="user-data">
-      <div class="form-group">
-        <label for="firstNameInput">Фамилия:</label>
-        <input type="text" class="form-control" id="firstNameInput" v-model="firstName" v-if="isEditModeOn">
-        <div class="form-control" v-if="!isEditModeOn">{{firstName}}</div>
-
-        <div class="error-message" v-if="isFirstNameWrong || isFirstNameNull">
-          {{ isFirstNameWrong ? "Допускаются только буквы" :
-            isFirstNameNull ? "Поле обязательно для заполнения" : ""}}</div>
-      </div>
-      <div class="form-group">
-        <label for="surnameInput">Имя:</label>
-        <input type="text" class="form-control" id="surnameInput" v-model="surname" v-if="isEditModeOn">
-        <div class="form-control" v-if="!isEditModeOn">{{surname}}</div>
-
-        <div class="error-message" v-if="isSurnameWrong || isSurnameNull">
-          {{ isSurnameWrong ? "Допускаются только буквы" :
-            isSurnameNull ? "Поле обязательно для заполнения" : ""}}</div>
-      </div>
-      <div class="form-group">
-        <label for="middleNameInput">Отчество:</label>
-        <input type="text" class="form-control" id="middleNameInput" v-model="middleName" v-if="isEditModeOn">
-        <div class="form-control" v-if="!isEditModeOn">{{middleName}}</div>
-
-        <div class="error-message" v-if="isMiddleNameWrong || isMiddleNameNull">
-          {{ isMiddleNameWrong ? "Допускаются только буквы" :
-            isMiddleNameNull ? "Поле обязательно для заполнения" : ""}}</div>
-      </div>
-      <div class="form-group">
-        <label for="emailRegInput">Email:</label>
-        <input type="email" class="form-control" id="emailRegInput" v-model="emailRegister" v-if="isEditModeOn" @focusout="validateRegMail(emailRegister)">
-        <div class="form-control" v-if="!isEditModeOn">{{emailRegister}}</div>
-
-        <div class="error-message" v-if="isEmailRegisterWrong || isEmailRegisterNull">
-          {{ isEmailRegisterWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
-            isEmailRegisterNull ? "Поле обязательно для заполнения" : ""}}</div>
-      </div>
-      <div class="form-group">
-        <label for="phoneInput">Телефон:</label>
-        <input type="text" class="form-control" id="phoneInput" v-model="phone" v-if="isEditModeOn">
-        <div class="form-control" v-if="!isEditModeOn">{{phone}}</div>
-
-        <div class="error-message" v-if="isPhoneNumberWrong || isPhoneNumberNull">
-          {{ isPhoneNumberWrong ? "Допускаются только цифры" :
-            isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
-      </div>
-      <button class="cards-btn" @click="editUserData">{{ isEditModeOn ? 'Обновить' : 'Редактировать'}}</button>
-    </div>
+    <div class="error-msg-block" v-if="IS_UPDATE_ERROR_DETECTED">{{ GET_ERROR_MESSAGE }}</div>
   </div>
 </template>
 
 <script>
-import validationMixins from "@/components/mixins/validationMixins";
+import validationMixins from "@/components/mixins/validationMixins.js";
+import {mapActions, mapGetters} from "vuex";
 export default {
   name: "UserPage",
   mixins: [validationMixins],
-  props: {
-    isOwnerParent: Boolean,
-    surnameParent: String,
-    firstNameParent: String,
-    middleNameParent: String,
-    emailRegisterParent: String,
-    phoneParent: String,
-  },
   data() {
     return {
       isOwner: false,
       surname: '',
       firstName: '',
       middleName: '',
-      emailRegister: '',
+      email: '',
       phone: '',
       isEditModeOn: false,
-      /*isFirstNameWrong: false,
-      isEmailLoginWrong: false,
-      isSurnameWrong: false,
-      isMiddleNameWrong: false,
-      isEmailRegisterWrong: false,
-      isPhoneNumberWrong: false,
-
-      isFirstNameNull: false,
-      isEmailLoginNull: false,
-      isSurnameNull: false,
-      isMiddleNameNull: false,
-      isEmailRegisterNull: false,
-      isPhoneNumberNull: false,
-
-      regexAlpha: /[^a-zA-ZА-яЁё]/gmi,
-      regexNumber: /[^0-9]/g,*/
     }
   },
+  computed: {
+    ...mapGetters(['IS_USER_OWNER',
+      'GET_ALL_USER_INFO',
+      'GET_ERROR_MESSAGE',
+      'IS_UPDATE_ERROR_DETECTED',
+      'GET_UPDATE_KEY']),
+  },
   methods: {
+    ...mapActions(['updateUser']),
+    updateUserFields(){
+      const options = {
+        instance: 'user',
+        fields: ['surname', 'firstName', 'middleName', 'email', 'phone'],
+        values: [this.surname, this.firstName, this.middleName, this.email, this.phone]
+      }
+      this.$store.commit('updateField', options);
+    },
     editUserData() {
       if(this.isEditModeOn){
-        console.log('отредактировали');
+        const body = {
+          id: this.id,
+          first_name: this.firstName,
+          surname: this.surname,
+          middle_name: this.middleName,
+          email: this.email,
+          phone: this.phone,
+          role_id: this.$store.getters.GET_ALL_USER_INFO.roleId,
+          token: this.$store.getters.GET_ALL_USER_INFO.token,
+        }
+        console.log(body);
+        this.$store.dispatch('updateUser', body);
+        this.updateUserFields();
       } else {
+        this.surname = this.$store.getters.GET_ALL_USER_INFO.surname;
+        this.firstName = this.$store.getters.GET_ALL_USER_INFO.firstName;
+        this.middleName = this.$store.getters.GET_ALL_USER_INFO.middleName;
+        this.email = this.$store.getters.GET_ALL_USER_INFO.email;
+        this.phone = this.$store.getters.GET_ALL_USER_INFO.phone;
         console.log('ща как отредактируем!');
       }
       this.isEditModeOn = !this.isEditModeOn;
     }
-    /*validateRegMail(mail){
-      this.checkMailReg(mail);
-      if(this.isEmailRegisterNull) return false;
-      if(!this.isEmailRegisterNull) this.isEmailRegisterWrong = this.isMailInvalid(mail);
-      return this.isEmailRegisterWrong;
-    },
-    isMailInvalid(mail){
-      if(mail.match(/[\s]/g)) return true;
-      const dogHunter = mail.split('@');
-      if(dogHunter.length !== 2) return true;
-      const dotHunter = dogHunter[1].split('.');
-      if(dotHunter.length >= 2) {
-        return !!dotHunter.some(el => el == false);
-      } else {
-        return true;
-      }
-    },
-    checkMailReg(val){
-      this.isEmailRegisterNull = val.length === 0;
-      return this.isEmailRegisterNull;
-    },*/
-
   },
-  watch: {
-    /*firstName(newName) {
-      this.isFirstNameWrong = newName.match(this.regexAlpha);
-      this.isFirstNameNull = false;
-    },
-    surname(newName) {
-      this.isSurnameWrong = newName.match(this.regexAlpha);
-      this.isSurnameNull = false;
-    },
-    middleName(newName) {
-      this.isMiddleNameWrong = newName.match(this.regexAlpha);
-      this.isMiddleNameNull = false;
-    },
-    phone(newName) {
-      this.isPhoneNumberWrong = newName.match(this.regexNumber);
-      this.isPhoneNumberNull = false;
-    },
-    emailRegister(){
-      this.isEmailRegisterNull = false;
-    }*/
-  },
-  created() {
-    if(localStorage.getItem('firstName').length === 0) {
-      console.log(localStorage.getItem('firstName').length);
+  mounted() {
+    const options = {
+      typeError: 'isUpdateErrorDetected',
+      boolean: false
     }
-    this.isOwner = this.isOwnerParent;
-    this.surname = this.surnameParent;
-    this.firstName = this.firstNameParent;
-    this.middleName = this.middleNameParent;
-    this.emailRegister = this.emailRegisterParent;
-    this.phone = this.phoneParent;
+    this.$store.commit('detectError', options);
   }
-
-  /*
-  * ID         int64  `json:"id"`
-	FirstName  string `json:"first_name"`
-	Surname    string `json:"surname"`
-	MiddleName string `json:"middle_name"`
-	Email      string `json:"email" validate:"email,required"`
-	Password   string `json:"password" validate:"required"`
-	Phone      string `json:"phone" validate:"required"`
-	RoleID     int64  `json:"role_id" validate:"required"`
-	Token      string `json:"token"`*/
 }
 </script>
 
@@ -198,6 +154,13 @@ export default {
 
   .form-group > div {
     text-align: left;
+  }
+
+  .error-msg-block {
+    width: 100%;
+    text-align: center;
+    color: darkred;
+    font-size: 26px;
   }
 
 </style>

@@ -1,5 +1,5 @@
 import asyncRequest from "@/data-and-functions/API/asyncRequest.js";
-import {headerAPI, user} from "@/data-and-functions/constants/URLS.js";
+import {headerAPI, headerWithToken, user} from "@/data-and-functions/constants/URLS.js";
 
 
 export default {
@@ -40,6 +40,36 @@ export default {
             } catch (err) {
                 console.error(err);
             }
+        },
+        async updateUser(context, body){
+            try {
+                const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, headerWithToken);
+                console.log('обновляем данные пользователя');
+
+                if (!res.ok) {
+                    console.log('не обновили, ошибка');
+                    const options = {
+                        typeError: 'isUpdateErrorDetected',
+                        boolean: true
+                    }
+                    context.commit('detectError', options);
+                    context.commit('updateKey');
+
+                    context.commit('updateErrorMessage', 'Не удалось обновить данные аккаунта. Что делать - не знаем. Просим понять и простить!');
+                } else {
+                    console.log('обновлено успешно');
+                    const options = {
+                        typeError: 'isUpdateErrorDetected',
+                        boolean: false
+                    }
+                    context.commit('detectError', options);
+                    const userData = await res.json();
+                    context.commit('updateUser', userData);
+                    context.commit('updateLocalStorage', userData);
+                }
+            } catch (err) {
+                console.error(err);
+            }
         }
 
     },
@@ -56,7 +86,10 @@ export default {
             role_id: null, /*2 - user, 3 - owner*/
             token: '',
         },
-        authorizationErrorMsg: null,
+        isUpdateErrorDetected: false,
+        isLoginErrorDetected: false,
+        isRegErrorDetected: false,
+        updateKey: 1,
     },
     getters: {
         GET_ALL_USER_INFO(state){
@@ -69,13 +102,22 @@ export default {
             return +state.user.role_id === 3;
         },
         GET_USER_SURNAME(state){
-            return state.user.surname ? state.user.surname : 'Гость'
+            return state.user.surname ? state.user.surname : 'Гость';
         },
         IS_LOGGED_IN(state){
             return state.isLoggedIn;
         },
-        GET_AUTHORIZATION_ERROR_MSG(state){
-            return state.authorizationErrorMsg;
+        IS_LOGIN_ERROR_DETECTED(state){
+            return state.isLoginErrorDetected;
+        },
+        IS_REG_ERROR_DETECTED(state){
+            return state.isRegErrorDetected;
+        },
+        IS_UPDATE_ERROR_DETECTED(state){
+            return state.isUpdateErrorDetected;
+        },
+        GET_UPDATE_KEY(state){
+            return state.updateKey;
         }
     },
     mutations: {
@@ -92,11 +134,21 @@ export default {
             localStorage.clear();
             this.commit('login', false);
         },
-        updateField(state, field, value, instance){
-            if(instance) {
-                state[instance][field] = value;
+        /*const options = {
+            instance: instanceName|null,
+            fields: [fieldsNames],
+            values: [fieldsValues]
+        }*/
+        updateField(state, options){
+            if(options.instance) {
+                for(let i = 0; i < options.fields.length; i++){
+                   state[options.instance][options.fields[i]] = options.values[i];
+                }
+                console.log(state[options.instance]);
             } else {
-                state[field] = value;
+                for(let i = 0; i < options.fields.length; i++){
+                    state[options.fields[i]] = options.values[i];
+                }
             }
         },
         updateUser(state, userData){
@@ -147,6 +199,19 @@ export default {
         },
         updateAuthorizationErrorMessage(state, newMessage){
             state.authorizationErrorMsg = newMessage;
-        }
+        },
+
+        /*
+        * const options = {
+        * typeError: errorFieldName,
+        * boolean: value
+        * }
+        * */
+        detectError(state, options){
+            state[options.typeError] = options.boolean;
+        },
+        updateKey(state){
+            state.updateKey += 1;
+        },
     },
 }

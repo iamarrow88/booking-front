@@ -11,6 +11,7 @@
   <div v-else>
     <h3 class="subtitle">Здравствуйте, {{ GET_USER_SURNAME }}</h3>
 
+    <button class="sub-btn" @click="goToProfile">Редактировать профиль</button>
     <button class="sub-btn" @click="goToStartPage">Забронировать чего-нибудь</button>
     <button class="sub-btn" @click="goToMyBookingsPage">Посмотреть, чего уже набронировал</button>
     <button class="sub-btn" @click="goToResortPage" v-if="IS_USER_OWNER">Поуправлять курортом xD</button>
@@ -36,6 +37,9 @@ export default {
     ...mapGetters(['IS_LOGGED_IN', 'GET_USER_SURNAME', 'IS_USER_OWNER']),
   },
   methods: {
+    goToProfile(){
+      this.$router.push({path: paths.UserPage});
+    },
     entryBlockToggle(boolean){
       this.isLoginChecked = boolean;
     },

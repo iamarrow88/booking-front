@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1 class="title">Вход/Регистрация</h1>
-    <div v-if="GET_ERROR_MESSAGE" class="error-message">
+    <div v-if="IS_LOGIN_ERROR_DETECTED" class="error-message">
       {{ GET_ERROR_MESSAGE }}
     </div>
     <div v-if="!IS_LOGGED_IN">
@@ -105,7 +105,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['IS_LOGGED_IN', 'GET_ERROR_MESSAGE']),
+    ...mapGetters(['IS_LOGGED_IN', 'GET_ERROR_MESSAGE', 'IS_LOGIN_ERROR_DETECTED']),
   },
   /*watch: {
     firstName() {
