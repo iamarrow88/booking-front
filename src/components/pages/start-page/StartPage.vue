@@ -32,7 +32,7 @@
              <label for="city" class="form-title">Город:</label>
              <select class="form-select" id="city" v-model="selectedCity">
                <option class="form-option"
-                       v-for="city in cities"
+                       v-for="city in GET_CITIES"
                        :key="city.id"
                        :value="city">{{ city.name }}</option>
              </select>
@@ -41,7 +41,7 @@
              <label for="typeItem" class="form-title">Тип инвентаря:</label>
              <select class="form-select" id="typeItem" v-model="selectedType">
                <option class="form-option"
-                   v-for="type in types"
+                   v-for="type in GET_INVENTORY_TYPES"
                    :key="type.id"
                    :value="type">{{ type.name }}</option>
              </select>
@@ -79,8 +79,10 @@
 
 <script>
 import ResultItemFromStartPage from "@/components/items/start-page/ResultItemFromStartPage.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
+  name: "StartPage",
   components: ResultItemFromStartPage,
   data() {
     return {
@@ -107,7 +109,45 @@ export default {
       isMoreShown: false,
     }
   },
+  watch: {
+    startTime(newTime) {
+      this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
+      if(this.endTime > 24) {
+        const MsInHour = 60 * 60 * 1000;
+        const hoursToAdd = (+newTime + 1) * MsInHour;
+        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
+        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
+        this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
+      }
+      this.createEndOptions(newTime);
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    endTime() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateEndShort() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateStartShort(newDate) {
+      if(newDate !== this.todayShortDate) {
+        this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
+        this.startTime = '10';
+        this.selDateEndShort = newDate;
+        this.createStartOptions(this.startTime, false);
+        this.createEndOptions(this.startTime);
+      }
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+  },
+  computed: {
+    ...mapGetters(['GET_INVENTORY_TYPES', 'GET_CITIES']),
+  },
   methods: {
+    ...mapActions(['fetchInventoryTypes', 'fetchCities']),
    getTimeNumber(dateFull) {
       let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
       timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
@@ -212,41 +252,10 @@ export default {
     this.todayShortDate = (new Date().toISOString().slice(0, 10));
     this.$refs.dateStart.setAttribute('min', this.todayShortDate);
     this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
+    await this.fetchInventoryTypes();
+    await this.fetchCities();
   },
-  watch: {
-    startTime(newTime) {
-      this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
-      if(this.endTime > 24) {
-        const MsInHour = 60 * 60 * 1000;
-        const hoursToAdd = (+newTime + 1) * MsInHour;
-        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
-        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
-        this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
-      }
-      this.createEndOptions(newTime);
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    endTime() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateEndShort() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateStartShort(newDate) {
-      if(newDate !== this.todayShortDate) {
-        this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
-        this.startTime = '10';
-        this.selDateEndShort = newDate;
-        this.createStartOptions(this.startTime, false);
-        this.createEndOptions(this.startTime);
-      }
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-  }
+
 }
 </script>
 

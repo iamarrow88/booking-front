@@ -14,6 +14,7 @@ import BookingItem from "@/components/items/bookings/BookingItem.vue";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
+  name: "BookingPage",
   components: {BookingItem},
   props: {
     isLoggedIn: Boolean,
@@ -25,7 +26,7 @@ export default {
       ...mapGetters(['GET_ALL_USER_INFO'])
     }
   },
-  methods: mapActions(['fetchInventoryTypes']),
+  methods: mapActions(['fetchInventoryTypes', 'fetchCities']),
   async mounted() {
     console.log(this.$store.getters.GET_ALL_USER_INFO);
     const token = localStorage.getItem('token');
@@ -43,12 +44,12 @@ export default {
         this.errorMessage = "Invalid data provided, please try again";
       } else {
         this.booking = await res.json()
-        console.log(this.booking)
       }
     } catch (err) {
       console.error(err);
     }
     await this.fetchInventoryTypes();
+    await this.fetchCities();
     /*try {
       const res = await fetch('/api/inventories/types', {
         method: 'GET',
