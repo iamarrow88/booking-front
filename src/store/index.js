@@ -1,6 +1,7 @@
 import {createStore} from 'vuex';
 import authorization from "@/store/modules/authorization";
 import inventory from "@/store/modules/inventory";
+import selected from "@/store/modules/selected";
 
 
 const store = createStore({
@@ -9,6 +10,7 @@ const store = createStore({
     },
     state: {
         errorMessage: '',
+        todayShortDate: null,
     },
     getters: {
         GET_ERROR_MESSAGE(state){
@@ -22,7 +24,7 @@ const store = createStore({
     },
 
     modules: {
-        authorization, inventory
+        authorization, inventory, selected
     }
 });
 
