@@ -85,6 +85,7 @@
 
 import validationMixins from "@/components/mixins/validationMixins";
 import {mapActions, mapGetters} from "vuex";
+import paths from "@/data-and-functions/constants/paths.js";
 
 export default {
   mixins: [validationMixins],
@@ -101,35 +102,6 @@ export default {
       passwordLogin: '',
       emailRegister: '',
       passwordRegister: '',
-
-
-      /*user: {
-        firstName: '',
-        surname: '',
-        middleName: '',
-        phone: '',
-        email: '',
-      }*/
-
-      /*isFirstNameWrong: false,
-      isEmailLoginWrong: false,
-      isSurnameWrong: false,
-      isMiddleNameWrong: false,
-      isEmailRegisterWrong: false,
-      isPhoneNumberWrong: false,
-
-      isFirstNameNull: false,
-      isEmailLoginNull: false,
-      isSurnameNull: false,
-      isMiddleNameNull: false,
-      isEmailRegisterNull: false,
-      isPhoneNumberNull: false,
-
-      isPasswordLoginNull: false,
-      isPasswordRegisterNull: false,
-
-      regexAlpha: /[^a-zA-ZА-яЁё]/gmi,
-      regexNumber: /[^0-9]/g,*/
     }
   },
   computed: {
@@ -149,18 +121,23 @@ export default {
         phone: this.phone,
         role_id: this.roleId
       }
-      this.$store.dispatch('registerUser', body)
+
+      this.$store.dispatch('registerUser', body);
+      if(this.$store.getters.IS_LOGGED_IN) this.$router.push({ path: paths.UserPage, params: {id: this.$store.state.authorization.user.id}});
     },
+
     async login() {
       this.isPasswordLoginNull = false;
+
       const body = {
         email: this.emailLogin,
         password: this.passwordLogin
       }
+
       if(!this.checkLoginPass(this.passwordLogin) ||
           this.validateLoginMail(this.emailLogin)){
         this.$store.dispatch('loginUser', body);
-        if(this.$store.getters.IS_LOGGED_IN) this.$router.push({path: '/mybooking', params: {id: this.$store.state.authorization.user.id}});
+        if(this.$store.getters.IS_LOGGED_IN) this.$router.push({path: paths.UserPage, params: {id: this.$store.state.authorization.user.id}});
       }
     },
 
