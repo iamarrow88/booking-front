@@ -21,8 +21,8 @@ import store from "@/store";
 import ResortDescritption from "@/components/items/resorts/ResortDescritption.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
 import StarsRate from "@/components/UI/StarsRate.vue";
-import LoginBlock from "@/components/pages/user/LoginBlock.vue";
-import AuthorizationPage from "@/components/pages/user/AuthorizationPage.vue";
+import LoginBlock from "@/components/blocks/user/LoginBlock.vue";
+import AuthorizationPage from "@/components/blocks/user/AuthorizationPage.vue";
 import RegistrationBlock from "@/components/pages/user/RegistrationBlock.vue";
 
 
