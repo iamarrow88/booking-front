@@ -229,12 +229,6 @@ export default {
     },
     setStars() {
       return Math.floor((Math.random() * 5) + 1);
-    },
-    checkStartTime(){
-      if(this.startTime === 24){
-        this.todayShortDate = this.addDayToDate(this.todayShortDate, 1);
-        console.log(this.todayShortDate);
-      }
     }
     },
   async created() {
@@ -252,8 +246,7 @@ export default {
     this.selectedCity = this.cities[0];
     this.selectedType = this.types[0];
     this.selDateEndShort = this.selDateStartShort;
-    this.startTime = +this.getTimeNumber(this.todayDateFull);
-    this.checkStartTime();
+    this.startTime = this.getTimeNumber(this.todayDateFull);
     this.createStartOptions(this.startTime, true);
     this.createEndOptions(this.startTime);
     this.todayShortDate = (new Date().toISOString().slice(0, 10));
