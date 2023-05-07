@@ -101,9 +101,7 @@ export default {
       selectedCity: null,
       selectedType: null,
 
-      cities: [],
       resorts: [],
-      types: [],
 
       isNotFoundShown: false,
       isMoreShown: false,
@@ -119,9 +117,11 @@ export default {
         this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
         this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
       }
+      this.checkStartTime();
       this.createEndOptions(newTime);
       this.duration = this.calcDuration();
       this.calcHoursNaming(this.duration);
+
     },
     endTime() {
       this.duration = this.calcDuration();
@@ -156,8 +156,9 @@ export default {
     getShortDate(fullDate) {
       return (fullDate.toISOString().slice(0, 10));
     },
-    addDayToDate(dateFull, daysToAdd){
-      return new Date(dateFull.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
+    addDayToDate(dateFull, dateType, daysToAdd){
+      let date = dateType === 'short' ? new Date(dateFull) : dateFull;
+      return new Date(date.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
     },
     createStartOptions(startTime, isToday) {
       const startTimeBlock = this.$refs.startTime;
@@ -229,27 +230,25 @@ export default {
     },
     setStars() {
       return Math.floor((Math.random() * 5) + 1);
-    }
     },
-  async created() {
-    try {
-      const response = await fetch('/api/cities')
-      this.cities = await response.json()
-      const types = await fetch('/api/inventories/types')
-      this.types = await types.json()
-    } catch (error) {
-      console.error(error)
+    checkStartTime(){
+      if(this.startTime === 24){
+        this.selDateStartShort = this.addDayToDate(this.todayShortDate, 'short', 1);
+      }
     }
+  },
+  async mounted() {
     this.selDateStartShort = this.getShortDate(new Date());
     this.startDateFull = new Date(new Date(this.selDateStartShort).setHours(0, 0, 0, 0));
     this.todayDateFull = new Date();
-    this.selectedCity = this.cities[0];
-    this.selectedType = this.types[0];
+    this.selectedCity = this.GET_CITIES[0];
+    this.selectedType = this.GET_INVENTORY_TYPES[0];
     this.selDateEndShort = this.selDateStartShort;
-    this.startTime = this.getTimeNumber(this.todayDateFull);
+    this.startTime = +this.getTimeNumber(this.todayDateFull);
+    this.todayShortDate = (new Date().toISOString().slice(0, 10));
+    this.checkStartTime();
     this.createStartOptions(this.startTime, true);
     this.createEndOptions(this.startTime);
-    this.todayShortDate = (new Date().toISOString().slice(0, 10));
     this.$refs.dateStart.setAttribute('min', this.todayShortDate);
     this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
     await this.fetchInventoryTypes();
