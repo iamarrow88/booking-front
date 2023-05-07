@@ -74,14 +74,5 @@ export default {
 </script>
 
 <style scoped>
-.pop-up {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(178, 178, 178, .3);
-  z-index: 10;
-}
 
 </style>
