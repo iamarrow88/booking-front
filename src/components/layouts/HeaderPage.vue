@@ -4,28 +4,28 @@
       <nav class="header-nav">
         <div>
           <div @click="goToHomePage" class="logo">
-            <img class="logo-img" src="../assets/logo1.png" alt="logo">
+            <img class="logo-img" src="../../assets/logo1.png" alt="logo">
             <div class="logo-title">Домашняя страница</div>
           </div>
         </div>
         <div class="user-block">
-          <div v-if="isLoggedIn" class="header-management">
+          <div v-if="IS_LOGGED_IN" class="header-management">
             <button @click="goToMyBooking">Мои бронирования</button>
-            <button v-if="isOwner" @click="goToResortBookings">Бронирования курорта</button>
-            <button v-if="isOwner" @click="goToResortManagingPage">Управление курортом</button>
+            <button v-if="IS_USER_OWNER" @click="goToResortBookings">Бронирования курорта</button>
+            <button v-if="IS_USER_OWNER" @click="goToResortManagingPage">Управление курортом</button>
           </div>
           <div class="profile">
-            <div v-if="isLoggedIn" class="profile-img" @click="isHoverOnProfileIcon=!isHoverOnProfileIcon">
-              <img class="avatar" v-if="!isOwner" src="../assets/user.png" alt="avatar"><br>
-              <img class="avatar" v-if="isOwner" src="../assets/admin.png" alt="avatar"><br>
-              <div class="profile-username">{{ surname }}</div>
+            <div v-if="IS_LOGGED_IN" class="profile-img" @click="isHoverOnProfileIcon=!isHoverOnProfileIcon">
+              <img class="avatar" v-if="!IS_USER_OWNER" src="../../assets/user.png" alt="avatar"><br>
+              <img class="avatar" v-if="IS_USER_OWNER" src="../../assets/admin.png" alt="avatar"><br>
+              <div class="profile-username">{{ GET_USER_SURNAME }}</div>
             </div>
             <div class="profile-actions">
-              <button @click="showLoginModal" v-if="!isLoggedIn">Войти</button>
+              <button @click="goToLoginPage" v-if="!IS_LOGGED_IN">Войти</button>
               <transition name="fade">
                 <div class="profile-auth" v-if="isHoverOnProfileIcon">
-                  <button @click="goToProfile" v-if="isLoggedIn">В профиль</button>
-                  <button @click="logout" v-if="isLoggedIn">Выйти</button>
+                  <button @click="goToProfile" v-if="IS_LOGGED_IN">В профиль</button>
+                  <button @click="logout" v-if="IS_LOGGED_IN">Выйти</button>
                 </div>
               </transition>
             </div>
@@ -37,64 +37,50 @@
 </template>
 
 <script>
-import LoginPage from "@/components/LoginPage.vue";
-import validationMixins from "@/components/mixins/validationMixins";
+import LoginPage from "@/components/pages/user/LoginPage.vue";
+import {mapGetters, mapMutations} from "vuex";
+import paths from "@/data-and-functions/constants/paths.js";
 
 export default {
   name: "HeaderPage",
-  mixins: [validationMixins],
-  props: {
-    isLoggedIn: Boolean,
-  },
   data() {
     return {
-      surname: null,
       isHoverOnProfileIcon: false,
     }
   },
-  mounted() {
-    this.surname = localStorage.getItem('surname');
-  },
   computed: {
-    isOwner() {
-      return localStorage.getItem('role_id') === 3 || localStorage.getItem('role_id') === '3';
-    }
+    ...mapGetters(['GET_USER_SURNAME', 'IS_USER_OWNER', 'IS_LOGGED_IN']),
   },
   methods: {
-    showLoginModal() {
-      this.$router.push({path: '/login', component: LoginPage})
+    ...mapMutations(['login', 'checkLogin']),
+    goToLoginPage() {
+      this.$router.push({path: paths.LoginPage, component: LoginPage})
     },
     logout() {
-      localStorage.removeItem("token");
-      this.$emit('loggin', false);
-
-      this.$router.push('/login');
+      this.$store.commit('logoutUser');
+      this.$router.push(paths.LoginPage);
     },
-
-    goToHomePage(e) {
-      console.log(e.target)
-      this.$router.push('/');
+    goToHomePage() {
+      this.$router.push(paths.StartPage);
     },
     goToMyBooking() {
-      this.$router.push("/mybooking"); // navigate to "/mybooking" route
+      this.$router.push(paths.UserBookingPage);
     },
     goToResortBookings() {
-      this.$router.push({path: '/resorts/bookings'})
+      this.$router.push(paths.ResortBookingsPage)
     },
     goToResortManagingPage() {
-      this.$router.push({path: '/resorts/manage'})
+      this.$router.push(paths.ManageResort)
     },
     goToProfile() {
-      this.$router.push({path: '/profile', query: {
-          isOwnerParent: this.isOwner,
-          surnameParent: this.surname,
-          firstNameParent: this.firstName,
-          middleNameParent: this.middleName,
-          emailRegisterParent: this.emailRegister,
-          phoneParent: this.phone,
-        }})
+      this.$router.push(paths.UserPage)
     }
-  }
+  },
+  mounted() {
+    this.$store.commit('bringUserDataFromLS');
+    this.$store.commit('checkLogin');
+    this.$store.dispatch('fetchInventoryTypes');
+  },
 }
 </script>
 
@@ -182,9 +168,6 @@ button {
 button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
-
-
-
 
 .fade-enter-active,
 .fade-leave-active {

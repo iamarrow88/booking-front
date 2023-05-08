@@ -4,18 +4,18 @@
       <button @click="editResortDown" class="cards-btn">Редактировать</button>
       <button @click="deleteResort" class="cards-btn">Удалить</button>
       <div v-if="isEditComponent">
-        <create-resort-page :resortIdFromParent="resort.id"
+        <create-resort-block :resortIdFromParent="resort.id"
                             :editMode="isEditComponent"
-                            @updateResort="updateResortUp"></create-resort-page>
+                            @updateResort="updateResortUp"></create-resort-block>
       </div>
     </div>
 </template>
 
 <script>
-import CreateResortPage from "@/components/CreateResortPage.vue";
+import CreateResortBlock from "@/components/blocks/resorts/CreateResortBlock.vue";
 
 export default {
-  components: CreateResortPage,
+  components: CreateResortBlock,
   name: "ResortItem",
   props: {
     resort: {

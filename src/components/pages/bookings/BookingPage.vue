@@ -10,9 +10,11 @@
 
 <script>
 
-import BookingItem from "@/components/BookingItem.vue";
+import BookingItem from "@/components/items/bookings/BookingItem.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
+  name: "BookingPage",
   components: {BookingItem},
   props: {
     isLoggedIn: Boolean,
@@ -21,8 +23,10 @@ export default {
     return {
       booking: [],
       inv_types: [],
+      ...mapGetters(['GET_ALL_USER_INFO'])
     }
   },
+  methods: mapActions(['fetchInventoryTypes', 'fetchCities']),
   async mounted() {
     try {
       const res = await fetch('/api/user/bookings', {
@@ -37,32 +41,17 @@ export default {
         this.errorMessage = "Invalid data provided, please try again";
       } else {
         this.booking = await res.json()
-        console.log(this.booking)
       }
     } catch (err) {
       console.error(err);
     }
-    try {
-      const res = await fetch('/api/inventories/types', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-      });
-
-      if (!res.ok) {
-        this.errorMessage = "Invalid data provided, please try again";
-      } else {
-        this.inv_types = await res.json()
-        console.log(this.inv_types)
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    await this.fetchInventoryTypes();
+    await this.fetchCities();
   }
+
 }
 </script>
 <style>
 
 </style>
+

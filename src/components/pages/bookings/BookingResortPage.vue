@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import BookingItem from "@/components/BookingItem.vue";
+import BookingItem from "@/components/items/bookings/BookingItem.vue";
 
 export default {
   components: {BookingItem},
@@ -22,6 +22,9 @@ export default {
     }
   },
   async mounted() {
+    if(localStorage.getItem('firstName').length === 0) {
+      console.log(localStorage.getItem('firstName').length);
+    }
     try {
       const res = await fetch('/api/resorts/bookings', {
         method: 'GET',

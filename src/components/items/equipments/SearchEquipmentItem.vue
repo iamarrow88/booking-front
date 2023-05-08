@@ -7,7 +7,7 @@
              src="item.photo"
              alt="Item Photo">
         <img v-else class="equipment-item__photo"
-             src="../assets/no-photo.jpg"
+             src="../../../assets/no-photo.jpg"
              alt="Item Photo">
       </div>
       <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
@@ -32,13 +32,20 @@
     </div>
 
     <div v-if="isAddingItemModeOn">
-      <add-item :IsEditEquipmModeOnFParent="true"
+      <inventory-card :IsEditEquipmModeOnFParent="true"
                 :resortIdFromParent="resortId"
                 :itemFromParent="item"
-      @isAddItemBlockOpen="closeAddItem"></add-item>
+      @isAddItemBlockOpen="closeAddItem"></inventory-card>
     </div>
 
-    <pop-up v-if="!editMode" :item="item"
+    <div v-if="isAddingItemModeOn">
+      <inventory-card :IsEditEquipmModeOnFParent="true"
+                :resortIdFromParent="resortId"
+                :itemFromParent="item"
+      @isAddItemBlockOpen="closeAddItem"></inventory-card>
+    </div>
+
+    <confirm-window v-if="!editMode" :item="item"
             :typeName="type.name"
             :isBookingProcessStarted="isBookingProcessStarted"
             :resortName="resortName"
@@ -48,20 +55,21 @@
             :endTime="endTime"
             :total = "item.price * duration"
             :duration = "duration"
-            @closePopUp="closePopUp"></pop-up>
-    <modal-window :isOpen="isBooked" @closePopUp="closePopUp"></modal-window>
+            @closePopUp="closePopUp"></confirm-window>
+    <success-window :isOpen="isBooked" @closePopUp="closePopUp"></success-window>
   </div>
 </template>
 
 <script>
 
 
-import PopUp from "@/components/PopUp.vue";
-import ModalWindow from "@/components/ModalWindow.vue";
+import ConfirmWindow from "@/components/blocks/modal/ConfirmWindow.vue";
+import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
+import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 
 export default {
-  components: PopUp, ModalWindow,
-  name: "EquipmentItem",
+  components: ConfirmWindow, SuccessWindow, InventoryCard,
+  name: "SearchEquipmentItem",
   props: {
     item: {
       id: Number,

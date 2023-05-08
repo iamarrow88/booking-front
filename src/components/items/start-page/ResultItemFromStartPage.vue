@@ -3,7 +3,7 @@
     <div class="item">
       <div class="item__header">{{ resort.name }}</div>
       <div class="item__address">
-        <img class="address__img" src="../assets/icons/map-pin.svg" alt="pin">
+        <img class="address__img" src="../../../assets/icons/map-pin.svg" alt="pin">
         <p class="address__text">
           {{ resort.address }}
         </p>
@@ -35,24 +35,24 @@
     </div>
     <div class="reviews">
       <div class="reviews__title">Отзывы</div>
-      <review-item v-for="review in reviews"
+      <review-block v-for="review in reviews"
                     :review="review"
                     :users="users"
                     :key="review.id"
                    :class="{active: review.index === this.currentReview}"
       @prev="prev"
-      @next="next"></review-item>
+      @next="next"></review-block>
     </div>
   </li>
 </template>
 
 <script>
-import starsRate from "@/components/StarsRate.vue";
-import ReviewItem from "@/components/ReviewItem.vue";
+import starsRate from "@/components/UI/StarsRate.vue";
+import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
 
 export default {
   name: "ResultItemFromStartPage",
-  components: starsRate, ReviewItem,
+  components: starsRate, ReviewBlock,
   props: {
     resort: {
       id: Number,

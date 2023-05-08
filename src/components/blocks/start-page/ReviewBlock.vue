@@ -5,7 +5,7 @@
       <button class="down" @click="next">Next</button>
     </div>
     <div class="review">
-      <div class="review__author"><img src='../assets/admin.png' alt="avatar" class="author__img">
+      <div class="review__author"><img src='../../../assets/admin.png' alt="avatar" class="author__img">
         <div class="author__name">{{user.name}}</div>
       </div>
       <div class="review__title">{{review.title}}</div>
@@ -20,9 +20,9 @@
 
 <script>
 export default {
-  name: "ReviewItem",
+  name: "ReviewBlock",
   props: {
-    users: [],
+    users: Array,
     review: {
       userId: Number,
       id: Number,
@@ -32,7 +32,16 @@ export default {
   },
   data() {
     return {
-      user: {},
+      user: {
+        id: Number,
+        name: String,
+        username: String,
+        email: String,
+        address: Object,
+        phone: String,
+        website: String,
+        company:Object
+      },
       currentReviewId: null,
       currentUserId: null,
     }

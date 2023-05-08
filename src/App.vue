@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import HeaderPage from "@/components/HeaderPage.vue";
+import HeaderPage from "@/components/layouts/HeaderPage.vue";
 
 export default {
   components: {
@@ -14,12 +14,23 @@ export default {
   name: 'App',
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
     }
   },
   methods: {
     loggin(bool){
       this.isLoggedIn = bool;
+    },
+    /*scrollBehavior(to, from, savedPosition){
+      if(to.hash){
+        return {
+          results: to.hash,
+          behavior: 'smooth',
+        }
+      }
+    }*/
+    scrollBehavior() {
+      return { x: 0, y: 0 }
     }
   },
   mounted() {

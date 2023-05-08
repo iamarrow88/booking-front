@@ -2,27 +2,27 @@
   <div class="rating">
     <div class="star" id="rating-5" ref="rating5">
       <svg class="icon">
-        <use xlink:href="../assets/icons/sprite.svg#rating-star-4"></use>
+        <use xlink:href="../../assets/icons/sprite.svg#rating-star-4"></use>
       </svg>
     </div>
     <div class="star" id="rating-4" ref="rating4">
       <svg class="icon">
-        <use xlink:href="../assets/icons/sprite.svg#rating-star-3"></use>
+        <use xlink:href="../../assets/icons/sprite.svg#rating-star-3"></use>
       </svg>
     </div>
     <div class="star" id="rating-3" ref="rating3">
       <svg class="icon">
-        <use xlink:href="../assets/icons/sprite.svg#rating-star-2"></use>
+        <use xlink:href="../../assets/icons/sprite.svg#rating-star-2"></use>
       </svg>
     </div>
     <div class="star" id="rating-2" ref="rating2">
       <svg class="icon">
-        <use xlink:href="../assets/icons/sprite.svg#rating-star-1"></use>
+        <use xlink:href="../../assets/icons/sprite.svg#rating-star-1"></use>
       </svg>
     </div>
     <div class="star" id="rating-1" ref="rating1">
       <svg class="icon">
-        <use xlink:href="../assets/icons/sprite.svg#rating-star-0"></use>
+        <use xlink:href="../../assets/icons/sprite.svg#rating-star-0"></use>
       </svg>
     </div>
   </div>

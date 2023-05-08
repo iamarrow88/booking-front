@@ -1,6 +1,6 @@
 <template>
   <div class="add-resort">
-    <h2>{{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
+    <h2 class="add-resort__header">{{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Введите название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
@@ -27,20 +27,20 @@
       <button class="sub-btn"
       @click="getEquipments">Управлять инвентарем</button>
       <div class="equipment-list" v-if="!isEquipmManagingHide && equipments.length > 0">
-        <equipment-item v-for="item in equipments"
+        <search-equipment-item v-for="item in equipments"
                         :key="item.id"
                         :item="item"
                         :resortId="resortId"
                         :types="types"
                         :editMode="true"
-                        @DeleteItem="deleteItem"></equipment-item>
+                        @DeleteItem="deleteItem"></search-equipment-item>
       </div>
       <div class="add-item">
         <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
-        <add-item :IsEditEquipmModeOnFParent="false"
+        <inventory-card :IsEditEquipmModeOnFParent="false"
                   :resortIdFromParent="resortId"
                   v-if="isAddingItemModeOn"
-                  @isAddItemBlockOpen="closeAddItem"></add-item>
+                  @isAddItemBlockOpen="closeAddItem"></inventory-card>
 
       </div>
     </div>
@@ -49,12 +49,12 @@
 
 <script>
 
-import addItem from "@/components/addItem.vue";
-import EquipmentItem from "@/components/EquipmentItem.vue";
+import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
+import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
 
 export default {
-  components: addItem, EquipmentItem,
-  name: "CreateResortPage",
+  components: InventoryCard, SearchEquipmentItem,
+  name: "CreateResortBlock",
   props: {
     resortIdFromParent: Number,
     editMode: Boolean,
@@ -198,6 +198,10 @@ export default {
     border-radius: 0.5rem;
   }
 
+  .add-resort__header {
+    margin-bottom: 20px;
+  }
+
   input {
     margin: 0 auto;
     max-width: 500px;
@@ -211,5 +215,16 @@ export default {
   }
   .resort-address input {
     width: 50%;
+  }
+
+  .resort-name {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .resort-name label {
+    margin-bottom: 10px;
   }
 </style>

@@ -35,16 +35,16 @@
     <button @click="bookingItem" class="cards-btn">Я ввел, честно</button>
   </div>
   <div v-else>
-    <modal-window :isOpen="isOpen" @closePopUp="closePopUp"></modal-window>
+    <success-window :isOpen="isOpen" @closePopUp="closePopUp"></success-window>
   </div>
 </template>
 
 <script>
-import ModalWindow from "@/components/ModalWindow.vue";
+import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 
 export default {
   name: "PaymentPage",
-  components: ModalWindow,
+  components: SuccessWindow,
   data(){
     return {
       bookings: [],
@@ -90,6 +90,9 @@ export default {
     }
   },
   created() {
+    if(localStorage.getItem('firstName').length === 0) {
+      console.log(localStorage.getItem('firstName').length);
+    }
     this.total = this.$route.query.total;
     /*
     * props: {

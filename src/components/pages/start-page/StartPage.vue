@@ -17,12 +17,12 @@
          <div class="form-group form-group-time">
            <div class="drop-list">
              <label for="startTime" class="form-title">Начало:</label>
-             <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTime">
+             <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTimeBlock">
              </select>
            </div>
            <div class="drop-list">
              <label for="endTime" class="form-title">Конец:</label>
-             <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTime">
+             <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTimeBlock">
              </select>
            </div>
          </div>
@@ -32,7 +32,7 @@
              <label for="city" class="form-title">Город:</label>
              <select class="form-select" id="city" v-model="selectedCity">
                <option class="form-option"
-                       v-for="city in cities"
+                       v-for="city in GET_CITIES"
                        :key="city.id"
                        :value="city">{{ city.name }}</option>
              </select>
@@ -41,7 +41,7 @@
              <label for="typeItem" class="form-title">Тип инвентаря:</label>
              <select class="form-select" id="typeItem" v-model="selectedType">
                <option class="form-option"
-                   v-for="type in types"
+                   v-for="type in GET_INVENTORY_TYPES"
                    :key="type.id"
                    :value="type">{{ type.name }}</option>
              </select>
@@ -53,7 +53,7 @@
          </div>
        </div>
       </div>
-    <div>
+    <div ref="results">
       <div v-if="resorts.length > 0" class="results-block">
         <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
         <ul class="results-list">
@@ -74,13 +74,16 @@
         Ничего на найдено, попробуйте другой город или другое снаряжение
       </div>
     </div>
+    <div class="results" id="results"></div>
   </div>
 </template>
 
 <script>
-import ResultItemFromStartPage from "@/components/ResultItemFromStartPage.vue";
+import ResultItemFromStartPage from "@/components/items/start-page/ResultItemFromStartPage.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
+  name: "StartPage",
   components: ResultItemFromStartPage,
   data() {
     return {
@@ -91,23 +94,61 @@ export default {
       selDateStartShort: null,
       selDateEndShort: null,
 
-      startTime: '',
+      startTime: null,
       endTime: '',
-      duration: null,
+      duration: '',
       hoursNaming: 'час',
 
       selectedCity: null,
       selectedType: null,
 
-      cities: [],
       resorts: [],
-      types: [],
 
       isNotFoundShown: false,
       isMoreShown: false,
     }
   },
+  watch: {
+    startTime(newTime) {
+      this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1).toString();
+      if(+this.endTime > 24) {
+        const MsInHour = 60 * 60 * 1000;
+        const hoursToAdd = (+newTime + 1) * MsInHour;
+        let endTime = new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
+        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
+        this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
+      }
+      this.checkStartTime();
+      this.createEndOptions(newTime);
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+
+    },
+    endTime() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateEndShort() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateStartShort(newDate) {
+      if(newDate !== this.todayShortDate) {
+        this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
+        this.startTime = '10';
+        this.selDateEndShort = newDate;
+        this.createStartOptions(this.startTime, false);
+        this.createEndOptions(this.startTime);
+      }
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+  },
+  computed: {
+    ...mapGetters(['GET_INVENTORY_TYPES', 'GET_CITIES']),
+  },
   methods: {
+    ...mapActions(['fetchCities', 'fetchInventoryTypes']),
    getTimeNumber(dateFull) {
       let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
       timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
@@ -116,11 +157,12 @@ export default {
     getShortDate(fullDate) {
       return (fullDate.toISOString().slice(0, 10));
     },
-    addDayToDate(dateFull, daysToAdd){
-      return new Date(dateFull.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
+    addDayToDate(dateFull, dateType, daysToAdd){
+      let date = dateType === 'short' ? new Date(dateFull) : dateFull;
+      return new Date(date.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
     },
     createStartOptions(startTime, isToday) {
-      const startTimeBlock = this.$refs.startTime;
+      const startTimeBlock = this.$refs.startTimeBlock;
       const nowHour = this.todayDateFull.getHours();
 
       startTimeBlock.innerHTML = '';
@@ -135,7 +177,7 @@ export default {
       }
     },
     createEndOptions(startTime) {
-      const endTimeBlock = this.$refs.endTime;
+      const endTimeBlock = this.$refs.endTimeBlock;
       endTimeBlock.innerHTML = '';
 
       for (let i = +startTime + 1; i < 25; i++) {
@@ -164,10 +206,18 @@ export default {
             end_time: this.selDateStartShort + 'T' + endTime + '.000Z',
           })
         });
-        this.resorts = await response.json();
-        this.resorts.forEach(resort => resort.rate = this.setStars())
-        console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
-        this.isNotFoundShown = this.resorts.length === 0;
+        if(response.ok){
+          this.resorts = await response.json();
+          this.resorts.forEach(resort => resort.rate = this.setStars())
+          console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
+          this.isNotFoundShown = this.resorts.length === 0;
+          setTimeout(() => {
+            this.scrollToResults();
+          }, 1)
+
+        } else {
+          console.log('не ок');
+        }
       } catch (error) {
         console.error(error)
       }
@@ -189,64 +239,34 @@ export default {
     },
     setStars() {
       return Math.floor((Math.random() * 5) + 1);
-    }
     },
-  async created() {
-    try {
-      const response = await fetch('/api/cities')
-      this.cities = await response.json()
-      const types = await fetch('/api/inventories/types')
-      this.types = await types.json()
-    } catch (error) {
-      console.error(error)
+    checkStartTime(){
+      if(+this.startTime === 24){
+        this.selDateStartShort = this.addDayToDate(this.todayShortDate, 'short', 1);
+      }
+    },
+    scrollToResults(){
+     const resultsBlock = this.$refs.results;
+      resultsBlock.scrollIntoView({ behavior: "smooth", block: "start"});
     }
+  },
+  async mounted() {
     this.selDateStartShort = this.getShortDate(new Date());
     this.startDateFull = new Date(new Date(this.selDateStartShort).setHours(0, 0, 0, 0));
     this.todayDateFull = new Date();
-    this.selectedCity = this.cities[0];
-    this.selectedType = this.types[0];
     this.selDateEndShort = this.selDateStartShort;
     this.startTime = this.getTimeNumber(this.todayDateFull);
+    this.todayShortDate = (new Date().toISOString().slice(0, 10));
+    this.checkStartTime();
     this.createStartOptions(this.startTime, true);
     this.createEndOptions(this.startTime);
-    this.todayShortDate = (new Date().toISOString().slice(0, 10));
     this.$refs.dateStart.setAttribute('min', this.todayShortDate);
     this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
+    await this.fetchInventoryTypes();
+    await this.fetchCities();
+    this.selectedCity = this.GET_CITIES[0];
+    this.selectedType = this.GET_INVENTORY_TYPES[0];
   },
-  watch: {
-    startTime(newTime) {
-      this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
-      if(this.endTime > 24) {
-        const MsInHour = 60 * 60 * 1000;
-        const hoursToAdd = (+newTime + 1) * MsInHour;
-        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
-        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
-        this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
-      }
-      this.createEndOptions(newTime);
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    endTime() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateEndShort() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateStartShort(newDate) {
-      if(newDate !== this.todayShortDate) {
-        this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
-        this.startTime = '10';
-        this.selDateEndShort = newDate;
-        this.createStartOptions(this.startTime, false);
-        this.createEndOptions(this.startTime);
-      }
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-  }
 }
 </script>
 
@@ -258,8 +278,8 @@ export default {
 }
 
 .search-block {
-  padding: 50px 50px;
-  background-image: url("../assets/11.jpg");
+  padding: 50px 50px 0;
+  background-image: url("../../../assets/11.jpg");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -3,7 +3,7 @@
     <div class="resort-name">Курорт {{ resortName }}</div>
     <div class="filters">
       <div class="filters__img">
-        <img src="../assets/3.jpg" alt="forest">
+        <img src="../../../assets/3.jpg" alt="forest">
       </div>
       <div class="filters__wrapper">
         <div class="filters__date date">
@@ -66,7 +66,7 @@
       <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
       <div class="results__wrapper" v-if="items.length > 0">
         <ul class="results__list">
-          <equipment-item v-for="item in filteredItems"
+          <search-equipment-item v-for="item in filteredItems"
                           class="results__item"
                           :key="item.id"
                           :item="item"
@@ -80,7 +80,7 @@
                           :endTime="endTime"
                           :duration="duration"
                           :hoursNaming="hoursNaming"
-          ></equipment-item>
+          ></search-equipment-item>
 
         </ul>
       </div>
@@ -92,10 +92,10 @@
 </template>
 
 <script>
-import EquipmentItem from "@/components/EquipmentItem.vue";
+import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
 
 export default {
-  components: EquipmentItem,
+  components: SearchEquipmentItem,
   data() {
     return {
       items: [],
@@ -231,6 +231,9 @@ export default {
     },
   },
   async mounted() {
+    if(localStorage.getItem('firstName').length === 0) {
+      console.log(localStorage.getItem('firstName').length);
+    }
     try {
       const response = await fetch(`/api/resorts/${this.$route.params.id}`)
       const resort = await response.json()

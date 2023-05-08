@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "ModalWindow",
+  name: "SuccessWindow",
   props: {
     isOpen: Boolean,
   },
