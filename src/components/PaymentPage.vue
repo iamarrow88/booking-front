@@ -14,8 +14,10 @@
         <div class="term-form">
           <label for="cardTerm">Срок действия</label>
           <div class="term-form__inputs">
-            <input type="number" class="card__month" id="cardTerm" placeholder="04">/
-            <input type="number" class="card__year" placeholder="25">
+
+            <input type="text" class="card__month" id="cardTerm" placeholder="04">/
+            <input type="text" class="card__year" placeholder="25">
+
           </div>
         </div>
         <div class="holderName-form">
