@@ -105,7 +105,6 @@ export default {
           email: this.email,
           phone: +this.phone,
           role_id: +this.$store.getters.GET_ALL_USER_INFO.role_id,
-          /*token: this.$store.getters.GET_ALL_USER_INFO.token,*/
         }
         console.log(body);
         this.$store.dispatch('updateUser', body);
@@ -119,11 +118,11 @@ export default {
         console.log('ща как отредактируем!');
       }
       this.isEditModeOn = !this.isEditModeOn;
+      this.$store.commit('updateKey');
     },
     deleteUserData(){
       const body = {
         id: +this.$store.getters.GET_ALL_USER_INFO.id,
-        /*token: this.$store.getters.GET_ALL_USER_INFO.token,*/
       };
 
       console.log(body);
