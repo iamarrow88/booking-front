@@ -18,7 +18,7 @@ export default {
     }
   },
   methods: {
-    loggin(bool){
+    loggin(bool) {
       this.isLoggedIn = bool;
     },
     /*scrollBehavior(to, from, savedPosition){
@@ -30,7 +30,7 @@ export default {
       }
     }*/
     scrollBehavior() {
-      return { x: 0, y: 0 }
+      return {x: 0, y: 0}
     }
   },
   mounted() {
@@ -42,6 +42,7 @@ export default {
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Raleway:wght@400;500;700&family=Roboto:wght@400;500;700;900&display=swap');
+
 #main {
   margin: 0;
   padding: 0;

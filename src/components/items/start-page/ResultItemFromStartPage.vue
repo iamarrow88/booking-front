@@ -13,7 +13,8 @@
       </div>
 
       <button @click="showMore"
-              class="cards-btn">Подробнее</button>
+              class="cards-btn">Подробнее
+      </button>
       <p class="item__description" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
 
       <button
@@ -39,9 +40,9 @@
                     :review="review"
                     :users="users"
                     :key="review.id"
-                   :class="{active: review.index === this.currentReview}"
-      @prev="prev"
-      @next="next"></review-block>
+                    :class="{active: review.index === this.currentReview}"
+                    @prev="prev"
+                    @next="next"></review-block>
     </div>
   </li>
 </template>
@@ -87,15 +88,15 @@ export default {
     }
   },
   methods: {
-    showMore(e){
+    showMore(e) {
       const parent = e.target.parentNode;
       parent.parentElement.classList.toggle('showMore');
       this.isMoreShown = !this.isMoreShown;
     },
-    async getUsers(){
+    async getUsers() {
       try {
         const res = await fetch('https://jsonplaceholder.typicode.com/users');
-        if(res.ok) {
+        if (res.ok) {
           this.users = await res.json();
         } else {
           console.log('there is no users')
@@ -104,10 +105,10 @@ export default {
         console.error(e);
       }
     },
-    async getReviews(){
+    async getReviews() {
       try {
         const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
-        if(res.ok) {
+        if (res.ok) {
           this.reviews = await res.json();
         } else {
           console.log('there is no reviews')
@@ -121,12 +122,12 @@ export default {
     },
     prev() {
       this.currentReview -= 1;
-      if(this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
+      if (this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
 
     },
     next() {
       this.currentReview += 1;
-      if(this.currentReview >= this.reviews.length) this.currentReview = 0;
+      if (this.currentReview >= this.reviews.length) this.currentReview = 0;
 
     }
   },
@@ -217,14 +218,15 @@ export default {
   margin-bottom: 10px;
   order: 2
 }
+
 .item__description {
   order: 2;
-/*  width: 100%;*/
+  /*  width: 100%;*/
   text-align: left;
   align-self: start;
 }
 
-.rate__gray svg, .rate__yellow svg{
+.rate__gray svg, .rate__yellow svg {
   width: 100%;
 }
 

@@ -35,8 +35,8 @@ export default {
     rate: Number
   },
   methods: {
-    applyRate(rate){
-      for(let i = 0; i < rate; i++){
+    applyRate(rate) {
+      for (let i = 0; i < rate; i++) {
         const star = Object.keys(this.$refs).reverse()[i];
         this.$refs[star].classList.add('marked-star');
       }
@@ -49,7 +49,9 @@ export default {
 </script>
 
 <style scoped>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 .rating {
   margin-bottom: 15px;
@@ -77,13 +79,13 @@ export default {
   height: 100%;
 }
 
-.rating > .star svg use{
+.rating > .star svg use {
   width: 100%;
   height: 100%;
   fill: #d0cece;
 }
 
-.rating > .star.marked-star svg use{
+.rating > .star.marked-star svg use {
   fill: #fb946d;
 }
 

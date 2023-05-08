@@ -8,7 +8,7 @@ export default {
             /*const token = this.$store.getters.GET_USER_TOKEN;*/
             console.log(body);
             const res = await asyncRequest(user.register.URL, body, user.register.METHOD, headerAPI);
-            if(res.status === 200) {
+            if (res.status === 200) {
                 console.log('не вошли в акк');
                 console.log(res);
                 context.commit('updateErrorMessage', 'Не удалось войти в аккаунт. Проверьте введенные данные.');
@@ -22,28 +22,28 @@ export default {
             }
 
         },
-        async loginUser(context, body){
+        async loginUser(context, body) {
             try {
-            const res = await asyncRequest(user.login.URL, body, user.login.METHOD, headerAPI);
+                const res = await asyncRequest(user.login.URL, body, user.login.METHOD, headerAPI);
                 console.log('запрос отправили');
 
                 if (!res.ok) {
-                console.log('не вошли в акк');
-                context.commit('updateErrorMessage', 'Не удалось войти в аккаунт. Проверьте логин и пароль.');
-                context.commit('login', false);
+                    console.log('не вошли в акк');
+                    context.commit('updateErrorMessage', 'Не удалось войти в аккаунт. Проверьте логин и пароль.');
+                    context.commit('login', false);
                 } else {
-                console.log('вошли в акк');
+                    console.log('вошли в акк');
 
-                const userData = await res.json();
-                context.commit('login', true);
-                context.commit('updateUser', userData);
-                context.commit('updateLocalStorage', userData);
+                    const userData = await res.json();
+                    context.commit('login', true);
+                    context.commit('updateUser', userData);
+                    context.commit('updateLocalStorage', userData);
                 }
             } catch (err) {
                 console.error(err);
             }
         },
-        async updateUser(context, body){
+        async updateUser(context, body) {
             console.log(body);
             try {
                 const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, headerWithToken);
@@ -74,7 +74,7 @@ export default {
                 console.error(err);
             }
         },
-        async deleteUser(context, body){
+        async deleteUser(context, body) {
             try {
                 const res = await asyncRequest(user.deleteUser.URL, body, user.deleteUser.METHOD, headerWithToken);
                 console.log('удаляем аккаунт');
@@ -126,45 +126,45 @@ export default {
         updateKey: 1,
     },
     getters: {
-        GET_ALL_USER_INFO(state){
+        GET_ALL_USER_INFO(state) {
             return state.user;
         },
         GET_USER_TOKEN(state) {
             return state.user.token;
         },
-        IS_USER_OWNER(state){
+        IS_USER_OWNER(state) {
             return +state.user.role_id === 3;
         },
-        GET_USER_SURNAME(state){
+        GET_USER_SURNAME(state) {
             return state.user.surname ? state.user.surname : 'Гость';
         },
-        IS_LOGGED_IN(state){
+        IS_LOGGED_IN(state) {
             return state.isLoggedIn;
         },
-        IS_LOGIN_ERROR_DETECTED(state){
+        IS_LOGIN_ERROR_DETECTED(state) {
             return state.isLoginErrorDetected;
         },
-        IS_REG_ERROR_DETECTED(state){
+        IS_REG_ERROR_DETECTED(state) {
             return state.isRegErrorDetected;
         },
-        IS_UPDATE_ERROR_DETECTED(state){
+        IS_UPDATE_ERROR_DETECTED(state) {
             return state.isUpdateErrorDetected;
         },
-        GET_UPDATE_KEY(state){
+        GET_UPDATE_KEY(state) {
             return state.updateKey;
         }
     },
     mutations: {
-        login(state, isLogin=true){
+        login(state, isLogin = true) {
             state.isLoggedIn = isLogin;
-            if(isLogin && !localStorage.getItem('surname')) {
+            if (isLogin && !localStorage.getItem('surname')) {
                 this.commit('bringUserDataFromLS');
-            } else if(isLogin){
+            } else if (isLogin) {
                 this.commit('updateLocalStorage');
             }
-            if(!isLogin) localStorage.removeItem('token');
+            if (!isLogin) localStorage.removeItem('token');
         },
-        logoutUser(){
+        logoutUser() {
             localStorage.clear();
             this.commit('login', false);
         },
@@ -173,27 +173,27 @@ export default {
             fields: [fieldsNames],
             values: [fieldsValues]
         }*/
-        updateField(state, options){
-            if(options.instance) {
-                for(let i = 0; i < options.fields.length; i++){
-                   state[options.instance][options.fields[i]] = options.values[i];
+        updateField(state, options) {
+            if (options.instance) {
+                for (let i = 0; i < options.fields.length; i++) {
+                    state[options.instance][options.fields[i]] = options.values[i];
                 }
                 console.log(state[options.instance]);
             } else {
-                for(let i = 0; i < options.fields.length; i++){
+                for (let i = 0; i < options.fields.length; i++) {
                     state[options.fields[i]] = options.values[i];
                 }
             }
         },
-        updateUser(state, userData){
+        updateUser(state, userData) {
             state.user.id = userData.id;
             state.user.token = userData.token;
-            if(userData.first_name) {
+            if (userData.first_name) {
                 state.user.firstName = userData.first_name;
             } else {
                 state.user.firstName = userData.firstName;
             }
-            if(userData.middle_name) {
+            if (userData.middle_name) {
                 state.user.middleName = userData.middle_name;
             } else {
                 state.user.middleName = userData.middleName;
@@ -201,14 +201,14 @@ export default {
             state.user.surname = userData.surname;
             state.user.phone = userData.phone;
             state.user.email = userData.email;
-            if(userData.role_id) {
+            if (userData.role_id) {
                 state.user.role_id = userData.role_id;
             } else {
                 state.user.role_id = userData.roleId;
             }
 
         },
-        updateLocalStorage(state, userData){
+        updateLocalStorage(state, userData) {
             localStorage.setItem('token', state.user.token);
             localStorage.setItem('userId', state.user.id);
             localStorage.setItem('role_id', userData.role_id);
@@ -218,7 +218,7 @@ export default {
             localStorage.setItem('phone', state.user.phone);
             localStorage.setItem('email', state.user.email);
         },
-        bringUserDataFromLS(state){
+        bringUserDataFromLS(state) {
             state.user.token = localStorage.getItem('token');
             state.user.id = localStorage.getItem('userId');
             state.user.firstName = localStorage.getItem('firstName');
@@ -228,10 +228,10 @@ export default {
             state.user.email = localStorage.getItem('email');
             state.user.role_id = +localStorage.getItem('role_id');
         },
-        checkLogin(state){
+        checkLogin(state) {
             state.isLoggedIn = !!localStorage.getItem('token');
         },
-        updateAuthorizationErrorMessage(state, newMessage){
+        updateAuthorizationErrorMessage(state, newMessage) {
             state.authorizationErrorMsg = newMessage;
         },
 
@@ -241,10 +241,10 @@ export default {
         * boolean: value
         * }
         * */
-        detectError(state, options){
+        detectError(state, options) {
             state[options.typeError] = options.boolean;
         },
-        updateKey(state){
+        updateKey(state) {
             state.updateKey += 1;
         },
     },

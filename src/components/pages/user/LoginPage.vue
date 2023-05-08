@@ -8,10 +8,14 @@
       <h3 class="subtitle">Войти</h3>
       <div class="form-group">
         <label for="emailLogInput">Email:</label>
-        <input type="email" class="form-control" id="emailLogInput" v-model="emailLogin" @focusout="validateLoginMail(emailLogin)">
+        <input type="email" class="form-control" id="emailLogInput" v-model="emailLogin"
+               @focusout="validateLoginMail(emailLogin)">
         <div class="error-message" v-if="isEmailLoginWrong || isEmailLoginNull">
-          {{ isEmailLoginWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
-            isEmailLoginNull ? "Поле обязательно для заполнения" : ""}}</div>
+          {{
+            isEmailLoginWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
+                isEmailLoginNull ? "Поле обязательно для заполнения" : ""
+          }}
+        </div>
       </div>
       <div class="form-group">
         <label for="passwordLogInput">Пароль:</label>
@@ -27,41 +31,57 @@
         <label for="firstNameInput">Фамилия:</label>
         <input type="text" class="form-control" id="firstNameInput" v-model="firstName">
         <div class="error-message" v-if="isFirstNameWrong || isFirstNameNull">
-          {{ isFirstNameWrong ? "Допускаются только буквы" :
-            isFirstNameNull ? "Поле обязательно для заполнения" : ""}}</div>
+          {{
+            isFirstNameWrong ? "Допускаются только буквы" :
+                isFirstNameNull ? "Поле обязательно для заполнения" : ""
+          }}
+        </div>
       </div>
       <div class="form-group">
         <label for="surnameInput">Имя:</label>
         <input type="text" class="form-control" id="surnameInput" v-model="surname">
         <div class="error-message" v-if="isSurnameWrong || isSurnameNull">
-          {{ isSurnameWrong ? "Допускаются только буквы" :
-            isSurnameNull ? "Поле обязательно для заполнения" : ""}}</div>
+          {{
+            isSurnameWrong ? "Допускаются только буквы" :
+                isSurnameNull ? "Поле обязательно для заполнения" : ""
+          }}
+        </div>
       </div>
       <div class="form-group">
         <label for="middleNameInput">Отчество:</label>
         <input type="text" class="form-control" id="middleNameInput" v-model="middleName">
         <div class="error-message" v-if="isMiddleNameWrong || isMiddleNameNull">
-          {{ isMiddleNameWrong ? "Допускаются только буквы" :
-            isMiddleNameNull ? "Поле обязательно для заполнения" : ""}}</div>
+          {{
+            isMiddleNameWrong ? "Допускаются только буквы" :
+                isMiddleNameNull ? "Поле обязательно для заполнения" : ""
+          }}
+        </div>
       </div>
       <div class="form-group">
         <label for="emailRegInput">Email:</label>
-        <input type="email" class="form-control" id="emailRegInput" v-model="emailRegister" @focusout="validateRegMail(emailRegister)">
+        <input type="email" class="form-control" id="emailRegInput" v-model="emailRegister"
+               @focusout="validateRegMail(emailRegister)">
         <div class="error-message" v-if="isEmailRegisterWrong || isEmailRegisterNull">
-          {{ isEmailRegisterWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
-            isEmailRegisterNull ? "Поле обязательно для заполнения" : ""}}</div>
+          {{
+            isEmailRegisterWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
+                isEmailRegisterNull ? "Поле обязательно для заполнения" : ""
+          }}
+        </div>
       </div>
       <div class="form-group">
         <label for="passwordRegInput">Пароль:</label>
-        <input type="password" class="form-control" id="passwordRegInput" v-model="passwordRegister" >
+        <input type="password" class="form-control" id="passwordRegInput" v-model="passwordRegister">
         <div class="error-message" v-if="isPasswordRegisterNull">Введите пароль</div>
       </div>
       <div class="form-group">
         <label for="phoneInput">Телефон:</label>
         <input type="text" class="form-control" id="phoneInput" v-model="phone">
         <div class="error-message" v-if="isPhoneNumberWrong || isPhoneNumberNull">
-          {{ isPhoneNumberWrong ? "Допускаются только цифры" :
-            isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
+          {{
+            isPhoneNumberWrong ? "Допускаются только цифры" :
+                isPhoneNumberNull ? "Поле обязательно для заполнения" : ""
+          }}
+        </div>
       </div>
       <div class="form-group">
         <label for="roleIdInput">Роль:</label>
@@ -115,7 +135,7 @@ export default {
   },*/
   methods: {
     ...mapActions(['registerUser', 'loginUser']),
-    async register(){
+    async register() {
       this.isPasswordRegisterNull = false;
 
       const body = {
@@ -129,7 +149,10 @@ export default {
       }
 
       this.$store.dispatch('registerUser', body);
-      if(this.$store.getters.IS_LOGGED_IN) this.$router.push({ path: paths.UserPage, params: {id: this.$store.state.authorization.user.id}});
+      if (this.$store.getters.IS_LOGGED_IN) this.$router.push({
+        path: paths.UserPage,
+        params: {id: this.$store.state.authorization.user.id}
+      });
     },
 
     async login() {
@@ -140,10 +163,13 @@ export default {
         password: this.passwordLogin
       }
 
-      if(!this.checkLoginPass(this.passwordLogin) ||
-          this.validateLoginMail(this.emailLogin)){
+      if (!this.checkLoginPass(this.passwordLogin) ||
+          this.validateLoginMail(this.emailLogin)) {
         this.$store.dispatch('loginUser', body);
-        if(this.$store.getters.IS_LOGGED_IN) this.$router.push({path: paths.UserPage, params: {id: this.$store.state.authorization.user.id}});
+        if (this.$store.getters.IS_LOGGED_IN) this.$router.push({
+          path: paths.UserPage,
+          params: {id: this.$store.state.authorization.user.id}
+        });
       }
     },
 

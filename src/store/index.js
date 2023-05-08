@@ -5,20 +5,18 @@ import selected from "@/store/modules/selected";
 
 
 const store = createStore({
-    actions: {
-
-    },
+    actions: {},
     state: {
         errorMessage: '',
         todayShortDate: null,
     },
     getters: {
-        GET_ERROR_MESSAGE(state){
+        GET_ERROR_MESSAGE(state) {
             return state.errorMessage;
         }
     },
     mutations: {
-        updateErrorMessage(state, errorMsg){
+        updateErrorMessage(state, errorMsg) {
             state.errorMessage = errorMsg;
         },
     },

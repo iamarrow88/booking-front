@@ -54,7 +54,7 @@ export default {
     getInvTypeName() {
       let typeName = '';
       this.inventoryTypes.forEach(type => {
-        if(type.id === this.item.inventory.type_id) typeName = type.name;
+        if (type.id === this.item.inventory.type_id) typeName = type.name;
       })
       return typeName;
     },

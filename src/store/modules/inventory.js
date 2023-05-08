@@ -3,7 +3,7 @@ import {dataArrays} from "@/data-and-functions/constants/URLS";
 
 export default {
     actions: {
-        async fetchInventoryTypes(context){
+        async fetchInventoryTypes(context) {
             try {
                 const res = await asyncRequest(dataArrays.inventoryTypes.URL);
 
@@ -20,7 +20,7 @@ export default {
                 console.error(err);
             }
         },
-        async fetchCities(context){
+        async fetchCities(context) {
             try {
                 const res = await asyncRequest(dataArrays.cities.URL);
 
@@ -40,11 +40,11 @@ export default {
         }
     },
     mutations: {
-        setInventoryTypes(state, newTypesArray){
+        setInventoryTypes(state, newTypesArray) {
             state.inventoryTypes = newTypesArray;
             console.log(state.inventoryTypes);
         },
-        setCities(state, newTypesArray){
+        setCities(state, newTypesArray) {
             state.cities = newTypesArray;
             console.log(state.cities);
         }
@@ -54,10 +54,10 @@ export default {
         cities: [],
     },
     getters: {
-        GET_INVENTORY_TYPES(state){
+        GET_INVENTORY_TYPES(state) {
             return state.inventoryTypes;
         },
-        GET_CITIES(state){
+        GET_CITIES(state) {
             return state.cities;
         },
 

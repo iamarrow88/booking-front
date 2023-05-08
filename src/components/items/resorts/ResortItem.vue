@@ -1,14 +1,14 @@
 <template>
-    <div>
-      <div>{{ resort.name }}</div>
-      <button @click="editResortDown" class="cards-btn">Редактировать</button>
-      <button @click="deleteResort" class="cards-btn">Удалить</button>
-      <div v-if="isEditComponent">
-        <create-resort-block :resortIdFromParent="resort.id"
-                            :editMode="isEditComponent"
-                            @updateResort="updateResortUp"></create-resort-block>
-      </div>
+  <div>
+    <div>{{ resort.name }}</div>
+    <button @click="editResortDown" class="cards-btn">Редактировать</button>
+    <button @click="deleteResort" class="cards-btn">Удалить</button>
+    <div v-if="isEditComponent">
+      <create-resort-block :resortIdFromParent="resort.id"
+                           :editMode="isEditComponent"
+                           @updateResort="updateResortUp"></create-resort-block>
     </div>
+  </div>
 </template>
 
 <script>

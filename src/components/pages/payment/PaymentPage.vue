@@ -1,10 +1,10 @@
 <template>
   <div class="payment" v-if="!isPaymentOk">
-    <div class="payment__title">Сумма к оплате {{total}} RUB</div>
+    <div class="payment__title">Сумма к оплате {{ total }} RUB</div>
     <div class="payment__subtitle">Введите номер карты :)</div>
     <div class="card">
       <div class="card__img">
-<!--        <img src="../assets/card.png" alt="card">-->
+        <!--        <img src="../assets/card.png" alt="card">-->
       </div>
       <div class="front-card__inputs">
         <div class="number-form">
@@ -45,7 +45,7 @@ import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 export default {
   name: "PaymentPage",
   components: SuccessWindow,
-  data(){
+  data() {
     return {
       bookings: [],
       isPaymentOk: false,
@@ -72,7 +72,7 @@ export default {
             end_time: this.$route.query.selDateStartShort + 'T' + endTime + 'Z'
           })
         });
-        if(response.ok) {
+        if (response.ok) {
           this.bookings = await response.json();
           console.log('ok');
           this.isPaymentOk = true;
@@ -92,6 +92,7 @@ export default {
   created() {
     if(!localStorage.getItem('firstName')){
       console.log('Сначала нужно авторизоваться')
+
     }
     this.total = this.$route.query.total;
     /*
@@ -141,6 +142,7 @@ input {
   border: 1px solid orangered;
   padding: 5px 10px;
 }
+
 .front-card__inputs, .back-card__inputs {
   position: absolute;
   top: 0;
@@ -151,7 +153,7 @@ input {
   border-radius: 8px;
 }
 
-.front-card__inputs{
+.front-card__inputs {
   z-index: 5;
   display: flex;
   align-items: start;
@@ -209,6 +211,7 @@ label {
   top: 162px;
   left: 20px;
 }
+
 .cvc-form {
   position: relative;
   top: 31px;
