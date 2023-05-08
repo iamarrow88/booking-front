@@ -1,29 +1,38 @@
 import {createApp} from 'vue'
 import App from './App.vue'
 import {createRouter, createWebHistory} from 'vue-router'
-import StartPage from "@/components/pages/start-page/StartPage.vue";
-import ResortPage from "@/components/pages/start-page/ResortPage.vue";
 import BookingPage from "@/components/pages/bookings/BookingPage.vue";
 import BookingResortPage from "@/components/pages/bookings/BookingResortPage.vue";
-import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
-import ConfirmWindow from "@/components/blocks/modal/ConfirmWindow.vue";
+import PaymentPage from "@/components/pages/payment/PaymentPage.vue";
+import ResortPage from "@/components/pages/start-page/ResortPage.vue";
+import StartPage from "@/components/pages/start-page/StartPage.vue";
+import LoginPage from "@/components/pages/user/LoginPage.vue";
+import RegistrationBlock from "@/components/pages/user/RegistrationBlock.vue";
+import UserPage from "@/components/pages/user/UserPage.vue";
+
+import BookingItem from "@/components/items/bookings/BookingItem.vue";
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
+import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
+import ResortDescritption from "@/components/items/resorts/ResortDescritption.vue";
+import ResortItem from "@/components/items/resorts/ResortItem.vue";
+import ResultItemFromStartPage from "@/components/items/start-page/ResultItemFromStartPage.vue";
+
+import ConfirmWindow from "@/components/blocks/modal/ConfirmWindow.vue";
+import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import CreateResortBlock from "@/components/blocks/resorts/CreateResortBlock.vue";
 import ManageResortCard from "@/components/blocks/resorts/ManageResortCard.vue";
-import ResortItem from "@/components/items/resorts/ResortItem.vue";
-import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
-import BookingItem from "@/components/items/bookings/BookingItem.vue";
-import PaymentPage from "@/components/pages/payment/PaymentPage.vue";
-import '@/main.css'
-import UserPage from "@/components/pages/user/UserPage.vue";
-import ResultItemFromStartPage from "@/components/items/start-page/ResultItemFromStartPage.vue";
-import store from "@/store";
-import ResortDescritption from "@/components/items/resorts/ResortDescritption.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
-import StarsRate from "@/components/UI/StarsRate.vue";
-import LoginBlock from "@/components/blocks/user/LoginBlock.vue";
 import AuthorizationPage from "@/components/blocks/user/AuthorizationPage.vue";
-import RegistrationBlock from "@/components/pages/user/RegistrationBlock.vue";
+import LoginBlock from "@/components/blocks/user/LoginBlock.vue";
+
+import '@/main.css'
+import store from "@/store";
+
+
+import StarsRate from "@/components/UI/StarsRate.vue";
+
+
+
 
 
 
@@ -64,6 +73,8 @@ app.component('StarsRate', StarsRate);
 app.component('AuthorizationPage', AuthorizationPage);
 app.component('LoginBlock', LoginBlock);
 app.component('RegistrationBlock', RegistrationBlock);
+app.component('LoginPage', LoginPage);
+
 
 app.mixin({
     methods: {
