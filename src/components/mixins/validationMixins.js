@@ -103,7 +103,7 @@ export default {
             this.isMiddleNameNull = false;
         },
         phone(newName) {
-            this.isPhoneNumberWrong= newName.match(this.regexNumber);
+            this.isPhoneNumberWrong= newName.toString().match(this.regexNumber);
             this.isPhoneNumberNull = false;
         },
         passwordLogin() {

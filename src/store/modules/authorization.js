@@ -69,6 +69,7 @@ export default {
                     const userData = await res.json();
                     context.commit('updateUser', userData);
                     context.commit('updateLocalStorage', userData);
+
                 }
             } catch (err) {
                 console.error(err);
@@ -184,6 +185,7 @@ export default {
                     state[options.fields[i]] = options.values[i];
                 }
             }
+            this.commit('updateKey');
         },
         updateUser(state, userData){
             state.user.id = userData.id;
