@@ -90,8 +90,9 @@ export default {
     }
   },
   created() {
-    if (localStorage.getItem('firstName').length === 0) {
-      console.log(localStorage.getItem('firstName').length);
+    if(!localStorage.getItem('firstName')){
+      console.log('Сначала нужно авторизоваться')
+
     }
     this.total = this.$route.query.total;
     /*
