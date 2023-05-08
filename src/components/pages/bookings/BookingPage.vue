@@ -28,9 +28,6 @@ export default {
   },
   methods: mapActions(['fetchInventoryTypes', 'fetchCities']),
   async mounted() {
-    console.log(this.$store.getters.GET_ALL_USER_INFO);
-    const token = localStorage.getItem('token');
-    console.log('token ' + token);
     try {
       const res = await fetch('/api/user/bookings', {
         method: 'GET',
@@ -50,25 +47,8 @@ export default {
     }
     await this.fetchInventoryTypes();
     await this.fetchCities();
-    /*try {
-      const res = await fetch('/api/inventories/types', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-      });
-
-      if (!res.ok) {
-        this.errorMessage = "Invalid data provided, please try again";
-      } else {
-        this.inv_types = await res.json()
-        console.log(this.inv_types)
-      }
-    } catch (err) {
-      console.error(err);
-    }
   }
+
 }
 </script>
 <style>

@@ -88,6 +88,7 @@ import {mapActions, mapGetters} from "vuex";
 import paths from "@/data-and-functions/constants/paths.js";
 
 export default {
+  name: 'LoginPage',
   mixins: [validationMixins],
   data() {
     return {
