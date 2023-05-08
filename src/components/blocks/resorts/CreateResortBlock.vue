@@ -1,6 +1,6 @@
 <template>
   <div class="add-resort">
-    <h2>{{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
+    <h2 class="add-resort__header">{{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Введите название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
@@ -198,6 +198,10 @@ export default {
     border-radius: 0.5rem;
   }
 
+  .add-resort__header {
+    margin-bottom: 20px;
+  }
+
   input {
     margin: 0 auto;
     max-width: 500px;
@@ -211,5 +215,16 @@ export default {
   }
   .resort-address input {
     width: 50%;
+  }
+
+  .resort-name {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .resort-name label {
+    margin-bottom: 10px;
   }
 </style>
