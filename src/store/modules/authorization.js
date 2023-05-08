@@ -58,7 +58,7 @@ export default {
                     context.commit('detectError', options);
                     context.commit('updateKey');
 
-                    context.commit('updateErrorMessage', 'Не удалось обновить данные аккаунта. Что делать - не знаем. Просим понять и простить!');
+                    context.commit('updateErrorMessage', 'Не удалось обновить данные аккаунта.');
                 } else {
                     console.log('обновлено успешно');
                     const options = {

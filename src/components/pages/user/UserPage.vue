@@ -98,13 +98,13 @@ export default {
     editUserData() {
       if(this.isEditModeOn){
         const body = {
-          id: this.$store.getters.GET_ALL_USER_INFO.id,
+          id: +this.$store.getters.GET_ALL_USER_INFO.id,
           first_name: this.firstName,
           surname: this.surname,
           middle_name: this.middleName,
           email: this.email,
-          phone: this.phone,
-          role_id: this.$store.getters.GET_ALL_USER_INFO.role_id,
+          phone: +this.phone,
+          role_id: +this.$store.getters.GET_ALL_USER_INFO.role_id,
           /*token: this.$store.getters.GET_ALL_USER_INFO.token,*/
         }
         console.log(body);
@@ -115,14 +115,14 @@ export default {
         this.firstName = this.$store.getters.GET_ALL_USER_INFO.firstName;
         this.middleName = this.$store.getters.GET_ALL_USER_INFO.middleName;
         this.email = this.$store.getters.GET_ALL_USER_INFO.email;
-        this.phone = this.$store.getters.GET_ALL_USER_INFO.phone;
+        this.phone = +this.$store.getters.GET_ALL_USER_INFO.phone;
         console.log('ща как отредактируем!');
       }
       this.isEditModeOn = !this.isEditModeOn;
     },
     deleteUserData(){
       const body = {
-        id: this.$store.getters.GET_ALL_USER_INFO.id,
+        id: +this.$store.getters.GET_ALL_USER_INFO.id,
         /*token: this.$store.getters.GET_ALL_USER_INFO.token,*/
       };
 
