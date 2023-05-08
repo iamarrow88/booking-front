@@ -206,11 +206,18 @@ export default {
             end_time: this.selDateStartShort + 'T' + endTime + '.000Z',
           })
         });
-        this.resorts = await response.json();
-        this.resorts.forEach(resort => resort.rate = this.setStars())
-        console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
-        this.isNotFoundShown = this.resorts.length === 0;
-        this.scrollToResults();
+        if(response.ok){
+          this.resorts = await response.json();
+          this.resorts.forEach(resort => resort.rate = this.setStars())
+          console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
+          this.isNotFoundShown = this.resorts.length === 0;
+          setTimeout(() => {
+            this.scrollToResults();
+          }, 1)
+
+        } else {
+          console.log('не ок');
+        }
       } catch (error) {
         console.error(error)
       }
@@ -240,8 +247,7 @@ export default {
     },
     scrollToResults(){
      const resultsBlock = this.$refs.results;
-     const top = resultsBlock.offsetTop;
-     window.scrollTo(0, top)
+      resultsBlock.scrollIntoView({ behavior: "smooth", block: "start"});
     }
   },
   async mounted() {
