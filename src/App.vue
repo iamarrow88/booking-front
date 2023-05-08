@@ -21,6 +21,17 @@ export default {
     loggin(bool){
       this.isLoggedIn = bool;
     },
+    /*scrollBehavior(to, from, savedPosition){
+      if(to.hash){
+        return {
+          results: to.hash,
+          behavior: 'smooth',
+        }
+      }
+    }*/
+    scrollBehavior() {
+      return { x: 0, y: 0 }
+    }
   },
   mounted() {
     this.isLoggedIn = Boolean(localStorage.getItem('token')) || false;

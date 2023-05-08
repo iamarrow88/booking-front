@@ -17,12 +17,12 @@
          <div class="form-group form-group-time">
            <div class="drop-list">
              <label for="startTime" class="form-title">Начало:</label>
-             <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTime">
+             <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTimeBlock">
              </select>
            </div>
            <div class="drop-list">
              <label for="endTime" class="form-title">Конец:</label>
-             <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTime">
+             <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTimeBlock">
              </select>
            </div>
          </div>
@@ -53,8 +53,8 @@
          </div>
        </div>
       </div>
-    <div>
-      <div v-if="resorts.length > 0" class="results-block" id="results">
+    <div ref="results">
+      <div v-if="resorts.length > 0" class="results-block">
         <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
         <ul class="results-list">
           <result-item-from-start-page v-for="resort in resorts"
@@ -74,6 +74,7 @@
         Ничего на найдено, попробуйте другой город или другое снаряжение
       </div>
     </div>
+    <div class="results" id="results"></div>
   </div>
 </template>
 
@@ -93,9 +94,9 @@ export default {
       selDateStartShort: null,
       selDateEndShort: null,
 
-      startTime: '',
+      startTime: null,
       endTime: '',
-      duration: null,
+      duration: '',
       hoursNaming: 'час',
 
       selectedCity: null,
@@ -109,11 +110,11 @@ export default {
   },
   watch: {
     startTime(newTime) {
-      this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
-      if(this.endTime > 24) {
+      this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1).toString();
+      if(+this.endTime > 24) {
         const MsInHour = 60 * 60 * 1000;
         const hoursToAdd = (+newTime + 1) * MsInHour;
-        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
+        let endTime = new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
         this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
         this.selDateEndShort = new Date(this.todayDateFull.setDate(new Date().getDate() + 1)).toISOString().slice(0, 10);
       }
@@ -147,7 +148,7 @@ export default {
     ...mapGetters(['GET_INVENTORY_TYPES', 'GET_CITIES']),
   },
   methods: {
-    ...mapActions(['fetchInventoryTypes', 'fetchCities']),
+    ...mapActions(['fetchCities', 'fetchInventoryTypes']),
    getTimeNumber(dateFull) {
       let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
       timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
@@ -161,7 +162,7 @@ export default {
       return new Date(date.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
     },
     createStartOptions(startTime, isToday) {
-      const startTimeBlock = this.$refs.startTime;
+      const startTimeBlock = this.$refs.startTimeBlock;
       const nowHour = this.todayDateFull.getHours();
 
       startTimeBlock.innerHTML = '';
@@ -176,7 +177,7 @@ export default {
       }
     },
     createEndOptions(startTime) {
-      const endTimeBlock = this.$refs.endTime;
+      const endTimeBlock = this.$refs.endTimeBlock;
       endTimeBlock.innerHTML = '';
 
       for (let i = +startTime + 1; i < 25; i++) {
@@ -209,6 +210,7 @@ export default {
         this.resorts.forEach(resort => resort.rate = this.setStars())
         console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
         this.isNotFoundShown = this.resorts.length === 0;
+        this.scrollToResults();
       } catch (error) {
         console.error(error)
       }
@@ -232,9 +234,14 @@ export default {
       return Math.floor((Math.random() * 5) + 1);
     },
     checkStartTime(){
-      if(this.startTime === 24){
+      if(+this.startTime === 24){
         this.selDateStartShort = this.addDayToDate(this.todayShortDate, 'short', 1);
       }
+    },
+    scrollToResults(){
+     const resultsBlock = this.$refs.results;
+     const top = resultsBlock.offsetTop;
+     window.scrollTo(0, top)
     }
   },
   async mounted() {
@@ -242,7 +249,7 @@ export default {
     this.startDateFull = new Date(new Date(this.selDateStartShort).setHours(0, 0, 0, 0));
     this.todayDateFull = new Date();
     this.selDateEndShort = this.selDateStartShort;
-    this.startTime = +this.getTimeNumber(this.todayDateFull);
+    this.startTime = this.getTimeNumber(this.todayDateFull);
     this.todayShortDate = (new Date().toISOString().slice(0, 10));
     this.checkStartTime();
     this.createStartOptions(this.startTime, true);
@@ -254,7 +261,6 @@ export default {
     this.selectedCity = this.GET_CITIES[0];
     this.selectedType = this.GET_INVENTORY_TYPES[0];
   },
-
 }
 </script>
 

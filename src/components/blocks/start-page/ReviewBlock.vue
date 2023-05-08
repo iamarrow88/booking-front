@@ -22,7 +22,7 @@
 export default {
   name: "ReviewBlock",
   props: {
-    users: [],
+    users: Array,
     review: {
       userId: Number,
       id: Number,
@@ -32,7 +32,16 @@ export default {
   },
   data() {
     return {
-      user: {},
+      user: {
+        id: Number,
+        name: String,
+        username: String,
+        email: String,
+        address: Object,
+        phone: String,
+        website: String,
+        company:Object
+      },
       currentReviewId: null,
       currentUserId: null,
     }
