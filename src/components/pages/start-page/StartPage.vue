@@ -54,7 +54,7 @@
        </div>
       </div>
     <div>
-      <div v-if="resorts.length > 0" class="results-block">
+      <div v-if="resorts.length > 0" class="results-block" id="results">
         <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
         <ul class="results-list">
           <result-item-from-start-page v-for="resort in resorts"
@@ -241,8 +241,6 @@ export default {
     this.selDateStartShort = this.getShortDate(new Date());
     this.startDateFull = new Date(new Date(this.selDateStartShort).setHours(0, 0, 0, 0));
     this.todayDateFull = new Date();
-    this.selectedCity = this.GET_CITIES[0];
-    this.selectedType = this.GET_INVENTORY_TYPES[0];
     this.selDateEndShort = this.selDateStartShort;
     this.startTime = +this.getTimeNumber(this.todayDateFull);
     this.todayShortDate = (new Date().toISOString().slice(0, 10));
@@ -253,6 +251,8 @@ export default {
     this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
     await this.fetchInventoryTypes();
     await this.fetchCities();
+    this.selectedCity = this.GET_CITIES[0];
+    this.selectedType = this.GET_INVENTORY_TYPES[0];
   },
 
 }
