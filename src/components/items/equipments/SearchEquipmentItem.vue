@@ -13,7 +13,8 @@
       <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
       <div class="equipment-item__summary">
         <div class="summary__duration"
-             v-if="!editMode">Аренда на {{ duration }} {{hoursNaming}}</div>
+             v-if="!editMode">Аренда на {{ duration }} {{ hoursNaming }}
+        </div>
         <div class="summary__total"
              v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
       </div>
@@ -22,40 +23,43 @@
     <div class="buttons">
       <button @click="showPopUp"
               v-if="!editMode"
-              class="btn cards-btn">Забронировать</button>
+              class="btn cards-btn">Забронировать
+      </button>
       <button v-if="editMode"
               @click="showAddItemBlock"
-              class="btn cards-btn">Редактировать</button>
+              class="btn cards-btn">Редактировать
+      </button>
       <button v-if="editMode"
               @click="this.$emit('DeleteItem', item.id)"
-              class="btn cards-btn">Удалить</button>
+              class="btn cards-btn">Удалить
+      </button>
     </div>
 
     <div v-if="isAddingItemModeOn">
       <inventory-card :IsEditEquipmModeOnFParent="true"
-                :resortIdFromParent="resortId"
-                :itemFromParent="item"
-      @isAddItemBlockOpen="closeAddItem"></inventory-card>
+                      :resortIdFromParent="resortId"
+                      :itemFromParent="item"
+                      @isAddItemBlockOpen="closeAddItem"></inventory-card>
     </div>
 
     <div v-if="isAddingItemModeOn">
       <inventory-card :IsEditEquipmModeOnFParent="true"
-                :resortIdFromParent="resortId"
-                :itemFromParent="item"
-      @isAddItemBlockOpen="closeAddItem"></inventory-card>
+                      :resortIdFromParent="resortId"
+                      :itemFromParent="item"
+                      @isAddItemBlockOpen="closeAddItem"></inventory-card>
     </div>
 
     <confirm-window v-if="!editMode" :item="item"
-            :typeName="type.name"
-            :isBookingProcessStarted="isBookingProcessStarted"
-            :resortName="resortName"
-            :selDateStartShort="selDateStartShort"
-            :selDateEndShort="selDateEndShort"
-            :startTime="startTime"
-            :endTime="endTime"
-            :total = "item.price * duration"
-            :duration = "duration"
-            @closePopUp="closePopUp"></confirm-window>
+                    :typeName="type.name"
+                    :isBookingProcessStarted="isBookingProcessStarted"
+                    :resortName="resortName"
+                    :selDateStartShort="selDateStartShort"
+                    :selDateEndShort="selDateEndShort"
+                    :startTime="startTime"
+                    :endTime="endTime"
+                    :total="item.price * duration"
+                    :duration="duration"
+                    @closePopUp="closePopUp"></confirm-window>
     <success-window :isOpen="isBooked" @closePopUp="closePopUp"></success-window>
   </div>
 </template>
@@ -108,7 +112,7 @@ export default {
   methods: {
     getEquipmentType() {
       this.types.forEach(type => {
-        if(type.id === this.item.type_id) {
+        if (type.id === this.item.type_id) {
           this.type = type;
         }
       })
@@ -116,7 +120,7 @@ export default {
     showPopUp() {
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
     },
-    closePopUp(bool1, bool2){
+    closePopUp(bool1, bool2) {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
@@ -127,11 +131,11 @@ export default {
       this.isAddingItemModeOn = bool;
       this.itemsCounter += 1;
     },
-    async getInventoryByResort(){
+    async getInventoryByResort() {
       try {
         const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
         this.equipments = await equipments.json();
-        if(equipments.ok){
+        if (equipments.ok) {
           console.log('получили данные по инвентарю с курорта ' + this.resortName);
         } else {
           console.log('не удалось получить данные по инвентарю с курорта ' + this.resortName);
@@ -220,6 +224,7 @@ export default {
   background-color: rgba(178, 178, 178, .3);
   z-index: 10;
 }
+
 @media (max-width: 767px) {
 
   .equipment-item {

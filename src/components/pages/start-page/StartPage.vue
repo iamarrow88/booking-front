@@ -1,73 +1,75 @@
 <template>
   <div class="start-page">
-     <div class="search-block">
-       <h1 class="search-block__header">Бронирование спортивного инвентаря</h1>
-       <p class="search-block__subheader">Забронируйте свой любимый спортивный инвентарь онлайн!</p>
-       <div class="filters-wrapper">
-         <div class="form-group form-group-dates">
-           <div class="dates__item">
-             <label for="date-start" class="form-title">Дата с:</label>
-             <input type="date" class="form-input" id="date-start" v-model="selDateStartShort" ref="dateStart">
-           </div>
-           <div class="dates__item">
-             <label for="date-end" class="form-title">Дата по:</label>
-             <input type="date" class="form-input" id="date-end" v-model="selDateEndShort" ref="dateEnd">
-           </div>
-         </div>
-         <div class="form-group form-group-time">
-           <div class="drop-list">
-             <label for="startTime" class="form-title">Начало:</label>
-             <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTimeBlock">
-             </select>
-           </div>
-           <div class="drop-list">
-             <label for="endTime" class="form-title">Конец:</label>
-             <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTimeBlock">
-             </select>
-           </div>
-         </div>
-<!--         <div class="duration form-title">Бронь на {{duration}} {{hoursNaming}}</div>-->
-         <div class="form-group form-group-options">
-           <div class="form-group form-group-city">
-             <label for="city" class="form-title">Город:</label>
-             <select class="form-select" id="city" v-model="selectedCity">
-               <option class="form-option"
-                       v-for="city in GET_CITIES"
-                       :key="city.id"
-                       :value="city">{{ city.name }}</option>
-             </select>
-           </div>
-           <div class="form-group form-group-type">
-             <label for="typeItem" class="form-title">Тип инвентаря:</label>
-             <select class="form-select" id="typeItem" v-model="selectedType">
-               <option class="form-option"
-                   v-for="type in GET_INVENTORY_TYPES"
-                   :key="type.id"
-                   :value="type">{{ type.name }}</option>
-             </select>
-           </div>
-         </div>
+    <div class="search-block">
+      <h1 class="search-block__header">Бронирование спортивного инвентаря</h1>
+      <p class="search-block__subheader">Забронируйте свой любимый спортивный инвентарь онлайн!</p>
+      <div class="filters-wrapper">
+        <div class="form-group form-group-dates">
+          <div class="dates__item">
+            <label for="date-start" class="form-title">Дата с:</label>
+            <input type="date" class="form-input" id="date-start" v-model="selDateStartShort" ref="dateStart">
+          </div>
+          <div class="dates__item">
+            <label for="date-end" class="form-title">Дата по:</label>
+            <input type="date" class="form-input" id="date-end" v-model="selDateEndShort" ref="dateEnd">
+          </div>
+        </div>
+        <div class="form-group form-group-time">
+          <div class="drop-list">
+            <label for="startTime" class="form-title">Начало:</label>
+            <select name="startTime" id="startTime" v-model="startTime" class="time-picker" ref="startTimeBlock">
+            </select>
+          </div>
+          <div class="drop-list">
+            <label for="endTime" class="form-title">Конец:</label>
+            <select name="endTime" id="endTime" v-model="endTime" class="time-picker" ref="endTimeBlock">
+            </select>
+          </div>
+        </div>
+        <!--         <div class="duration form-title">Бронь на {{duration}} {{hoursNaming}}</div>-->
+        <div class="form-group form-group-options">
+          <div class="form-group form-group-city">
+            <label for="city" class="form-title">Город:</label>
+            <select class="form-select" id="city" v-model="selectedCity">
+              <option class="form-option"
+                      v-for="city in GET_CITIES"
+                      :key="city.id"
+                      :value="city">{{ city.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group form-group-type">
+            <label for="typeItem" class="form-title">Тип инвентаря:</label>
+            <select class="form-select" id="typeItem" v-model="selectedType">
+              <option class="form-option"
+                      v-for="type in GET_INVENTORY_TYPES"
+                      :key="type.id"
+                      :value="type">{{ type.name }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-         <div class="form-group form-group-submit">
-           <button @click="getResorts" class="btn-search">Поиск курорта</button>
-         </div>
-       </div>
+        <div class="form-group form-group-submit">
+          <button @click="getResorts" class="btn-search">Поиск курорта</button>
+        </div>
       </div>
+    </div>
     <div ref="results">
       <div v-if="resorts.length > 0" class="results-block">
         <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
         <ul class="results-list">
           <result-item-from-start-page v-for="resort in resorts"
                                        :key="resort.id"
-                                      :resort="resort"
-                                      :selectedType="selectedType"
-                                      :selectedCity="selectedCity"
-                                      :selDateStartShort="selDateStartShort"
-                                      :selDateEndShort="selDateEndShort"
-                                      :startTime="startTime"
-                                      :endTime="endTime"
-                                      :duration="duration"
-                                      :rate="resort.rate"/>
+                                       :resort="resort"
+                                       :selectedType="selectedType"
+                                       :selectedCity="selectedCity"
+                                       :selDateStartShort="selDateStartShort"
+                                       :selDateEndShort="selDateEndShort"
+                                       :startTime="startTime"
+                                       :endTime="endTime"
+                                       :duration="duration"
+                                       :rate="resort.rate"/>
         </ul>
       </div>
       <div v-else-if="isNotFoundShown" class="results-none">
@@ -111,7 +113,7 @@ export default {
   watch: {
     startTime(newTime) {
       this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1).toString();
-      if(+this.endTime > 24) {
+      if (+this.endTime > 24) {
         const MsInHour = 60 * 60 * 1000;
         const hoursToAdd = (+newTime + 1) * MsInHour;
         let endTime = new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
@@ -133,7 +135,7 @@ export default {
       this.calcHoursNaming(this.duration);
     },
     selDateStartShort(newDate) {
-      if(newDate !== this.todayShortDate) {
+      if (newDate !== this.todayShortDate) {
         this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
         this.startTime = '10';
         this.selDateEndShort = newDate;
@@ -149,7 +151,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchCities', 'fetchInventoryTypes']),
-   getTimeNumber(dateFull) {
+    getTimeNumber(dateFull) {
       let timeNumber = (+dateFull.toString().split(':')[0].slice(-3) + 1).toString();
       timeNumber = timeNumber.length === 1 ? '0' + timeNumber : timeNumber;
       return timeNumber;
@@ -157,7 +159,7 @@ export default {
     getShortDate(fullDate) {
       return (fullDate.toISOString().slice(0, 10));
     },
-    addDayToDate(dateFull, dateType, daysToAdd){
+    addDayToDate(dateFull, dateType, daysToAdd) {
       let date = dateType === 'short' ? new Date(dateFull) : dateFull;
       return new Date(date.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
     },
@@ -168,11 +170,11 @@ export default {
       startTimeBlock.innerHTML = '';
 
       let i = isToday ? startTime : 0;
-      for (i; i < 24; i ++) {
+      for (i; i < 24; i++) {
         const item = document.createElement('option');
         item.value = i < 10 ? '0' + +i : +i;
         item.innerHTML = (i < 10 ? '0' + +i : +i) + ':00';
-        if(isToday && nowHour > i) item.setAttribute('disabled', 'true');
+        if (isToday && nowHour > i) item.setAttribute('disabled', 'true');
         startTimeBlock.appendChild(item);
       }
     },
@@ -206,7 +208,7 @@ export default {
             end_time: this.selDateStartShort + 'T' + endTime + '.000Z',
           })
         });
-        if(response.ok){
+        if (response.ok) {
           this.resorts = await response.json();
           this.resorts.forEach(resort => resort.rate = this.setStars())
           console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
@@ -222,32 +224,32 @@ export default {
         console.error(error)
       }
     },
-    calcDuration(){
-     const msPerHours = 60 * 60 * 1000;
-     const start = new Date(this.selDateStartShort + ' ' + this.startTime + ':00:00');
-     const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
+    calcDuration() {
+      const msPerHours = 60 * 60 * 1000;
+      const start = new Date(this.selDateStartShort + ' ' + this.startTime + ':00:00');
+      const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
       return (end - start) / msPerHours
     },
-    calcHoursNaming(duration){
-     if(duration >= 5 && duration <= 20 || +duration.toString()[0] >= 5 && +duration.toString()[0] <= 9){
-       this.hoursNaming = 'часов';
-     } else if(+duration.toString()[0] === 1){
-       this.hoursNaming = 'час';
-     } else {
-       this.hoursNaming = 'часа';
-     }
+    calcHoursNaming(duration) {
+      if (duration >= 5 && duration <= 20 || +duration.toString()[0] >= 5 && +duration.toString()[0] <= 9) {
+        this.hoursNaming = 'часов';
+      } else if (+duration.toString()[0] === 1) {
+        this.hoursNaming = 'час';
+      } else {
+        this.hoursNaming = 'часа';
+      }
     },
     setStars() {
       return Math.floor((Math.random() * 5) + 1);
     },
-    checkStartTime(){
-      if(+this.startTime === 24){
+    checkStartTime() {
+      if (+this.startTime === 24) {
         this.selDateStartShort = this.addDayToDate(this.todayShortDate, 'short', 1);
       }
     },
-    scrollToResults(){
-     const resultsBlock = this.$refs.results;
-      resultsBlock.scrollIntoView({ behavior: "smooth", block: "start"});
+    scrollToResults() {
+      const resultsBlock = this.$refs.results;
+      resultsBlock.scrollIntoView({behavior: "smooth", block: "start"});
     }
   },
   async mounted() {
@@ -379,6 +381,7 @@ export default {
 .results-block {
   padding-top: 40px;
 }
+
 .results-header {
   margin-bottom: 35px;
   font-size: 2em;

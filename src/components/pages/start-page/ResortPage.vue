@@ -52,7 +52,8 @@
             <option v-for="type in types"
                     :key="type.id"
                     :value="type"
-                    class="type__option">{{ type.name }}</option>
+                    class="type__option">{{ type.name }}
+            </option>
           </select>
         </div>
 
@@ -61,25 +62,24 @@
     </div>
 
 
-
     <div class="results">
       <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
       <div class="results__wrapper" v-if="items.length > 0">
         <ul class="results__list">
           <search-equipment-item v-for="item in filteredItems"
-                          class="results__item"
-                          :key="item.id"
-                          :item="item"
-                          :types="types"
-                          :typeId="item.type_id"
-                          :resortName="resortName"
-                          :editMode="false"
-                          :selDateStartShort="selDateStartShort"
-                          :selDateEndShort="selDateEndShort"
-                          :startTime="startTime"
-                          :endTime="endTime"
-                          :duration="duration"
-                          :hoursNaming="hoursNaming"
+                                 class="results__item"
+                                 :key="item.id"
+                                 :item="item"
+                                 :types="types"
+                                 :typeId="item.type_id"
+                                 :resortName="resortName"
+                                 :editMode="false"
+                                 :selDateStartShort="selDateStartShort"
+                                 :selDateEndShort="selDateEndShort"
+                                 :startTime="startTime"
+                                 :endTime="endTime"
+                                 :duration="duration"
+                                 :hoursNaming="hoursNaming"
           ></search-equipment-item>
 
         </ul>
@@ -136,7 +136,7 @@ export default {
     getShortDate(fullDate) {
       return (fullDate.toISOString().slice(0, 10));
     },
-    addDayToDate(dateFull, daysToAdd){
+    addDayToDate(dateFull, daysToAdd) {
       return new Date(dateFull.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
     },
     createStartOptions(startTime, isToday) {
@@ -145,11 +145,11 @@ export default {
       startTimeBlock.innerHTML = '';
 
       let i = isToday ? startTime : 0;
-      for (i; i < 24; i ++) {
+      for (i; i < 24; i++) {
         const item = document.createElement('option');
         item.value = i < 10 ? '0' + +i : +i;
         item.innerHTML = (i < 10 ? '0' + +i : +i) + ':00';
-        if(isToday && nowHour > i) item.setAttribute('disabled', 'true');
+        if (isToday && nowHour > i) item.setAttribute('disabled', 'true');
         startTimeBlock.appendChild(item);
       }
     },
@@ -164,16 +164,16 @@ export default {
         endTimeBlock.appendChild(item);
       }
     },
-    calcDuration(){
+    calcDuration() {
       const msPerHours = 60 * 60 * 1000;
       const start = new Date(this.selDateStartShort + ' ' + this.startTime + ':00:00');
       const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
       return (end - start) / msPerHours
     },
-    calcHoursNaming(duration){
-      if(duration >= 5 && duration <= 20 || +duration.toString()[0] >= 5 && +duration.toString()[0] <= 9){
+    calcHoursNaming(duration) {
+      if (duration >= 5 && duration <= 20 || +duration.toString()[0] >= 5 && +duration.toString()[0] <= 9) {
         this.hoursNaming = 'часов';
-      } else if(+duration.toString()[0] === 1){
+      } else if (+duration.toString()[0] === 1) {
         this.hoursNaming = 'час';
       } else {
         this.hoursNaming = 'часа';
@@ -188,16 +188,16 @@ export default {
 
       }
     },
-    duration(newDuration){
+    duration(newDuration) {
       this.calcHoursNaming(newDuration);
     },
     startTime(newTime) {
-      if(this.startCounter !== 0) {
+      if (this.startCounter !== 0) {
         this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
       } else {
         this.startCounter += 1;
       }
-      if(this.endTime > 24) {
+      if (this.endTime > 24) {
         const MsInHour = 60 * 60 * 1000;
         const hoursToAdd = (+newTime + 1) * MsInHour;
         let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
@@ -217,9 +217,9 @@ export default {
       this.calcHoursNaming(this.duration);
     },
     selDateStartShort(newDate) {
-      if(newDate !== this.todayShortDate) {
+      if (newDate !== this.todayShortDate) {
         document.querySelector('#dateEnd').setAttribute('min', this.selDateStartShort);
-        if(this.startCounter !== 0) {
+        if (this.startCounter !== 0) {
           this.startTime = '10';
           this.selDateEndShort = newDate;
         }
@@ -231,7 +231,7 @@ export default {
     },
   },
   async mounted() {
-    if(localStorage.getItem('firstName').length === 0) {
+    if (localStorage.getItem('firstName').length === 0) {
       console.log(localStorage.getItem('firstName').length);
     }
     try {
@@ -320,12 +320,12 @@ input, select, option {
   width: 45%;
 }
 
-.filters__wrapper > div{
+.filters__wrapper > div {
   margin: 0 auto 15px;
   width: 80%;
 }
 
-.date, .time{
+.date, .time {
   display: flex;
   justify-content: space-between;
 
@@ -374,6 +374,7 @@ label.date__label, label.time__label, label.type__label {
   .results__item {
     width: 25%;
   }
+
   .resort-page {
     font-size: 1rem;
   }

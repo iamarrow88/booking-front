@@ -59,7 +59,7 @@ label, input {
     padding: 0;
 }
 
-input[type="date"], select{
+input[type="date"], select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -99,6 +99,7 @@ input[type="date"], select{
     justify-content: space-between;
     width: 70%;
 }
+
 button.action {
     background-color: #fad4c6;
     color: #ff673c;

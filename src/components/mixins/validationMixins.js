@@ -23,68 +23,68 @@ export default {
         }
     },
     methods: {
-        validateRegMail(mail){
+        validateRegMail(mail) {
             this.checkMailReg(mail);
-            if(this.isEmailRegisterNull) return false;
-            if(!this.isEmailRegisterNull) this.isEmailRegisterWrong = this.isMailInvalid(mail);
+            if (this.isEmailRegisterNull) return false;
+            if (!this.isEmailRegisterNull) this.isEmailRegisterWrong = this.isMailInvalid(mail);
             return this.isEmailRegisterWrong;
         },
 
-        validateLoginMail(mail){
+        validateLoginMail(mail) {
             this.checkMailLog(mail);
-            if(this.isEmailLoginNull) return false;
-            if(!this.isEmailLoginNull) this.isEmailLoginWrong = this.isMailInvalid(mail);
+            if (this.isEmailLoginNull) return false;
+            if (!this.isEmailLoginNull) this.isEmailLoginWrong = this.isMailInvalid(mail);
             return this.isEmailLoginWrong;
         },
 
-        isMailInvalid(mail){
-            if(mail.match(/[\s]/g)) return true;
+        isMailInvalid(mail) {
+            if (mail.match(/[\s]/g)) return true;
             const dogHunter = mail.split('@');
-            if(dogHunter.length !== 2) return true;
+            if (dogHunter.length !== 2) return true;
             const dotHunter = dogHunter[1].split('.');
-            if(dotHunter.length >= 2) {
+            if (dotHunter.length >= 2) {
                 return !!dotHunter.some(el => el == false);
             } else {
                 return true;
             }
         },
 
-        checkLoginPass(pass){
+        checkLoginPass(pass) {
             this.isPasswordLoginNull = pass.length === 0;
             return this.isPasswordLoginNull;
         },
 
-        checkRegPass(pass){
+        checkRegPass(pass) {
             this.isPasswordRegisterNull = pass.length === 0;
             return this.isPasswordRegisterNull;
         },
 
-        checkFirstNameInput(val){
+        checkFirstNameInput(val) {
             this.isFirstNameNull = val.length === 0;
             return this.isFirstNameNull;
         },
 
-        checkSurnameInput(val){
+        checkSurnameInput(val) {
             this.isSurnameNull = val.length === 0;
             return this.isSurnameNull;
         },
 
-        checkMiddleNameInput(val){
+        checkMiddleNameInput(val) {
             this.isMiddleNameNull = val.length === 0;
             return this.isMiddleNameNull;
         },
 
-        checkMailLog(val){
+        checkMailLog(val) {
             this.isEmailLoginNull = val.length === 0;
             return this.isEmailLoginNull;
         },
 
-        checkMailReg(val){
+        checkMailReg(val) {
             this.isEmailRegisterNull = val.length === 0;
             return this.isEmailRegisterNull;
         },
 
-        checkPhoneInput(val){
+        checkPhoneInput(val) {
             this.isPhoneNumberNull = val.length === 0;
             return this.isPhoneNumberNull;
         },
@@ -99,11 +99,11 @@ export default {
             this.isSurnameNull = false;
         },
         middleName(newName) {
-            this.isMiddleNameWrong= newName.match(this.regexAlpha);
+            this.isMiddleNameWrong = newName.match(this.regexAlpha);
             this.isMiddleNameNull = false;
         },
         phone(newName) {
-            this.isPhoneNumberWrong= newName.toString().match(this.regexNumber);
+            this.isPhoneNumberWrong = newName.toString().match(this.regexNumber);
             this.isPhoneNumberNull = false;
         },
         passwordLogin() {
@@ -112,10 +112,10 @@ export default {
         passwordRegister() {
             this.isPasswordRegisterNull = false;
         },
-        emailLogin(){
+        emailLogin() {
             this.isEmailLoginNull = false;
         },
-        emailRegister(){
+        emailRegister() {
             this.isEmailRegisterNull = false;
         }
     }

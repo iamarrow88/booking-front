@@ -2,10 +2,11 @@
 
   <div class="add-resort">
     <button class="sub-btn"
-            @click="editComponent">Добавить курорт</button>
+            @click="editComponent">Добавить курорт
+    </button>
     <create-resort-block v-if="isEditComponent"
-                        :editMode="false"
-                        @updateResort="editResort"></create-resort-block>
+                         :editMode="false"
+                         @updateResort="editResort"></create-resort-block>
   </div>
   <div class="resorts-list" v-if="resorts.length > 0">
     <resort-item @editResortFromItem="editResort"
@@ -66,7 +67,7 @@ export default {
         description: resortDescription,
         address: resortAddress
       }
-      if(editMode) body['id'] = +resortId;
+      if (editMode) body['id'] = +resortId;
       console.log(body);
 
       try {
@@ -80,7 +81,7 @@ export default {
           body: JSON.stringify(body)
         });
 
-        if(response.ok){
+        if (response.ok) {
           console.log('ok');
           this.wasChangeResorts += 1;
           this.isEditComponent = false;
@@ -116,19 +117,19 @@ export default {
     }
   },
   watch: {
-    wasChangeResorts(){
+    wasChangeResorts() {
       this.getUserResorts();
     }
   },
   async mounted() {
-    if(localStorage.getItem('firstName').length === 0) {
+    if (localStorage.getItem('firstName').length === 0) {
       console.log(localStorage.getItem('firstName').length);
     }
-    await  this.getUserResorts();
+    await this.getUserResorts();
     try {
       const cities = await fetch('/api/cities');
       this.cities = await cities.json();
-      if(!this.editMode) {
+      if (!this.editMode) {
         this.cityName = this.cities[0].name;
         this.cityId = this.cities[0].id
       }

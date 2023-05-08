@@ -14,14 +14,17 @@
   <label for="price" class="create-price">Введите стоимость</label>
   <input type="number" class="create-price-input" v-model="price" min="1">
 
-<!--  <label class="create-upload" for="upload-img">Загрузите фото</label>
-  <input type="file" name="img" id="img" accept="image/*" class="create-upload-file">-->
+  <!--  <label class="create-upload" for="upload-img">Загрузите фото</label>
+    <input type="file" name="img" id="img" accept="image/*" class="create-upload-file">-->
   <form action="/upload" method="post" enctype="multipart/form-data" ref="uploadPhoto">
     <input type="file" name="photo">
     <input type="submit" value="Upload">
   </form>
 
-  <button @click="createItem" class="cards-btn">{{ IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать" }}</button>
+  <button @click="createItem" class="cards-btn">{{
+      IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать"
+    }}
+  </button>
 </template>
 
 <script>
@@ -80,23 +83,22 @@ export default {
           },
           body: JSON.stringify(body)
         });
-        if(response.ok) {
+        if (response.ok) {
           await this.uploadPhoto(id);
           this.$emit('isAddItemBlockOpen', false)
           console.log('OK');
-        }
-        else {
+        } else {
           console.log('ошибка')
         }
       } catch (error) {
         console.error(error);
       }
     },
-    async uploadPhoto(itemId){
+    async uploadPhoto(itemId) {
       const photoBlock = this.$refs.uploadPhoto;
       const uploadPhotoForm = new FormData(photoBlock);
       console.log(itemId);
-      for(let [name, value] in uploadPhotoForm){
+      for (let [name, value] in uploadPhotoForm) {
         console.log(`name - ${name}, value - ${value}`);
       }
 
@@ -109,10 +111,9 @@ export default {
           },
           body: uploadPhotoForm
         });
-        if(response.ok) {
+        if (response.ok) {
           console.log('OK upload photo');
-        }
-        else {
+        } else {
           console.log('ошибка upload photo')
         }
       } catch (error) {
@@ -121,7 +122,7 @@ export default {
     },
     getResortName() {
       this.resorts.forEach(resort => {
-        if(resort.id === this.resortIdFromParent) this.resortName = resort.name;
+        if (resort.id === this.resortIdFromParent) this.resortName = resort.name;
       })
     },
     getTypeName() {
@@ -135,7 +136,7 @@ export default {
     try {
       const types = await fetch('/api/inventories/types');
       this.types = await types.json();
-      if(this.isEditEquipmModeOnFComp) {
+      if (this.isEditEquipmModeOnFComp) {
         this.typeId = this.itemFromParent.type_id ? this.itemFromParent.type_id : this.types[0];
         this.getTypeName();
       } else {
@@ -159,12 +160,12 @@ export default {
   watch: {
     typeName(newName) {
       this.types.forEach(type => {
-        if(type.name === newName) this.typeId = type.id;
+        if (type.name === newName) this.typeId = type.id;
       })
     },
-    resortName(newResort){
-      for(let i = 0; i < this.resorts.length; i++) {
-        if(this.resorts[i].name === newResort) this.resortId = this.resorts[i].id
+    resortName(newResort) {
+      for (let i = 0; i < this.resorts.length; i++) {
+        if (this.resorts[i].name === newResort) this.resortId = this.resorts[i].id
       }
     },
   }

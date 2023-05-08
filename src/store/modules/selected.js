@@ -1,10 +1,6 @@
 export default {
-    actions: {
-
-    },
-    mutations: {
-
-    },
+    actions: {},
+    mutations: {},
     state: {
         shortDateFrom: null,
         shortDateTo: null,
@@ -19,7 +15,5 @@ export default {
         selectedCityStartPage: null,
         selectedTypeStartPage: null,
     },
-    getters: {
-
-    }
+    getters: {}
 }

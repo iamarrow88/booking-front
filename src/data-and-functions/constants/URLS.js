@@ -155,7 +155,7 @@ const inventory = {
     }
 }
 
-const bookings ={
+const bookings = {
     getBookingByID: {
         URL: 'api/booking/',
         METHOD: 'GET',
@@ -194,4 +194,4 @@ const headerWithToken = {
     'Authorization': 'Bearer '
 }
 
-export { user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken }
+export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken}

@@ -5,7 +5,8 @@
     <div class="pop-up__block">
       <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимостью <b>{{ item.price }} RUB в час</b></div>
       <div class="pop-up__text">На курорте <b>{{ resortName }}</b></div>
-      <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{formattedEndDate}} {{ endTime }}:00</b></div>
+      <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{ formattedEndDate }}
+        {{ endTime }}:00</b></div>
       <div class="pop-up__text">Итоговая стоимость: <b>{{ total }} RUB</b></div>
       <div class="pop-up__btns">
         <button class="pop-up__btn cards-btn action" @click="goPaymentPage">Оплатить</button>
@@ -47,26 +48,28 @@ export default {
       this.$props.isBookingProcessStarted = false;
       this.$emit('closePopUp', false, this.isBooked)
     },
-    formatDate(date){
+    formatDate(date) {
       let arr = date.split('-');
       return arr.reverse().join('.');
     },
 
     async goPaymentPage() {
-      this.$router.push({path: '/payment', query: {
+      this.$router.push({
+        path: '/payment', query: {
           selDateStartShort: this.selDateStartShort,
           startTime: this.startTime,
           endTime: this.endTime,
           itemId: this.item.id,
           total: this.total
-        }});
+        }
+      });
     }
   },
   computed: {
     formattedStartDate() {
       return this.formatDate(this.selDateStartShort);
     },
-    formattedEndDate(){
+    formattedEndDate() {
       return this.formatDate(this.selDateEndShort);
     }
   },

@@ -1,6 +1,7 @@
 <template>
   <div class="add-resort">
-    <h2 class="add-resort__header">{{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
+    <h2 class="add-resort__header">
+      {{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Введите название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
@@ -17,7 +18,10 @@
       <input type="text" id="resortDescription" v-model="resortDescription">
     </div>
 
-    <button @click="addResort" class="cards-btn">{{ editMode ? "Изменить данные курорта" : "Создать карточку курорта" }}</button>
+    <button @click="addResort" class="cards-btn">{{
+        editMode ? "Изменить данные курорта" : "Создать карточку курорта"
+      }}
+    </button>
 
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
@@ -25,22 +29,23 @@
 
     <div class="manage-equipment-block" v-if="editMode">
       <button class="sub-btn"
-      @click="getEquipments">Управлять инвентарем</button>
+              @click="getEquipments">Управлять инвентарем
+      </button>
       <div class="equipment-list" v-if="!isEquipmManagingHide && equipments.length > 0">
         <search-equipment-item v-for="item in equipments"
-                        :key="item.id"
-                        :item="item"
-                        :resortId="resortId"
-                        :types="types"
-                        :editMode="true"
-                        @DeleteItem="deleteItem"></search-equipment-item>
+                               :key="item.id"
+                               :item="item"
+                               :resortId="resortId"
+                               :types="types"
+                               :editMode="true"
+                               @DeleteItem="deleteItem"></search-equipment-item>
       </div>
       <div class="add-item">
         <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
         <inventory-card :IsEditEquipmModeOnFParent="false"
-                  :resortIdFromParent="resortId"
-                  v-if="isAddingItemModeOn"
-                  @isAddItemBlockOpen="closeAddItem"></inventory-card>
+                        :resortIdFromParent="resortId"
+                        v-if="isAddingItemModeOn"
+                        @isAddItemBlockOpen="closeAddItem"></inventory-card>
 
       </div>
     </div>
@@ -85,7 +90,7 @@ export default {
     }
   },
   methods: {
-    addResort () {
+    addResort() {
       console.log('create resort');
       this.$emit('updateResort', this.editMode, this.cityId, this.resortId, this.resortName, this.resortAddress, this.resortDescription, this.userId);
     },
@@ -97,11 +102,11 @@ export default {
         console.error(e);
       }
     },
-    async getInventoryByResort(){
+    async getInventoryByResort() {
       try {
         const equipments = await fetch(`/api/resorts/inventories/${this.resortId}`);
         this.equipments = await equipments.json();
-        if(equipments.ok){
+        if (equipments.ok) {
           console.log('ok');
         } else {
           console.log('not ok');
@@ -110,8 +115,8 @@ export default {
         console.error(e);
       }
     },
-    getEquipments(){
-      this.isEquipmManagingHide=!this.isEquipmManagingHide;
+    getEquipments() {
+      this.isEquipmManagingHide = !this.isEquipmManagingHide;
       this.getInventoryByResort();
     },
     async deleteItem(id) {
@@ -122,7 +127,7 @@ export default {
         }
       });
       console.log(res.json());
-      if(res.ok) {
+      if (res.ok) {
         this.counter += 1;
         console.log('inventory item deleted');
       } else {
@@ -147,7 +152,7 @@ export default {
     try {
       const cities = await fetch('/api/cities');
       this.cities = await cities.json();
-      if(!this.editMode) {
+      if (!this.editMode) {
         this.cityName = this.cities[0].name;
         this.cityId = this.cities[0].id
       }
@@ -156,13 +161,13 @@ export default {
     }
 
     this.resorts.forEach(resort => {
-      if(resort.id === this.resortId){
+      if (resort.id === this.resortId) {
         this.resortName = resort.name;
         this.resortAddress = resort.address;
         this.resortDescription = resort.description;
         this.cityId = resort.city_id;
         this.cities.forEach(city => {
-          if(city.id === this.cityId) this.cityName = city.name;
+          if (city.id === this.cityId) this.cityName = city.name;
         })
       }
     })
@@ -190,41 +195,44 @@ export default {
 </script>
 
 <style scoped>
-  .add-resort {
-    margin: 30px auto;
-    padding: 1rem;
-    width: 50vw;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-  }
+.add-resort {
+  margin: 30px auto;
+  padding: 1rem;
+  width: 50vw;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
 
-  .add-resort__header {
-    margin-bottom: 20px;
-  }
+.add-resort__header {
+  margin-bottom: 20px;
+}
 
-  input {
-    margin: 0 auto;
-    max-width: 500px;
-  }
-  .resort-address, select, option {
-    margin: 0 auto;
-    max-width: 542px;
-  }
-  .resort-address select {
-    width: 42%;
-  }
-  .resort-address input {
-    width: 50%;
-  }
+input {
+  margin: 0 auto;
+  max-width: 500px;
+}
 
-  .resort-name {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-  }
+.resort-address, select, option {
+  margin: 0 auto;
+  max-width: 542px;
+}
 
-  .resort-name label {
-    margin-bottom: 10px;
-  }
+.resort-address select {
+  width: 42%;
+}
+
+.resort-address input {
+  width: 50%;
+}
+
+.resort-name {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.resort-name label {
+  margin-bottom: 10px;
+}
 </style>

@@ -32,11 +32,6 @@ import store from "@/store";
 import StarsRate from "@/components/UI/StarsRate.vue";
 
 
-
-
-
-
-
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -44,7 +39,7 @@ const router = createRouter({
         {path: '/resorts/:id', component: ResortPage},
         {path: '/login', component: AuthorizationPage},
         {path: '/user/bookings', component: BookingPage},
-       // {path: '/:notFound(.*)', redirect: '/'},
+        // {path: '/:notFound(.*)', redirect: '/'},
         {path: '/resorts/bookings', component: BookingResortPage},
         {path: '/add-equipment', component: InventoryCard},
         {path: '/resorts/add-resort', component: CreateResortBlock},
@@ -54,9 +49,9 @@ const router = createRouter({
     ]
 })
 const app = createApp(App);
-    app.use(router);
-    app.use(store);
-    app.mount('#app');
+app.use(router);
+app.use(store);
+app.mount('#app');
 
 app.component('SearchEquipmentItem', SearchEquipmentItem);
 app.component('ConfirmWindow', ConfirmWindow);

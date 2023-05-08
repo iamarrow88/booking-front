@@ -16,7 +16,8 @@
     <button class="sub-btn" @click="goToMyBookingsPage">Посмотреть, чего уже набронировал</button>
     <button class="sub-btn" @click="goToResortPage" v-if="IS_USER_OWNER">Поуправлять курортом xD</button>
     <button class="btn btn-primary cards-btn"
-            @click="logout">Выйти из аккаунта</button>
+            @click="logout">Выйти из аккаунта
+    </button>
   </div>
 </template>
 
@@ -28,7 +29,7 @@ import paths from "@/data-and-functions/constants/paths";
 export default {
   name: "AuthorizationPage",
   components: ['LoginBlock', 'RegistrationBlock'],
-  data(){
+  data() {
     return {
       isLoginChecked: true,
     }
@@ -37,22 +38,22 @@ export default {
     ...mapGetters(['IS_LOGGED_IN', 'GET_USER_SURNAME', 'IS_USER_OWNER']),
   },
   methods: {
-    goToProfile(){
+    goToProfile() {
       this.$router.push({path: paths.UserPage});
     },
-    entryBlockToggle(boolean){
+    entryBlockToggle(boolean) {
       this.isLoginChecked = boolean;
     },
     logout() {
       this.$store.commit('logoutUser');
     },
-    goToStartPage(){
+    goToStartPage() {
       this.$router.push({path: paths.StartPage});
     },
-    goToMyBookingsPage(){
+    goToMyBookingsPage() {
       this.$router.push({path: paths.UserBookingPage});
     },
-    goToResortPage(){
+    goToResortPage() {
       this.$router.push({path: paths.ManageResort});
     }
   }

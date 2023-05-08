@@ -96,7 +96,7 @@ export default {
   align-items: center;
 }
 
-.logo{
+.logo {
   max-width: 180px;
   cursor: pointer;
 }
@@ -141,6 +141,7 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .header-nav-list {
   display: flex;
   align-items: center;

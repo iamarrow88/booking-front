@@ -14,8 +14,11 @@
                @focusout="validateLoginMail(emailLogin)">
         <div class="error-message"
              v-if="isEmailLoginWrong || isEmailLoginNull">
-          {{ isEmailLoginWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
-            isEmailLoginNull ? "Поле обязательно для заполнения" : ""}}</div>
+          {{
+            isEmailLoginWrong ? "Проверьте, пожалуйста, введенный адрес электронной почты" :
+                isEmailLoginNull ? "Поле обязательно для заполнения" : ""
+          }}
+        </div>
       </div>
       <div class="form-group">
         <label for="passwordLogInput">Пароль:</label>
@@ -24,13 +27,16 @@
                id="passwordLogInput"
                v-model="passwordLogin">
         <div class="error-message"
-             v-if="isPasswordLoginNull">Введите пароль</div>
+             v-if="isPasswordLoginNull">Введите пароль
+        </div>
       </div>
       <button class="btn btn-primary cards-btn"
-              @click="login">Войти в аккаунт</button>
+              @click="login">Войти в аккаунт
+      </button>
 
       <button @click="this.$emit('entryBlockToggle', false)"
-              class="sub-btn">Зарегистрироваться</button>
+              class="sub-btn">Зарегистрироваться
+      </button>
     </div>
   </div>
 </template>
@@ -63,10 +69,13 @@ export default {
         password: this.passwordLogin
       }
 
-      if(!this.checkLoginPass(this.passwordLogin) ||
-          this.validateLoginMail(this.emailLogin)){
+      if (!this.checkLoginPass(this.passwordLogin) ||
+          this.validateLoginMail(this.emailLogin)) {
         this.$store.dispatch('loginUser', body);
-        if(this.$store.getters.IS_LOGGED_IN) this.$router.push({path: paths.UserPage, params: {id: this.$store.state.authorization.user.id}});
+        if (this.$store.getters.IS_LOGGED_IN) this.$router.push({
+          path: paths.UserPage,
+          params: {id: this.$store.state.authorization.user.id}
+        });
       }
     },
 
