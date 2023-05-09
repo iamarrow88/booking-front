@@ -186,6 +186,38 @@ const bookings = {
     }
 }
 
+const comments = {
+    createComment: {
+        URL: 'api/comments',
+        METHOD: 'POST',
+    },
+    getCommentByID: {
+        URL: 'api/comments/',
+        METHOD: 'GET',
+    },
+    getCommentByResortID: {
+        URL: 'api/resorts/comments/',
+        METHOD: 'GET',
+    },
+    deleteCommentByID: {
+        URL: 'api/comments/',
+        METHOD: 'DELETE',
+    },
+    getCommentByInventoryID: {
+        URL: 'api/inventories/comments/s',
+        METHOD: 'GET',
+    },
+
+    model: {
+        id: 'Number',
+        user_id: 'Number',
+        inventory_id: 'Number',
+        rating: 'Number',
+        text: 'String',
+        created_at: 'time'
+    }
+}
+
 const headerAPI = {'Content-Type': 'application/json'};
 
 const headerWithToken = {
@@ -194,4 +226,4 @@ const headerWithToken = {
     'Authorization': 'Bearer '
 }
 
-export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken}
+export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken, comments}
