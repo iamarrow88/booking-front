@@ -7,7 +7,7 @@
     <div class="my-booking-item__body">
       <p><b>Тип инвентаря:</b> {{ getInvTypeName }}</p>
       <div class="body__term">
-        <p><span>Начало:</span> {{ startTimeFormatted }}</p>
+        <p><b>Начало:</b> {{ startTimeFormatted }}</p>
         <p><b>Конец:</b> {{ endTimeFormatted }}</p>
       </div>
       <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
