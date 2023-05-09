@@ -164,6 +164,13 @@ button.action {
     text-align: left;
 }
 
+.showMore {
+    width: 93%;
+    order: 1;
+    transition: all .3ms;
+    padding: 40px;
+}
+
 @media (max-width: 767px) {
     .my-booking-item__id {
         font-size: 1rem;

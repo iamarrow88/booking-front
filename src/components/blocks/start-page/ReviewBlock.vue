@@ -8,26 +8,33 @@
       <div class="review__author"><img src='../../../assets/admin.png' alt="avatar" class="author__img">
         <div class="author__name">{{ user.name }}</div>
       </div>
-      <div class="review__title">{{ review.title }}</div>
-      <div class="review__text">
-        {{ review.body }}
+      <div class="review__rate">
+        <stars-rate :rate="this.review.rating"></stars-rate>
       </div>
-      <div class="review__date">22/04/22</div>
+      <div class="review__text">
+        {{ review.text }}
+      </div>
+      <div class="review__date">{{ review.createdAt }}</div>
     </div>
   </div>
 
 </template>
 
 <script>
+import StarsRate from "@/components/UI/StarsRate.vue";
+
 export default {
   name: "ReviewBlock",
+  components: StarsRate,
   props: {
     users: Array,
     review: {
-      userId: Number,
       id: Number,
-      title: String,
-      body: String
+      userId: Number,
+      inventory_id: Number,
+      rating: Number,
+      text: String,
+      createdAt: String
     }
   },
   data() {

@@ -25,6 +25,10 @@
               v-if="!editMode"
               class="btn cards-btn">Забронировать
       </button>
+      <button @click="showMore"
+              v-if="!editMode"
+              class="cards-btn">Подробнее
+      </button>
       <button v-if="editMode"
               @click="showAddItemBlock"
               class="btn cards-btn">Редактировать
@@ -70,9 +74,10 @@
 import ConfirmWindow from "@/components/blocks/modal/ConfirmWindow.vue";
 import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
+import StarsRate from "@/components/UI/StarsRate.vue";
 
 export default {
-  components: ConfirmWindow, SuccessWindow, InventoryCard,
+  components: ConfirmWindow, SuccessWindow, InventoryCard, StarsRate,
   name: "SearchEquipmentItem",
   props: {
     item: {
@@ -110,6 +115,10 @@ export default {
     }
   },
   methods: {
+    showMore(e) {
+      console.log(e.target.closest('.equipment-item'));
+      e.target.closest('.equipment-item').classList.toggle('showMore');
+    },
     getEquipmentType() {
       this.types.forEach(type => {
         if (type.id === this.item.type_id) {
@@ -223,6 +232,13 @@ export default {
   overflow: hidden;
   background-color: rgba(178, 178, 178, .3);
   z-index: 10;
+}
+
+.equipment-item.showMore {
+  /*grid-column-start: span 4;
+  grid-row-start: 1;*/
+  width: 100%;
+  transition: all .7s;
 }
 
 @media (max-width: 767px) {

@@ -50,6 +50,7 @@
 <script>
 import starsRate from "@/components/UI/StarsRate.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
+import {comments} from "@/data-and-functions/constants/URLS";
 
 export default {
   name: "ResultItemFromStartPage",
@@ -105,9 +106,9 @@ export default {
         console.error(e);
       }
     },
-    async getReviews() {
+    async getReviewsByResortID() {
       try {
-        const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+        const res = await fetch(comments.getCommentByResortID.URL+this.resort.id);
         if (res.ok) {
           this.reviews = await res.json();
         } else {
@@ -133,7 +134,7 @@ export default {
   },
   mounted() {
     this.getUsers();
-    this.getReviews();
+    this.getReviewsByResortID();
   }
 }
 </script>
