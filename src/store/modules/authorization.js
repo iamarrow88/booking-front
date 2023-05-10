@@ -45,6 +45,7 @@ export default {
         },
         async updateUser(context, body) {
             console.log(body);
+            console.log(user.updateUser.URL);/**/
             try {
                 const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, headerWithToken);
                 console.log('обновляем данные пользователя');

@@ -1,6 +1,7 @@
 export default {
     actions: {},
-    mutations: {},
+    mutations: {
+        },
     state: {
         shortDateFrom: null,
         shortDateTo: null,
