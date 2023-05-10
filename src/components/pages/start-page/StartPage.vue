@@ -326,7 +326,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   width: 17vw;
   max-width: 300px;
 }
@@ -355,7 +355,7 @@ export default {
 .form-group-city {
   margin-bottom: 45px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
 }
 
@@ -392,7 +392,7 @@ export default {
   width: 76vw;
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 30px;
 }
 

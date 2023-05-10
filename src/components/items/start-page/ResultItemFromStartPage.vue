@@ -189,7 +189,7 @@ export default {
 .item__address {
   margin-bottom: 20px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 7px;
   width: 100%;
   order: 2

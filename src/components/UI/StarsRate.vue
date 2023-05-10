@@ -58,7 +58,7 @@ export default {
   padding: 5px;
   display: flex;
   width: 10em;
-  justify-content: start;
+  justify-content: flex-start;
   flex-direction: row-reverse;
   height: 2em;
   position: relative;

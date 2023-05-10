@@ -198,7 +198,7 @@ export default {
   margin-bottom: 20px;
   width: 100%;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   font-size: 28px;
 }
 
@@ -216,13 +216,13 @@ export default {
 .equipment-item__price {
   margin-bottom: 10px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .equipment-item__summary {
   margin-bottom: 25px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 10px;
   width: 100%;
