@@ -62,7 +62,7 @@
     </div>
 
 
-    <div class="results">
+    <div class="results" ref="results">
       <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
       <div class="results__wrapper" v-if="items.length > 0">
         <ul class="results__list">
@@ -241,6 +241,10 @@ export default {
     try {
       const response = await fetch(`/api/resorts/inventories/${this.$route.params.id}`)
       this.notFilteredItems = await response.json();
+      setTimeout(() => {
+        const resultsBlock = this.$refs.results;
+        resultsBlock.scrollIntoView({behavior: "smooth", block: "start"});
+      }, 1)
     } catch (error) {
       console.error(error)
     }
