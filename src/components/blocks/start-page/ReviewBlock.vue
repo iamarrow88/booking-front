@@ -6,7 +6,7 @@
     </div>
     <div class="review">
       <div class="review__author"><img src='../../../assets/admin.png' alt="avatar" class="author__img">
-        <div class="author__name">{{ user.name }}</div>
+        <div class="author__name">{{ user.user_name  }}</div>
       </div>
       <div class="review__rate">
         <stars-rate :rate="this.review.rating"></stars-rate>
@@ -27,14 +27,14 @@ export default {
   name: "ReviewBlock",
   components: StarsRate,
   props: {
-    users: Array,
     review: {
       id: Number,
       userId: Number,
       inventory_id: Number,
       rating: Number,
       text: String,
-      createdAt: String
+      createdAt: String,
+      user_name: String,
     }
   },
   data() {

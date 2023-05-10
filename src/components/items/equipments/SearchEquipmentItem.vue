@@ -1,22 +1,36 @@
 <template>
   <div class="equipment-item">
-    <div class="equipment-item__about">
-      <div class="equipment-item__type-name">{{ type.name }}</div>
-      <div class="equipment-item__photo-block">
-        <img v-if="item.photo" class="equipment-item__photo"
-             src="item.photo"
-             alt="Item Photo">
-        <img v-else class="equipment-item__photo"
-             src="../../../assets/no-photo.jpg"
-             alt="Item Photo">
-      </div>
-      <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
-      <div class="equipment-item__summary">
-        <div class="summary__duration"
-             v-if="!editMode">Аренда на {{ duration }} {{ hoursNaming }}
+    <div class="equipment-item__body">
+      <div class="equipment-item__about">
+        <div class="equipment-item__type-name"><b>{{ type.name }}</b></div>
+        <div class="equipment-item__photo-block">
+          <img v-if="item.photo" class="equipment-item__photo"
+               src="item.photo"
+               alt="Item Photo">
+          <img v-else class="equipment-item__photo"
+               src="../../../assets/no-photo.jpg"
+               alt="Item Photo">
         </div>
-        <div class="summary__total"
-             v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
+        <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
+        <div class="equipment-item__summary">
+          <div class="summary__duration"
+               v-if="!editMode">Аренда на {{ duration }} {{ hoursNaming }}
+          </div>
+          <div class="summary__total"
+               v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
+        </div>
+      </div>
+
+      <div class="equipment-item__reviews">
+        <div class="reviews__title">Отзывы</div>
+        <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
+        <review-block v-for="review in reviews"
+                      :review="review"
+                      :key="review.id"
+                      :class="{active: review.index === this.currentReview}"
+                      @prev="prev"
+                      @next="next"></review-block>
+
       </div>
     </div>
 
@@ -75,9 +89,12 @@ import ConfirmWindow from "@/components/blocks/modal/ConfirmWindow.vue";
 import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 import StarsRate from "@/components/UI/StarsRate.vue";
+import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
+import {comments, headerWithToken} from "@/data-and-functions/constants/URLS";
+import asyncRequest from "@/data-and-functions/API/asyncRequest";
 
 export default {
-  components: ConfirmWindow, SuccessWindow, InventoryCard, StarsRate,
+  components: ConfirmWindow, SuccessWindow, InventoryCard, StarsRate, ReviewBlock,
   name: "SearchEquipmentItem",
   props: {
     item: {
@@ -111,13 +128,71 @@ export default {
       itemsCounter: 0,
       today: null,
       componentDuration: null,
-
+      users: [],
+      reviews: [],
+      currentReview: 0,
     }
   },
   methods: {
+    async getUsers() {
+      try {
+        const res = await fetch('https://jsonplaceholder.typicode.com/users');
+        if (res.ok) {
+          this.users = await res.json();
+        } else {
+          console.log('there is no users')
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      },
+    async getReviewsByInventoryID() {
+      try {
+        const res = await fetch(`${comments.getCommentByInventoryID.URL}${this.item.id}`);
+        if (res.ok) {
+          this.reviews = await res.json();
+        } else {
+          console.log('there is no reviews')
+        }
+        this.reviews.forEach((review, index) => {
+          return review.index = index;
+        })
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    prev() {
+      this.currentReview -= 1;
+      if (this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
+
+    },
+    next() {
+      this.currentReview += 1;
+      if (this.currentReview >= this.reviews.length) this.currentReview = 0;
+
+    },
+    async postComment(context){
+      try {
+        const res = await asyncRequest(comments.createComment.URL, comments.createComment.METHOD, headerWithToken);
+        if(!res.ok){
+          console.log('комментарий не создан, ошибка.');
+          context.commit('updateErrorMessage', 'Комментарий не удалось отправить');
+        } else {
+          console.log('Комментарий отправлен');
+          const comments = await res.json();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
     showMore(e) {
-      console.log(e.target.closest('.equipment-item'));
-      e.target.closest('.equipment-item').classList.toggle('showMore');
+      if([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+        e.target.closest('.equipment-item').classList.remove('showMore');
+      } else {
+        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
+        e.target.closest('.equipment-item').classList.add('showMore');
+        /*e.target.closest('.equipment-item__body').lastElementChild.classList.add('showMore');*/
+      }
     },
     getEquipmentType() {
       this.types.forEach(type => {
@@ -159,6 +234,8 @@ export default {
       const end = new Date(this.selDateEndShort + ' ' + this.endTime + ':00:00');
       return (end - start) / msPerHours
     },
+
+
   },
   watch: {
     itemsCounter() {
@@ -175,6 +252,8 @@ export default {
     this.getEquipmentType();
     this.today = (new Date().toISOString().slice(0, 10));
     this.componentDuration = this.$route.query.duration;
+    await this.getUsers();
+    await this.getReviewsByInventoryID();
   },
 
 }
@@ -183,15 +262,37 @@ export default {
 
 <style scoped>
 .equipment-item {
-  padding: 20px;
+  width: 23%;
+  padding: 40px;
   border: 0 solid #899bb0;
   box-shadow: 7px 7px 20px #c5daf3;
   font-size: 1.25rem;
+  order: 2;
+  transition: all .3ms;
 }
 
+.equipment-item.showMore {
+  padding: 40px 84px;
+  width: 100%;
+  transition: all .3ms;
+  order: 1;
+}
+
+.equipment-item__body {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  justify-content: space-between;
+}
 .equipment-item__about {
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+
+.showMore .equipment-item__about {
+  width: 65%;
+  flex-wrap: wrap;
 }
 
 .equipment-item__type-name {
@@ -200,12 +301,27 @@ export default {
   display: flex;
   justify-content: flex-start;
   font-size: 28px;
+  order: 2;
+}
+
+.showMore .equipment-item__type-name {
+  margin-top: 40px;
 }
 
 .equipment-item__photo-block {
   margin: 0 auto 30px;
   width: 90%;
   min-height: 150px;
+  display: flex;
+  order: 2;
+  justify-content: center;
+}
+
+.showMore .equipment-item__photo-block {
+  order: 1;
+  width: auto;
+  height: 100%;
+  justify-content: flex-start;
 }
 
 .equipment-item__photo {
@@ -213,10 +329,15 @@ export default {
   max-height: 100%;
 }
 
+.showMore .equipment-item__photo {
+  height: 100%;
+}
+
 .equipment-item__price {
   margin-bottom: 10px;
   display: flex;
   justify-content: flex-start;
+  order: 2;
 }
 
 .equipment-item__summary {
@@ -226,6 +347,26 @@ export default {
   flex-wrap: wrap;
   gap: 10px;
   width: 100%;
+  order: 2;
+}
+
+.equipment-item__reviews {
+  display: none;
+  min-width: 35%;
+}
+
+.showMore .equipment-item__reviews {
+  display: block;
+}
+
+.reviews__title {
+  padding-left: 7%;
+  font-weight: 900;
+  font-size: 30px;
+}
+
+.reviews__no-reviews {
+  margin-top: 45px;
 }
 
 .no-scroll {
@@ -234,12 +375,12 @@ export default {
   z-index: 10;
 }
 
-.equipment-item.showMore {
-  /*grid-column-start: span 4;
-  grid-row-start: 1;*/
-  width: 100%;
-  transition: all .7s;
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
+
 
 @media (max-width: 767px) {
 

@@ -188,23 +188,23 @@ const bookings = {
 
 const comments = {
     createComment: {
-        URL: 'api/comments',
+        URL: '/api/comments',
         METHOD: 'POST',
     },
     getCommentByID: {
-        URL: 'api/comments/',
+        URL: '/api/comments/',
         METHOD: 'GET',
     },
     getCommentByResortID: {
-        URL: 'api/resorts/comments/',
+        URL: '/api/resorts/comments/',
         METHOD: 'GET',
     },
     deleteCommentByID: {
-        URL: 'api/comments/',
+        URL: '/api/comments/',
         METHOD: 'DELETE',
     },
     getCommentByInventoryID: {
-        URL: 'api/inventories/comments/s',
+        URL: '/api/inventories/comments/',
         METHOD: 'GET',
     },
 

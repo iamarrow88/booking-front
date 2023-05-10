@@ -360,10 +360,11 @@ label.date__label, label.time__label, label.type__label {
 .results__list {
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: flex-start;
   gap: 20px;
   justify-items: stretch;
+  flex-wrap: wrap;
 }
 
 .results__item {

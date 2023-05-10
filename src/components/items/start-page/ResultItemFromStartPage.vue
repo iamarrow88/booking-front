@@ -38,7 +38,6 @@
       <div class="reviews__title">Отзывы</div>
       <review-block v-for="review in reviews"
                     :review="review"
-                    :users="users"
                     :key="review.id"
                     :class="{active: review.index === this.currentReview}"
                     @prev="prev"
@@ -292,7 +291,7 @@ export default {
 
 .showMore .reviews {
   display: block;
-  width: 50%;
+  width: 45%;
   text-align: left;
 }
 
