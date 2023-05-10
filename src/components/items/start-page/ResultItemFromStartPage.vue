@@ -42,6 +42,8 @@
                     :class="{active: review.index === this.currentReview}"
                     @prev="prev"
                     @next="next"></review-block>
+
+      <create-comment v-if="showAddComment"></create-comment>
     </div>
   </li>
 </template>
@@ -85,6 +87,12 @@ export default {
       users: [],
       reviews: [],
       currentReview: 0,
+      showAddComment: false,
+    }
+  },
+  watch: {
+    currentReview(){
+      this.showAddComment = this.currentReview === this.reviews.length;
     }
   },
   methods: {
@@ -127,13 +135,17 @@ export default {
       }
     },
     prev() {
-      this.currentReview -= 1;
+      /*this.currentReview -= 1;
       if (this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
-
+*/
+      this.currentReview -= 1;
+      if (this.currentReview < 0) this.currentReview = this.reviews.length;
     },
     next() {
+      /*this.currentReview += 1;
+      if (this.currentReview >= this.reviews.length) this.currentReview = 0;*/
       this.currentReview += 1;
-      if (this.currentReview >= this.reviews.length) this.currentReview = 0;
+      if (this.currentReview > this.reviews.length) this.currentReview = 0;
 
     }
   },

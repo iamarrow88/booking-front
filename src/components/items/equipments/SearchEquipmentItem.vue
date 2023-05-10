@@ -30,6 +30,9 @@
                       :class="{active: review.index === this.currentReview}"
                       @prev="prev"
                       @next="next"></review-block>
+        <create-comment v-if="showAddComment"
+                        @postComment="postComment"
+                        @prev="prev">добавьте комментарий</create-comment>
 
       </div>
     </div>
@@ -90,8 +93,10 @@ import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 import StarsRate from "@/components/UI/StarsRate.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
-import {comments, headerWithToken} from "@/data-and-functions/constants/URLS";
+import {comments , headerWithToken} from "@/data-and-functions/constants/URLS";
 import asyncRequest from "@/data-and-functions/API/asyncRequest";
+import {mapGetters} from "vuex";
+
 
 export default {
   components: ConfirmWindow, SuccessWindow, InventoryCard, StarsRate, ReviewBlock,
@@ -131,21 +136,28 @@ export default {
       users: [],
       reviews: [],
       currentReview: 0,
+      showAddComment: false,
+      comments: []
     }
   },
+  watch: {
+    itemsCounter() {
+      this.getInventoryByResort();
+    },
+    startTime() {
+      this.componentDuration = this.calcDuration();
+    },
+    endTime() {
+      this.componentDuration = this.calcDuration();
+    },
+    currentReview(){
+      this.showAddComment = this.currentReview === this.reviews.length;
+    }
+  },
+  computed: {
+    ...mapGetters(['GET_ALL_USER_INFO'])
+  },
   methods: {
-    async getUsers() {
-      try {
-        const res = await fetch('https://jsonplaceholder.typicode.com/users');
-        if (res.ok) {
-          this.users = await res.json();
-        } else {
-          console.log('there is no users')
-        }
-      } catch (e) {
-        console.error(e);
-      }
-      },
     async getReviewsByInventoryID() {
       try {
         const res = await fetch(`${comments.getCommentByInventoryID.URL}${this.item.id}`);
@@ -163,23 +175,30 @@ export default {
     },
     prev() {
       this.currentReview -= 1;
-      if (this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
-
+      if (this.currentReview < 0) this.currentReview = this.reviews.length;
     },
     next() {
       this.currentReview += 1;
-      if (this.currentReview >= this.reviews.length) this.currentReview = 0;
-
+      if (this.currentReview > this.reviews.length) this.currentReview = 0;
     },
-    async postComment(context){
+    async postComment(comment){
+      const body = {
+        id: Date.now(),
+        user_id: +this.GET_ALL_USER_INFO.id,
+        inventory_id: +this.item.id,
+        rating: +comment.rating,
+        text: comment.text,
+        created_at: comment.created_at
+      }
+      console.log(body);
       try {
-        const res = await asyncRequest(comments.createComment.URL, comments.createComment.METHOD, headerWithToken);
+        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
         if(!res.ok){
           console.log('комментарий не создан, ошибка.');
-          context.commit('updateErrorMessage', 'Комментарий не удалось отправить');
         } else {
           console.log('Комментарий отправлен');
           const comments = await res.json();
+          this.comments = comments;
         }
       } catch (e) {
         console.error(e);
@@ -191,7 +210,6 @@ export default {
       } else {
         document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
         e.target.closest('.equipment-item').classList.add('showMore');
-        /*e.target.closest('.equipment-item__body').lastElementChild.classList.add('showMore');*/
       }
     },
     getEquipmentType() {
@@ -237,22 +255,10 @@ export default {
 
 
   },
-  watch: {
-    itemsCounter() {
-      this.getInventoryByResort();
-    },
-    startTime() {
-      this.componentDuration = this.calcDuration();
-    },
-    endTime() {
-      this.componentDuration = this.calcDuration();
-    }
-  },
   async created() {
     this.getEquipmentType();
     this.today = (new Date().toISOString().slice(0, 10));
     this.componentDuration = this.$route.query.duration;
-    await this.getUsers();
     await this.getReviewsByInventoryID();
   },
 
@@ -282,6 +288,10 @@ export default {
   width: 100%;
   height: 90%;
   display: flex;
+  justify-content: center;
+}
+
+.showMore ..equipment-item__body {
   justify-content: space-between;
 }
 .equipment-item__about {

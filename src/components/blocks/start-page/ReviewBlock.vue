@@ -6,7 +6,7 @@
     </div>
     <div class="review">
       <div class="review__author"><img src='../../../assets/admin.png' alt="avatar" class="author__img">
-        <div class="author__name">{{ user.user_name  }}</div>
+        <div class="author__name">{{ review.user_name  }}</div>
       </div>
       <div class="review__rate">
         <stars-rate :rate="this.review.rating"></stars-rate>
@@ -54,13 +54,6 @@ export default {
     }
   },
   methods: {
-    findReviewAuthor(userId) {
-      for (let i = 0; i < this.users.length; i++) {
-        if (userId === this.users[i].id) {
-          this.user = this.users[i];
-        }
-      }
-    },
     previous() {
       this.$emit('prev');
     },
@@ -68,9 +61,6 @@ export default {
       this.$emit('next');
     }
   },
-  mounted() {
-    this.findReviewAuthor(this.review.userId);
-  }
 }
 </script>
 
