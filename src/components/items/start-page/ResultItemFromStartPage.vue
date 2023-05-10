@@ -90,9 +90,15 @@ export default {
   },
   methods: {
     showMore(e) {
-      const parent = e.target.parentNode;
+      /*const parent = e.target.parentNode;
       parent.parentElement.classList.toggle('showMore');
-      this.isMoreShown = !this.isMoreShown;
+      this.isMoreShown = !this.isMoreShown;*/
+      if([...e.target.closest('.result-item').classList].includes('showMore')) {
+        e.target.closest('.result-item').classList.remove('showMore');
+      } else {
+        document.querySelectorAll('.result-item').forEach(card => card.classList.remove('showMore'));
+        e.target.closest('.result-item').classList.add('showMore');
+      }
     },
     async getUsers() {
       try {
