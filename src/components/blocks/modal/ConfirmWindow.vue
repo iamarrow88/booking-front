@@ -2,8 +2,7 @@
   <div v-show="isBookingProcessStarted"
        class="pop-up"
        @click="closePopUp">
-    <div class="pop-up__block"
-    v-if="localStorage">
+    <div class="pop-up__block" v-if="!localStorage">
       <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимостью <b>{{ item.price }} RUB в час</b></div>
       <div class="pop-up__text">На курорте <b>{{ resortName }}</b></div>
       <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{ formattedEndDate }}
