@@ -2,8 +2,7 @@
   <div v-show="isBookingProcessStarted"
        class="pop-up"
        @click="closePopUp">
-    <div class="pop-up__block"
-    v-if="localStorage">
+    <div class="pop-up__block" v-if="!localStorage">
       <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимостью <b>{{ item.price }} RUB в час</b></div>
       <div class="pop-up__text">На курорте <b>{{ resortName }}</b></div>
       <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{ formattedEndDate }}
@@ -14,8 +13,8 @@
         <button class="pop-up__btn cards-btn" @click="closePopUp">Отмена</button>
       </div>
     </div>
-    <information-window v-else @Back="closePopUp"
-    @GoToAuthPage="GoToAuthPage"></information-window>
+<!--    <information-window v-else @Back="closePopUp"
+    @GoToAuthPage="GoToAuthPage"></information-window>-->
   </div>
 </template>
 
@@ -90,11 +89,14 @@ export default {
       return this.formatDate(this.selDateEndShort);
     }
   },
+  mounted() {
+    console.log(Boolean(localStorage))
+  }
 }
 </script>
 
 <style scoped>
-.pop-up {
+/*.pop-up {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -104,6 +106,6 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   display: table;
   transition: opacity 0.3s ease;
-}
+}*/
 
 </style>

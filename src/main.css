@@ -80,14 +80,7 @@ input[type="date"], select {
 }
 
 .pop-up__block {
-    width: 300px;
-    margin: 0px auto;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-    transition: all 0.3s ease;
-    /*position: absolute;
+    position: absolute;
     top: 46%;
     left: 35%;
     padding: 3em;
@@ -97,7 +90,7 @@ input[type="date"], select {
     justify-content: space-around;
     gap: 16px;
     border-radius: 6px;
-    box-shadow: 1px 1px 12px #fdd4bd;*/
+    box-shadow: 1px 1px 12px #fdd4bd;
 }
 
 .pop-up__btns {
@@ -169,6 +162,10 @@ button.action {
 
 .body__term {
     text-align: left;
+}
+
+.active {
+    display: block;
 }
 
 @media (max-width: 767px) {
