@@ -42,13 +42,6 @@
                       @isAddItemBlockOpen="closeAddItem"></inventory-card>
     </div>
 
-    <div v-if="isAddingItemModeOn">
-      <inventory-card :IsEditEquipmModeOnFParent="true"
-                      :resortIdFromParent="resortId"
-                      :itemFromParent="item"
-                      @isAddItemBlockOpen="closeAddItem"></inventory-card>
-    </div>
-
     <confirm-window v-if="!editMode" :item="item"
                     :typeName="type.name"
                     :isBookingProcessStarted="isBookingProcessStarted"
@@ -106,7 +99,6 @@ export default {
       itemsCounter: 0,
       today: null,
       componentDuration: null,
-
     }
   },
   methods: {

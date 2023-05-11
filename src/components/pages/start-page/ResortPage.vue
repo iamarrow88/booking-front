@@ -193,7 +193,7 @@ export default {
     },
     startTime(newTime) {
       if (this.startCounter !== 0) {
-        this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
+        this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1).toString();
       } else {
         this.startCounter += 1;
       }

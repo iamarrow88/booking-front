@@ -164,6 +164,10 @@ button.action {
     text-align: left;
 }
 
+.active {
+    display: block;
+}
+
 @media (max-width: 767px) {
     .my-booking-item__id {
         font-size: 1rem;
