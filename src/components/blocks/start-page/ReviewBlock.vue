@@ -1,9 +1,5 @@
 <template>
   <div class="block">
-    <div class="block__btns">
-      <button class="up" @click="previous">Previous</button>
-      <button class="down" @click="next">Next</button>
-    </div>
     <div class="review">
       <div class="review__author"><img src='../../../assets/admin.png' alt="avatar" class="author__img">
         <div class="author__name">{{ review.user_name  }}</div>
@@ -15,6 +11,10 @@
         {{ review.text }}
       </div>
       <div class="review__date">{{ review.createdAt }}</div>
+    </div>
+    <div class="block__btns">
+      <button class="up" @click="previous">Previous</button>
+      <button class="down" @click="next">Next</button>
     </div>
   </div>
 

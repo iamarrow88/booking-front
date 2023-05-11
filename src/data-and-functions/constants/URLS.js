@@ -1,26 +1,26 @@
 const user = {
     register: {
-        URL: 'api/user/register',
+        URL: '/api/user/register',
         METHOD: 'POST',
     },
     login: {
-        URL: 'api/user/login',
+        URL: '/api/user/login',
         METHOD: 'POST',
     },
     bookings: {
-        URL: 'api/user/bookings',
+        URL: '/api/user/bookings',
         METHOD: 'GET',
     },
     getUser: {
-        URL: 'api/user',
+        URL: '/api/user',
         METHOD: 'GET',
     },
     updateUser: {
-        URL: 'api/user',
+        URL: '/api/user',
         METHOD: 'PUT',
     },
     deleteUser: {
-        URL: 'api/user',
+        URL: '/api/user',
         METHOD: 'DELETE',
     },
 
@@ -40,11 +40,11 @@ const user = {
 
 const dataArrays = {
     cities: {
-        URL: 'api/cities',
+        URL: '/api/cities',
         METHOD: 'GET',
     },
     inventoryTypes: {
-        URL: 'api/inventories/types',
+        URL: '/api/inventories/types',
         METHOD: 'GET',
     },
 
@@ -56,35 +56,35 @@ const dataArrays = {
 
 const resorts = {
     allResorts: {
-        URL: 'api/resorts',
+        URL: '/api/resorts',
         METHOD: 'GET',
     },
     createResort: {
-        URL: 'api/resorts',
+        URL: '/api/resorts',
         METHOD: 'POST',
     },
     updateResort: {
-        URL: 'api/resorts',
+        URL: '/api/resorts',
         METHOD: 'PUT',
     },
     filteredResorts: {
-        URL: 'api/resorts/filter',
+        URL: '/api/resorts/filter',
         METHOD: 'POST',
     },
     allMyResorts: {
-        URL: 'api/myresorts',
+        URL: '/api/myresorts',
         METHOD: 'GET',
     },
     getInventoryInResort: {
-        URL: 'api/resorts/inventories/',
+        URL: '/api/resorts/inventories/',
         METHOD: 'GET',
     },
     getResortByID: {
-        URL: 'api/resorts/',
+        URL: '/api/resorts/',
         METHOD: 'GET',
     },
     deleteResortByID: {
-        URL: 'api/resorts/',
+        URL: '/api/resorts/',
         METHOD: 'DELETE',
     },
 

@@ -2,17 +2,20 @@
   <div class="comment_block">
     <div v-if="!isCommentAdded" class="add-comment">
       <div class="add-comment__title">Ваша оценка:</div>
-      <form class="add-comment__rating">
-        <!--      <label for="1">
-              <img src="../../assets/25533.png" alt="1">
 
-              </label>-->
+      <form class="add-comment__rating">
+        <label for="1" class="label-img">☆</label>
+        <label for="2" class="label-img">☆</label>
+        <label for="3" class="label-img">☆</label>
+        <label for="4" class="label-img">☆</label>
+        <label for="5" class="label-img">☆</label>
         <input type="radio" name="rate" value="1" id="1" v-model="rating">
         <input type="radio" name="rate" value="2" id="2" v-model="rating">
         <input type="radio" name="rate" value="3" id="3" v-model="rating">
         <input type="radio" name="rate" value="4" id="4" v-model="rating">
         <input type="radio" name="rate" value="5" id="5" v-model="rating">
       </form>
+      <div v-if="isErrorOccurred" class="error-message">Поставьте, пожалуйста, оценку</div>
       <textarea placeholder="Напишите ваш комментарий..."
                 class="add-comment__text"
                 v-model="text"></textarea>
@@ -22,7 +25,7 @@
     </div>
     <div class="buttons">
       <button v-if="!isCommentAdded" class="btn cards-btn" @click="postComment">Отправить</button>
-      <button class="btn cards-btn" :class="{added: isCommentAdded}" @click="this.$emit('prev')">Еще комментарии</button>
+      <button class="btn cards-btn" :class="{added: isCommentAdded}" @click="this.$emit('next')">Еще комментарии</button>
     </div>
   </div>
 </template>
@@ -39,21 +42,41 @@ export default {
       text: '',
       rating: null,
       isCommentAdded: false,
+      labels: [],
+      isErrorOccurred: false
+    }
+  },
+  watch: {
+    rating(){
+      this.labels.forEach((label, index) => label.innerHTML = (index + 1) <= +this.rating ? '★' : '☆');
     }
   },
   methods: {
     postComment(){
-      const body = {
-        text: this.text,
-        rating: this.rating,
-        created_at: new Date(),
-      };
-      this.$emit('postComment', body);
-      this.isCommentAdded = true;
+      if(this.rating){
+        const body = {
+          text: this.text,
+          rating: this.rating,
+          };
+        console.log(body);
+        this.$emit('postComment', body);
+        this.isCommentAdded = true;
+        this.isErrorOccurred = false;
+      } else {
+        this.isErrorOccurred = true;
+      }
     },
     getShortDate(fullDate) {
       return (fullDate.toISOString().slice(0, 10));
     },
+    getTimeNumber(dateFull) {
+      console.log(dateFull);
+      let timeNumber = dateFull.toString().split(' ')[4];
+      return timeNumber;
+    },
+  },
+  mounted() {
+    this.labels = document.querySelectorAll('.label-img');
   }
 }
 </script>
@@ -81,7 +104,7 @@ export default {
   padding: 5px;
   display: block;
   width: 83%;
-  height: 150px;
+  min-height: 17vw;
   resize: none;
 }
 
@@ -98,5 +121,19 @@ export default {
 
 .buttons .added {
   margin-left: 3em;
+}
+
+input {
+  display: none;
+}
+
+.label-img {
+  font-size: 48px;
+  color: goldenrod;
+}
+
+.error-message {
+  margin: 0 0 15px 0;
+  text-align: left;
 }
 </style>

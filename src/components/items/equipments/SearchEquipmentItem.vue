@@ -63,13 +63,6 @@
                       @isAddItemBlockOpen="closeAddItem"></inventory-card>
     </div>
 
-    <div v-if="isAddingItemModeOn">
-      <inventory-card :IsEditEquipmModeOnFParent="true"
-                      :resortIdFromParent="resortId"
-                      :itemFromParent="item"
-                      @isAddItemBlockOpen="closeAddItem"></inventory-card>
-    </div>
-
     <confirm-window v-if="!editMode" :item="item"
                     :typeName="type.name"
                     :isBookingProcessStarted="isBookingProcessStarted"
@@ -183,12 +176,9 @@ export default {
     },
     async postComment(comment){
       const body = {
-        id: Date.now(),
-        user_id: +this.GET_ALL_USER_INFO.id,
         inventory_id: +this.item.id,
         rating: +comment.rating,
         text: comment.text,
-        created_at: comment.created_at
       }
       console.log(body);
       try {

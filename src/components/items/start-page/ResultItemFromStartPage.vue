@@ -43,7 +43,7 @@
                     @prev="prev"
                     @next="next"></review-block>
 
-      <create-comment v-if="showAddComment"></create-comment>
+      <create-comment v-if="showAddComment" @next="next"></create-comment>
     </div>
   </li>
 </template>
@@ -139,12 +139,14 @@ export default {
       if (this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
 */
       this.currentReview -= 1;
+      console.log('prev' + this.currentReview);
       if (this.currentReview < 0) this.currentReview = this.reviews.length;
     },
     next() {
       /*this.currentReview += 1;
       if (this.currentReview >= this.reviews.length) this.currentReview = 0;*/
       this.currentReview += 1;
+      console.log('next' + this.currentReview);
       if (this.currentReview > this.reviews.length) this.currentReview = 0;
 
     }
