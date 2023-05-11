@@ -9,7 +9,7 @@
         </p>
       </div>
       <div class="item__rate">
-        <stars-rate :rate="resort.rate"></stars-rate>
+        <stars-rate :rate="Math.round(resort.avg_rating)"></stars-rate>
       </div>
 
       <button @click="showMore"
@@ -64,7 +64,8 @@ export default {
       owner_id: Number,
       description: String,
       address: String,
-      rate: Number
+      rate: Number,
+      avg_rating: Number,
     },
     selectedType: {
       id: Number,
@@ -79,7 +80,6 @@ export default {
     startTime: String,
     endTime: String,
     duration: Number,
-    rate: Number
   },
   data() {
     return {

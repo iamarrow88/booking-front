@@ -210,7 +210,7 @@ export default {
         });
         if (response.ok) {
           this.resorts = await response.json();
-          this.resorts.forEach(resort => resort.rate = this.setStars())
+          /*this.resorts.forEach(resort => resort.rate = this.setStars())*/
           console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
           this.isNotFoundShown = this.resorts.length === 0;
           setTimeout(() => {
@@ -239,9 +239,9 @@ export default {
         this.hoursNaming = 'часа';
       }
     },
-    setStars() {
+/*    setStars() {
       return Math.floor((Math.random() * 5) + 1);
-    },
+    },*/
     checkStartTime() {
       if (+this.startTime === 24) {
         this.selDateStartShort = this.addDayToDate(this.todayShortDate, 'short', 1);
