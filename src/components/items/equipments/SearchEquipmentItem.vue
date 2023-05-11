@@ -29,7 +29,8 @@
                       :key="review.id"
                       :class="{active: review.index === this.currentReview}"
                       @prev="prev"
-                      @next="next"></review-block>
+                      @next="next"
+                      @deleteComment="deleteComment"></review-block>
         <create-comment v-if="showAddComment"
                         @postComment="postComment"
                         @prev="prev">добавьте комментарий</create-comment>
@@ -173,6 +174,25 @@ export default {
     next() {
       this.currentReview += 1;
       if (this.currentReview > this.reviews.length) this.currentReview = 0;
+    },
+    async deleteComment(id){
+      const body = {
+        id: id,
+      }
+      try {
+        const res = await asyncRequest(comments.deleteCommentByID.URL, body, comments.deleteCommentByID.METHOD, headerWithToken)
+
+        if(res.ok){
+          console.log(res);
+          console.log('комментарий удален');
+        } else {
+          console.log(res);
+
+          console.log('комментарий не удален, ошибка');
+        }
+      } catch (e) {
+        console.error(e)
+      }
     },
     async postComment(comment){
       const body = {

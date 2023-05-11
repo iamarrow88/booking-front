@@ -13,8 +13,9 @@
       <div class="review__date">{{ review.createdAt }}</div>
     </div>
     <div class="block__btns">
-      <button class="up" @click="previous">Previous</button>
-      <button class="down" @click="next">Next</button>
+      <button class="up" @click="previous">Предыдущий</button>
+      <button class="down" @click="deleteComment" v-if="review.userId===this.GET_ALL_USER_INFO.id">Удалить</button>
+      <button class="down" @click="next">Следующий</button>
     </div>
   </div>
 
@@ -22,6 +23,7 @@
 
 <script>
 import StarsRate from "@/components/UI/StarsRate.vue";
+import {mapGetters} from "vuex";
 
 export default {
   name: "ReviewBlock",
@@ -53,12 +55,18 @@ export default {
       currentUserId: null,
     }
   },
+  computed: {
+    ...mapGetters(['GET_ALL_USER_INFO'])
+  },
   methods: {
     previous() {
       this.$emit('prev');
     },
     next() {
       this.$emit('next');
+    },
+    deleteComment(){
+      this.$emit('deleteComment', this.review.id)
     }
   },
 }
