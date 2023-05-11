@@ -30,6 +30,7 @@ import store from "@/store";
 
 
 import StarsRate from "@/components/UI/StarsRate.vue";
+import InformationWindow from "@/components/blocks/modal/InformationWindow.vue";
 
 
 const router = createRouter({
@@ -59,6 +60,7 @@ app.component('InventoryCard', InventoryCard);
 app.component('CreateResortBlock', CreateResortBlock);
 app.component('ResortItem', ResortItem);
 app.component('SuccessWindow', SuccessWindow);
+app.component('InformationWindow', InformationWindow);
 app.component('BookingItem', BookingItem);
 app.component('PaymentPage', PaymentPage);
 app.component('ResultItemFromStartPage', ResultItemFromStartPage);
