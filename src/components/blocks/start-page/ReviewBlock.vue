@@ -14,7 +14,7 @@
     </div>
     <div class="block__btns">
       <button class="up" @click="previous">Предыдущий</button>
-      <button class="down" @click="deleteComment" v-if="review.userId===this.GET_ALL_USER_INFO.id">Удалить</button>
+      <button class="down" @click="deleteComment" v-if="review.user_id===+this.GET_ALL_USER_INFO.id">Удалить</button>
       <button class="down" @click="next">Следующий</button>
     </div>
   </div>

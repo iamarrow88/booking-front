@@ -35,15 +35,18 @@
 
     </div>
     <div class="reviews">
-      <div class="reviews__title">Отзывы</div>
-      <review-block v-for="review in reviews"
-                    :review="review"
-                    :key="review.id"
-                    :class="{active: review.index === this.currentReview}"
-                    @prev="prev"
-                    @next="next"></review-block>
+      {{resort.description}}
+<!--      <div class="reviews__title">Отзывы</div>-->
+<!--      <review-block v-for="review in reviews"-->
+<!--                    :review="review"-->
+<!--                    :key="review.id"-->
+<!--                    :class="{active: review.index === this.currentReview}"-->
+<!--                    @prev="prev"-->
+<!--                    @next="next"-->
+<!--                    @deleteComment="deleteComment"></review-block>-->
 
-      <create-comment v-if="showAddComment" @next="next"></create-comment>
+<!--      <create-comment v-if="showAddComment" @next="next"-->
+<!--                      @postComment="postComment"></create-comment>-->
     </div>
   </li>
 </template>
@@ -97,9 +100,6 @@ export default {
   },
   methods: {
     showMore(e) {
-      /*const parent = e.target.parentNode;
-      parent.parentElement.classList.toggle('showMore');
-      this.isMoreShown = !this.isMoreShown;*/
       if([...e.target.closest('.result-item').classList].includes('showMore')) {
         e.target.closest('.result-item').classList.remove('showMore');
       } else {
@@ -121,7 +121,7 @@ export default {
     },
     async getReviewsByResortID() {
       try {
-        const res = await fetch(comments.getCommentByResortID.URL+this.resort.id);
+        const res = await fetch(comments.getCommentsByResortID.URL+this.resort.id);
         if (res.ok) {
           this.reviews = await res.json();
         } else {
@@ -135,21 +135,63 @@ export default {
       }
     },
     prev() {
-      /*this.currentReview -= 1;
-      if (this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
-*/
       this.currentReview -= 1;
       console.log('prev' + this.currentReview);
       if (this.currentReview < 0) this.currentReview = this.reviews.length;
     },
     next() {
-      /*this.currentReview += 1;
-      if (this.currentReview >= this.reviews.length) this.currentReview = 0;*/
       this.currentReview += 1;
       console.log('next' + this.currentReview);
       if (this.currentReview > this.reviews.length) this.currentReview = 0;
 
-    }
+    },
+    /*async deleteComment(id){
+      console.log('deleteComment');
+
+      const body = {
+        id: +id,
+      }
+      console.log(body);
+      try {
+        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
+
+        if(res.ok){
+          console.log(res);
+          console.log('комментарий удален');
+          this.currentReview -= 1;
+          await this.getReviewsByInventoryID();
+        } else {
+          console.log(res);
+
+          console.log('комментарий не удален, ошибка');
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async postComment(comment){
+      const body = {
+        "resort_id": +this.resort.id,
+        "rating": +comment.rating,
+        "text": comment.text,
+      }
+
+      try {
+        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
+        console.log('комментарий отправлен');
+        if(!res.ok){
+          console.log('комментарий не создан, ошибка.');
+        } else {
+          console.log('Комментарий отправлен');
+          const comment = await res.json();
+          console.log(comment);
+          this.currentReview += 1;
+          await this.getReviewsByInventoryID();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },*/
   },
   mounted() {
     this.getUsers();

@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="equipment-item__reviews">
+      <div class="equipment-item__reviews" data-refresh="0">
         <div class="reviews__title">Отзывы</div>
         <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
         <review-block v-for="review in reviews"
@@ -33,7 +33,7 @@
                       @deleteComment="deleteComment"></review-block>
         <create-comment v-if="showAddComment"
                         @postComment="postComment"
-                        @prev="prev">добавьте комментарий</create-comment>
+                        @next="next">добавьте комментарий</create-comment>
 
       </div>
     </div>
@@ -87,7 +87,7 @@ import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 import StarsRate from "@/components/UI/StarsRate.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
-import {comments , headerWithToken} from "@/data-and-functions/constants/URLS";
+import {comments, headerWithToken} from "@/data-and-functions/constants/URLS";
 import asyncRequest from "@/data-and-functions/API/asyncRequest";
 import {mapGetters} from "vuex";
 
@@ -104,10 +104,6 @@ export default {
       type_id: Number
     },
     resortId: Number,
-    types: {
-      id: Number,
-      name: String
-    },
     typeId: Number,
     resortName: String,
     editMode: Boolean,
@@ -131,7 +127,7 @@ export default {
       reviews: [],
       currentReview: 0,
       showAddComment: false,
-      comments: []
+      refreshCommentID: 0,
     }
   },
   watch: {
@@ -149,12 +145,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['GET_ALL_USER_INFO'])
+    ...mapGetters(['GET_ALL_USER_INFO', 'GET_INVENTORY_TYPES'])
   },
   methods: {
     async getReviewsByInventoryID() {
       try {
-        const res = await fetch(`${comments.getCommentByInventoryID.URL}${this.item.id}`);
+        const res = await fetch(`${comments.getCommentsByInventoryID.URL}${this.item.id}`);
         if (res.ok) {
           this.reviews = await res.json();
         } else {
@@ -176,15 +172,16 @@ export default {
       if (this.currentReview > this.reviews.length) this.currentReview = 0;
     },
     async deleteComment(id){
-      const body = {
-        id: id,
-      }
+      console.log('deleteComment');
+
       try {
-        const res = await asyncRequest(comments.deleteCommentByID.URL, body, comments.deleteCommentByID.METHOD, headerWithToken)
+        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
 
         if(res.ok){
           console.log(res);
           console.log('комментарий удален');
+          this.currentReview -= 1;
+          await this.getReviewsByInventoryID();
         } else {
           console.log(res);
 
@@ -196,19 +193,23 @@ export default {
     },
     async postComment(comment){
       const body = {
-        inventory_id: +this.item.id,
-        rating: +comment.rating,
-        text: comment.text,
+        "inventory_id": +this.item.id,
+        "rating": +comment.rating,
+        "text": comment.text,
       }
-      console.log(body);
+
       try {
         const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
+        console.log('комментарий отправлен');
         if(!res.ok){
           console.log('комментарий не создан, ошибка.');
         } else {
           console.log('Комментарий отправлен');
-          const comments = await res.json();
-          this.comments = comments;
+          const comment = await res.json();
+          console.log(comment);
+          /*this.currentReview += 1;*/
+          await this.getReviewsByInventoryID();
+          this.currentReview = 0;
         }
       } catch (e) {
         console.error(e);
@@ -223,7 +224,7 @@ export default {
       }
     },
     getEquipmentType() {
-      this.types.forEach(type => {
+      this.GET_INVENTORY_TYPES.forEach(type => {
         if (type.id === this.item.type_id) {
           this.type = type;
         }

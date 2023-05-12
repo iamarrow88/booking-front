@@ -190,22 +190,69 @@ const comments = {
     createComment: {
         URL: '/api/comments',
         METHOD: 'POST',
+        model: {
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекOOомендую!"
+        },
+        response: {
+            "id": 57,
+            "user_id": 3,
+            "user_name": "owner",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекOOомендую!",
+            "created_at": "2023-05-12T11:47:59.575921Z"
+        }
     },
     getCommentByID: {
         URL: '/api/comments/',
         METHOD: 'GET',
+        model: null,
+        response: {
+            "id": 57,
+            "user_id": 3,
+            "user_name": "owner",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекOOомендую!",
+            "created_at": "2023-05-12T11:47:59.575921Z"
+        }
+
     },
-    getCommentByResortID: {
+    getCommentsByResortID: {
         URL: '/api/resorts/comments/',
         METHOD: 'GET',
+        model: null,
+        response: [{
+            "id": 1,
+            "user_id": 1,
+            "user_name": "admin",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекомендую!",
+            "created_at": "2023-05-08T18:01:14.346394Z"
+        },]
     },
     deleteCommentByID: {
         URL: '/api/comments/',
         METHOD: 'DELETE',
+        model: null,
+        response: 'status: ok, response: null'
     },
-    getCommentByInventoryID: {
+    getCommentsByInventoryID: {
         URL: '/api/inventories/comments/',
         METHOD: 'GET',
+        model: null,
+        response: {
+            "id": 1,
+            "user_id": 1,
+            "user_name": "",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекомендую!",
+            "created_at": "2023-05-08T18:01:14.346394Z"
+        }
     },
 
     model: {
@@ -214,7 +261,7 @@ const comments = {
         inventory_id: 'Number',
         rating: 'Number',
         text: 'String',
-        created_at: 'time'
+        created_at: 'String'
     }
 }
 
@@ -223,7 +270,7 @@ const headerAPI = {'Content-Type': 'application/json'};
 const headerWithToken = {
     'Content-Type': 'application/json',
     'Accept': '*',
-    'Authorization': 'Bearer '
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
 }
 
 export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken, comments}

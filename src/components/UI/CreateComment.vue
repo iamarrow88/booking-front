@@ -20,9 +20,9 @@
                 class="add-comment__text"
                 v-model="text"></textarea>
     </div>
-    <div v-else class="comment-block__else">
+<!--    <div v-else class="comment-block__else">
       <div class="else__text">Спасибо! Ваш комментарий отправлен на проверку</div>
-    </div>
+    </div>-->
     <div class="buttons">
       <button v-if="!isCommentAdded" class="btn cards-btn" @click="postComment">Отправить</button>
       <button class="btn cards-btn" :class="{added: isCommentAdded}" @click="this.$emit('next')">Еще комментарии</button>
@@ -32,10 +32,11 @@
 
 <script>
 
+
 export default {
   name: "CreateComment",
   props: {
-
+    itemID: Number
   },
   data() {
     return {
@@ -52,14 +53,15 @@ export default {
     }
   },
   methods: {
-    postComment(){
+    async postComment(){
       if(this.rating){
         const body = {
-          text: this.text,
-          rating: this.rating,
-          };
-        console.log(body);
+          "rating": +this.rating,
+          "text": this.text,
+        }
         this.$emit('postComment', body);
+        this.rating = 0;
+
         this.isCommentAdded = true;
         this.isErrorOccurred = false;
       } else {
@@ -70,7 +72,6 @@ export default {
       return (fullDate.toISOString().slice(0, 10));
     },
     getTimeNumber(dateFull) {
-      console.log(dateFull);
       let timeNumber = dateFull.toString().split(' ')[4];
       return timeNumber;
     },

@@ -8,7 +8,6 @@ export default {
 
             try {
                 const res = await asyncRequest(path);
-                console.log(path);
                 if (!res.ok) {
                     console.log('не получили данные типов инвентаря');
                     context.commit('updateErrorMessage', 'Не удалось получить данные.');
