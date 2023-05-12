@@ -2,7 +2,7 @@
   <div v-show="isBookingProcessStarted"
        class="pop-up"
        @click="closePopUp">
-    <div class="pop-up__block" v-if="!localStorage">
+    <div class="pop-up__block" v-if="IS_LOGGED_IN">
       <div class="pop-up__text">Вы бронируете <b>{{ typeName }}</b>, стоимостью <b>{{ item.price }} RUB в час</b></div>
       <div class="pop-up__text">На курорте <b>{{ resortName }}</b></div>
       <div class="pop-up__text">Когда: с <b>{{ formattedStartDate }} {{ startTime }}:00</b> по <b>{{ formattedEndDate }}
@@ -21,6 +21,7 @@
 <script>
 import InformationWindow from "@/components/blocks/modal/InformationWindow.vue";
 import paths from "@/data-and-functions/constants/paths";
+import {mapGetters} from "vuex";
 
 export default {
   name: "ConfirmWindow",
@@ -48,6 +49,15 @@ export default {
       endDate: null,
       isBooked: false,
     }
+  },
+  computed: {
+    formattedStartDate() {
+      return this.formatDate(this.selDateStartShort);
+    },
+    formattedEndDate() {
+      return this.formatDate(this.selDateEndShort);
+    },
+    ...mapGetters(['IS_LOGGED_IN'])
   },
   methods: {
     closePopUp() {
@@ -79,14 +89,6 @@ export default {
           total: this.total
         }
       });
-    }
-  },
-  computed: {
-    formattedStartDate() {
-      return this.formatDate(this.selDateStartShort);
-    },
-    formattedEndDate() {
-      return this.formatDate(this.selDateEndShort);
     }
   },
 }
