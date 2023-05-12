@@ -7,15 +7,25 @@
     <div class="my-booking-item__body">
       <p><b>Тип инвентаря:</b> {{ getInvTypeName }}</p>
       <div class="body__term">
-        <p><span>Начало:</span> {{ startTimeFormatted }}</p>
+        <p><b>Начало:</b> {{ startTimeFormatted }}</p>
         <p><b>Конец:</b> {{ endTimeFormatted }}</p>
       </div>
       <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
+
+    </div>
+    <!-- отключить для страници бронирований пользователя -->
+    <div class="my-booking-item__user" v-if="IS_USER_OWNER">
+      <div class="body__term">
+        <p><b>Пользователь:</b> {{ item.user.first_name + " " + item.user.surname + " " + item.user.middle_name }}</p>
+        <p><b>Телефон: </b>{{ item.user.phone }} </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "BookingItem",
   props: {
@@ -30,6 +40,7 @@ export default {
       end_time: String
     },
     inventoryTypes: Array,
+    page: String
   },
   data() {
     return {
@@ -37,6 +48,7 @@ export default {
       endTimeFormatted: ''
     }
   },
+
   methods: {
     formatTime(originTime) {
       let arrDate = originTime.split('-');
@@ -51,6 +63,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['IS_USER_OWNER']),
     getInvTypeName() {
       let typeName = '';
       this.inventoryTypes.forEach(type => {

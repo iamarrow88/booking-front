@@ -4,7 +4,8 @@
     <booking-item v-for="item in booking"
                   :key="item.id"
                   :item="item"
-                  :inventoryTypes="inv_types"></booking-item>
+                  :inventoryTypes="inv_types">
+    </booking-item>
   </div>
 </template>
 
