@@ -30,6 +30,7 @@ import store from "@/store";
 
 
 import StarsRate from "@/components/UI/StarsRate.vue";
+import CreateComment from "@/components/UI/CreateComment.vue";
 
 
 const router = createRouter({
@@ -65,6 +66,7 @@ app.component('ResultItemFromStartPage', ResultItemFromStartPage);
 app.component('ResortDescritption', ResortDescritption);
 app.component('ReviewBlock', ReviewBlock);
 app.component('StarsRate', StarsRate);
+app.component('CreateComment', CreateComment);
 app.component('AuthorizationPage', AuthorizationPage);
 app.component('LoginBlock', LoginBlock);
 app.component('RegistrationBlock', RegistrationBlock);

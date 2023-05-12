@@ -210,7 +210,7 @@ export default {
         });
         if (response.ok) {
           this.resorts = await response.json();
-          this.resorts.forEach(resort => resort.rate = this.setStars())
+          /*this.resorts.forEach(resort => resort.rate = this.setStars())*/
           console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
           this.isNotFoundShown = this.resorts.length === 0;
           setTimeout(() => {
@@ -239,9 +239,9 @@ export default {
         this.hoursNaming = 'часа';
       }
     },
-    setStars() {
+/*    setStars() {
       return Math.floor((Math.random() * 5) + 1);
-    },
+    },*/
     checkStartTime() {
       if (+this.startTime === 24) {
         this.selDateStartShort = this.addDayToDate(this.todayShortDate, 'short', 1);
@@ -326,7 +326,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   width: 17vw;
   max-width: 300px;
 }
@@ -355,7 +355,7 @@ export default {
 .form-group-city {
   margin-bottom: 45px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
 }
 
@@ -392,7 +392,7 @@ export default {
   width: 76vw;
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 30px;
 }
 
