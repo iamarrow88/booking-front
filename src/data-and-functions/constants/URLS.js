@@ -40,11 +40,11 @@ const user = {
 
 const dataArrays = {
     cities: {
-        URL: 'api/cities',
+        URL: '/api/cities',
         METHOD: 'GET',
     },
     inventoryTypes: {
-        URL: 'api/inventories/types',
+        URL: '/api/inventories/types',
         METHOD: 'GET',
     },
 
@@ -56,35 +56,35 @@ const dataArrays = {
 
 const resorts = {
     allResorts: {
-        URL: 'api/resorts',
+        URL: '/api/resorts',
         METHOD: 'GET',
     },
     createResort: {
-        URL: 'api/resorts',
+        URL: '/api/resorts',
         METHOD: 'POST',
     },
     updateResort: {
-        URL: 'api/resorts',
+        URL: '/api/resorts',
         METHOD: 'PUT',
     },
     filteredResorts: {
-        URL: 'api/resorts/filter',
+        URL: '/api/resorts/filter',
         METHOD: 'POST',
     },
     allMyResorts: {
-        URL: 'api/myresorts',
+        URL: '/api/myresorts',
         METHOD: 'GET',
     },
     getInventoryInResort: {
-        URL: 'api/resorts/inventories/',
+        URL: '/api/resorts/inventories/',
         METHOD: 'GET',
     },
     getResortByID: {
-        URL: 'api/resorts/',
+        URL: '/api/resorts/',
         METHOD: 'GET',
     },
     deleteResortByID: {
-        URL: 'api/resorts/',
+        URL: '/api/resorts/',
         METHOD: 'DELETE',
     },
 
@@ -100,31 +100,31 @@ const resorts = {
 
 const inventory = {
     getInventoriesByID: {
-        URL: 'api/inventories/',
+        URL: '/api/inventories/',
         METHOD: 'GET',
     },
     filteredInventories: {
-        URL: 'api/inventories/filter',
+        URL: '/api/inventories/filter',
         METHOD: 'POST',
     },
     updateInventoryImgByID: {
-        URL: 'api/inventories/update_img/',
+        URL: '/api/inventories/update_img/',
         METHOD: 'POST',
     },
     getInventoryImgByID: {
-        URL: 'api/inventories/get_img/',
+        URL: '/api/inventories/get_img/',
         METHOD: 'GET',
     },
     createInventory: {
-        URL: 'api/inventories',
+        URL: '/api/inventories',
         METHOD: 'POST',
     },
     updateInventory: {
-        URL: 'api/inventories',
+        URL: '/api/inventories',
         METHOD: 'PUT',
     },
     deleteInventoryByID: {
-        URL: 'api/inventories/',
+        URL: '/api/inventories/',
         METHOD: 'DELETE',
     },
 
@@ -157,19 +157,19 @@ const inventory = {
 
 const bookings = {
     getBookingByID: {
-        URL: 'api/booking/',
+        URL: '/api/booking/',
         METHOD: 'GET',
     },
     getBookingInResortByID: {
-        URL: 'api/resorts/bookings/',
+        URL: '/api/resorts/bookings/',
         METHOD: 'GET',
     },
     getBookingByOwner: {
-        URL: 'api/resorts/bookings',
+        URL: '/api/resorts/bookings',
         METHOD: 'GET',
     },
     createBooking: {
-        URL: 'api/booking',
+        URL: '/api/booking',
         METHOD: 'POST',
     },
 

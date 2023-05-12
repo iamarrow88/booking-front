@@ -21,7 +21,7 @@
 <script>
 import InformationWindow from "@/components/blocks/modal/InformationWindow.vue";
 import paths from "@/data-and-functions/constants/paths";
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "ConfirmWindow",
@@ -41,7 +41,8 @@ export default {
     selDateEndShort: String,
     startTime: String,
     endTime: String,
-    total: Number
+    total: Number,
+    duration: Number
   },
   data() {
     return {
@@ -57,9 +58,10 @@ export default {
     formattedEndDate() {
       return this.formatDate(this.selDateEndShort);
     },
-    ...mapGetters(['IS_LOGGED_IN'])
+    ...mapGetters(['IS_LOGGED_IN', 'GET_SAVED_DATA'])
   },
   methods: {
+    ...mapMutations(['updateSavedData']),
     closePopUp() {
       this.$emit('closePopUp', false, this.isBooked)
     },
@@ -69,15 +71,19 @@ export default {
     },
     GoToAuthPage(){
       console.log('go to auth page');
-      this.$router.push({
-        path: paths.LoginPage, query: {
-          selDateStartShort: this.selDateStartShort,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          itemId: this.item.id,
-          total: this.total
-        }
-      });
+      const saved = {
+        itemTypeName: this.typeName,
+        itemPrice: this.item.price,
+        resortName: this.resortName,
+        startDateShort: this.selDateStartShort,
+        endDateShort: this.selDateEndShort,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        duration: this.duration,
+        totalPrice: this.total,
+      }
+      this.updateSavedData(saved);
+      this.$router.push({ path: paths.LoginPage, query: { toPayment: true} });
     },
     async goPaymentPage() {
       this.$router.push({
