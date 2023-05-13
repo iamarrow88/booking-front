@@ -64,18 +64,31 @@
                       @isAddItemBlockOpen="closeAddItem"></inventory-card>
     </div>
 
-    <confirm-window v-if="!editMode" :item="item"
-                    :typeName="type.name"
-                    :isBookingProcessStarted="isBookingProcessStarted"
-                    :resortName="resortName"
-                    :selDateStartShort="selDateStartShort"
-                    :selDateEndShort="selDateEndShort"
-                    :startTime="startTime"
-                    :endTime="endTime"
-                    :total="item.price * duration"
-                    :duration="duration"
-                    @closePopUp="closePopUp"></confirm-window>
-    <success-window :isOpen="isBooked" @closePopUp="closePopUp"></success-window>
+
+    <div v-if="isAddingItemModeOn">
+      <inventory-card :IsEditEquipmModeOnFParent="true"
+                      :resortIdFromParent="resortId"
+                      :itemFromParent="item"
+                      @isAddItemBlockOpen="closeAddItem"></inventory-card>
+    </div>
+
+    <teleport to="body">
+      <confirm-window v-if="!editMode" :item="item"
+                      :typeName="type.name"
+                      :isBookingProcessStarted="isBookingProcessStarted"
+                      :resortName="resortName"
+                      :selDateStartShort="selDateStartShort"
+                      :selDateEndShort="selDateEndShort"
+                      :startTime="startTime"
+                      :endTime="endTime"
+                      :total="item.price * duration"
+                      :duration="duration"
+                      @closePopUp="closePopUp"></confirm-window>
+    </teleport>
+    <teleport to="body">
+      <success-window :isOpen="isBooked" @closePopUp="closePopUp"></success-window>
+    </teleport>
+
   </div>
 </template>
 
