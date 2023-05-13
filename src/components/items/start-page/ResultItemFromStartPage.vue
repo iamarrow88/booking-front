@@ -9,7 +9,7 @@
         </p>
       </div>
       <div class="item__rate">
-        <stars-rate :rate="resort.rate"></stars-rate>
+        <stars-rate :rate="Math.round(resort.avg_rating)"></stars-rate>
       </div>
 
       <button @click="showMore"
@@ -35,14 +35,18 @@
 
     </div>
     <div class="reviews">
-      <div class="reviews__title">Отзывы</div>
-      <review-block v-for="review in reviews"
-                    :review="review"
-                    :users="users"
-                    :key="review.id"
-                    :class="{active: review.index === this.currentReview}"
-                    @prev="prev"
-                    @next="next"></review-block>
+      {{resort.description}}
+<!--      <div class="reviews__title">Отзывы</div>-->
+<!--      <review-block v-for="review in reviews"-->
+<!--                    :review="review"-->
+<!--                    :key="review.id"-->
+<!--                    :class="{active: review.index === this.currentReview}"-->
+<!--                    @prev="prev"-->
+<!--                    @next="next"-->
+<!--                    @deleteComment="deleteComment"></review-block>-->
+
+<!--      <create-comment v-if="showAddComment" @next="next"-->
+<!--                      @postComment="postComment"></create-comment>-->
     </div>
   </li>
 </template>
@@ -50,6 +54,7 @@
 <script>
 import starsRate from "@/components/UI/StarsRate.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
+import {comments} from "@/data-and-functions/constants/URLS";
 
 export default {
   name: "ResultItemFromStartPage",
@@ -62,7 +67,8 @@ export default {
       owner_id: Number,
       description: String,
       address: String,
-      rate: Number
+      rate: Number,
+      avg_rating: Number,
     },
     selectedType: {
       id: Number,
@@ -77,7 +83,6 @@ export default {
     startTime: String,
     endTime: String,
     duration: Number,
-    rate: Number
   },
   data() {
     return {
@@ -85,13 +90,22 @@ export default {
       users: [],
       reviews: [],
       currentReview: 0,
+      showAddComment: false,
+    }
+  },
+  watch: {
+    currentReview(){
+      this.showAddComment = this.currentReview === this.reviews.length;
     }
   },
   methods: {
     showMore(e) {
-      const parent = e.target.parentNode;
-      parent.parentElement.classList.toggle('showMore');
-      this.isMoreShown = !this.isMoreShown;
+      if([...e.target.closest('.result-item').classList].includes('showMore')) {
+        e.target.closest('.result-item').classList.remove('showMore');
+      } else {
+        document.querySelectorAll('.result-item').forEach(card => card.classList.remove('showMore'));
+        e.target.closest('.result-item').classList.add('showMore');
+      }
     },
     async getUsers() {
       try {
@@ -105,9 +119,9 @@ export default {
         console.error(e);
       }
     },
-    async getReviews() {
+    async getReviewsByResortID() {
       try {
-        const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+        const res = await fetch(comments.getCommentsByResortID.URL+this.resort.id);
         if (res.ok) {
           this.reviews = await res.json();
         } else {
@@ -122,18 +136,66 @@ export default {
     },
     prev() {
       this.currentReview -= 1;
-      if (this.currentReview < 0) this.currentReview = (this.reviews.length - 1);
-
+      console.log('prev' + this.currentReview);
+      if (this.currentReview < 0) this.currentReview = this.reviews.length;
     },
     next() {
       this.currentReview += 1;
-      if (this.currentReview >= this.reviews.length) this.currentReview = 0;
+      console.log('next' + this.currentReview);
+      if (this.currentReview > this.reviews.length) this.currentReview = 0;
 
-    }
+    },
+    /*async deleteComment(id){
+      console.log('deleteComment');
+
+      const body = {
+        id: +id,
+      }
+      console.log(body);
+      try {
+        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
+
+        if(res.ok){
+          console.log(res);
+          console.log('комментарий удален');
+          this.currentReview -= 1;
+          await this.getReviewsByInventoryID();
+        } else {
+          console.log(res);
+
+          console.log('комментарий не удален, ошибка');
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async postComment(comment){
+      const body = {
+        "resort_id": +this.resort.id,
+        "rating": +comment.rating,
+        "text": comment.text,
+      }
+
+      try {
+        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
+        console.log('комментарий отправлен');
+        if(!res.ok){
+          console.log('комментарий не создан, ошибка.');
+        } else {
+          console.log('Комментарий отправлен');
+          const comment = await res.json();
+          console.log(comment);
+          this.currentReview += 1;
+          await this.getReviewsByInventoryID();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },*/
   },
   mounted() {
     this.getUsers();
-    this.getReviews();
+    this.getReviewsByResortID();
   }
 }
 </script>
@@ -188,7 +250,7 @@ export default {
 .item__address {
   margin-bottom: 20px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 7px;
   width: 100%;
   order: 2
@@ -285,7 +347,7 @@ export default {
 
 .showMore .reviews {
   display: block;
-  width: 50%;
+  width: 45%;
   text-align: left;
 }
 

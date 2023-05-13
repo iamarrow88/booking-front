@@ -49,7 +49,7 @@
         <div class="filters__type type">
           <label for="typeInput" class="type__label">Тип инвентаря</label>
           <select class="type__select" id="typeInput" v-model="selectedType">
-            <option v-for="type in types"
+            <option v-for="type in GET_INVENTORY_TYPES"
                     :key="type.id"
                     :value="type"
                     class="type__option">{{ type.name }}
@@ -62,7 +62,7 @@
     </div>
 
 
-    <div class="results">
+    <div class="results" ref="results">
       <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
       <div class="results__wrapper" v-if="items.length > 0">
         <ul class="results__list">
@@ -70,7 +70,6 @@
                                  class="results__item"
                                  :key="item.id"
                                  :item="item"
-                                 :types="types"
                                  :typeId="item.type_id"
                                  :resortName="resortName"
                                  :editMode="false"
@@ -93,13 +92,13 @@
 
 <script>
 import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
+import {mapGetters} from "vuex";
 
 export default {
   components: SearchEquipmentItem,
   data() {
     return {
       items: [],
-      types: [],
       notFilteredItems: [],
       filteredItems: [],
 
@@ -118,11 +117,68 @@ export default {
       isToday: '',
 
       startCounter: 0,
+      startDateCounter: 0,
     }
+  },
+  watch: {
+    selectedType: {
+      deep: true,
+      handler: function (newValue) {
+        this.filteredItems = this.notFilteredItems.filter(item => item.type_id === newValue.id)
+
+      }
+    },
+    duration(newDuration) {
+      this.calcHoursNaming(newDuration);
+    },
+    startTime(newTime) {
+      if (this.startCounter !== 0) {
+        this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1).toString();
+      } else {
+        this.startCounter += 1;
+      }
+      if (+this.endTime > 24) {
+        const MsInHour = 60 * 60 * 1000;
+        const hoursToAdd = (+newTime + 1) * MsInHour;
+        let endTime = new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
+        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
+        this.selDateEndShort = this.addDayToDate(this.todayDateFull, 1);
+      }
+      this.createEndOptions(newTime);
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    endTime() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateEndShort() {
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+    selDateStartShort(newDate) {
+      if (newDate !== this.todayShortDate) {
+        document.querySelector('#dateEnd').setAttribute('min', this.selDateStartShort);
+        if (this.startDateCounter !== 0) {
+          this.startTime = '10';
+          this.selDateEndShort = newDate;
+          this.createStartOptions(this.startTime, false);
+        } else {
+          this.createStartOptions(this.startTime, true);
+          this.startDateCounter+= 1;
+        }
+        this.createEndOptions(this.startTime);
+      }
+      this.duration = this.calcDuration();
+      this.calcHoursNaming(this.duration);
+    },
+  },
+  computed: {
+    ...mapGetters(['GET_INVENTORY_TYPES']),
   },
   methods: {
     getEquipmentType() {
-      this.types.forEach(type => {
+      this.GET_INVENTORY_TYPES.forEach(type => {
         if (type.id === this.itemTypeId) {
           this.selectedType = type;
         }
@@ -180,57 +236,20 @@ export default {
       }
     }
   },
-  watch: {
-    selectedType: {
-      deep: true,
-      handler: function (newValue) {
-        this.filteredItems = this.notFilteredItems.filter(item => item.type_id === newValue.id)
 
-      }
-    },
-    duration(newDuration) {
-      this.calcHoursNaming(newDuration);
-    },
-    startTime(newTime) {
-      if (this.startCounter !== 0) {
-        this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1);
-      } else {
-        this.startCounter += 1;
-      }
-      if (this.endTime > 24) {
-        const MsInHour = 60 * 60 * 1000;
-        const hoursToAdd = (+newTime + 1) * MsInHour;
-        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
-        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
-        this.selDateEndShort = this.addDayToDate(this.todayDateFull, 1);
-      }
-      this.createEndOptions(newTime);
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    endTime() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateEndShort() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateStartShort(newDate) {
-      if (newDate !== this.todayShortDate) {
-        document.querySelector('#dateEnd').setAttribute('min', this.selDateStartShort);
-        if (this.startCounter !== 0) {
-          this.startTime = '10';
-          this.selDateEndShort = newDate;
-        }
-        this.createStartOptions(this.startTime, false);
-        this.createEndOptions(this.startTime);
-      }
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-  },
   async mounted() {
+    this.itemTypeId = +this.$route.query.type_id;
+    this.selDateStartShort = this.$route.query.selDateStartShort;
+    this.selDateEndShort = this.$route.query.selDateEndShort;
+    this.startTime = this.$route.query.startTime;
+    this.endTime = this.$route.query.endTime;
+    this.duration = this.$route.query.duration;
+    this.todayDateFull = new Date();
+    this.isToday = this.getShortDate(this.todayDateFull) === this.selDateStartShort;
+    this.createStartOptions(this.startTime, this.isToday);
+    this.createEndOptions(this.startTime);
+    this.$refs.dateStart.setAttribute('min', this.todayShortDate);
+    this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
     try {
       const response = await fetch(`/api/resorts/${this.$route.params.id}`)
       const resort = await response.json()
@@ -241,6 +260,10 @@ export default {
     try {
       const response = await fetch(`/api/resorts/inventories/${this.$route.params.id}`)
       this.notFilteredItems = await response.json();
+      setTimeout(() => {
+        const resultsBlock = this.$refs.results;
+        resultsBlock.scrollIntoView({behavior: "smooth", block: "start"});
+      }, 1)
     } catch (error) {
       console.error(error)
     }
@@ -251,27 +274,6 @@ export default {
       this.items = this.notFilteredItems;
     }
   },
-  async created() {
-    this.itemTypeId = +this.$route.query.type_id;
-    this.selDateStartShort = this.$route.query.selDateStartShort;
-    this.selDateEndShort = this.$route.query.selDateEndShort;
-    this.startTime = this.$route.query.startTime;
-    this.endTime = this.$route.query.endTime;
-    this.duration = this.$route.query.duration;
-    this.todayDateFull = new Date();
-    this.isToday = this.getShortDate(this.todayDateFull) === this.selDateStartShort;
-    try {
-      const types = await fetch('/api/inventories/types')
-      this.types = await types.json();
-    } catch (error) {
-      console.error(error)
-    }
-    this.createStartOptions(this.startTime, this.isToday);
-    this.createEndOptions(this.startTime);
-    this.$refs.dateStart.setAttribute('min', this.todayShortDate);
-    this.$refs.dateEnd.setAttribute('min', this.selDateStartShort);
-  },
-
 }
 </script>
 
@@ -356,10 +358,11 @@ label.date__label, label.time__label, label.type__label {
 .results__list {
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: flex-start;
   gap: 20px;
   justify-items: stretch;
+  flex-wrap: wrap;
 }
 
 .results__item {

@@ -234,12 +234,6 @@ button:hover {
   background-color: #0069d9;
 }
 
-.error-message {
-  color: #dc3545;
-  font-size: 16px;
-  margin-top: 10px;
-}
-
 .title {
   font-size: 32px;
   font-weight: 600;

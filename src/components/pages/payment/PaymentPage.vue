@@ -41,6 +41,7 @@
 
 <script>
 import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
+import paths from "@/data-and-functions/constants/paths";
 
 export default {
   name: "PaymentPage",
@@ -86,7 +87,7 @@ export default {
     },
     closePopUp(bool1) {
       this.isOpen = bool1;
-      this.$router.push('/mybooking')
+      this.$router.push(paths.UserBookingPage)
     }
   },
   created() {
@@ -133,7 +134,7 @@ export default {
 
 .card__img {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   /*background-image: url("../assets/card.png");*/
 }
 
@@ -156,7 +157,7 @@ input {
 .front-card__inputs {
   z-index: 5;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: column;
   background-color: #dae8f6;
 }

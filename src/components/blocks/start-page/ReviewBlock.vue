@@ -1,33 +1,42 @@
 <template>
   <div class="block">
-    <div class="block__btns">
-      <button class="up" @click="previous">Previous</button>
-      <button class="down" @click="next">Next</button>
-    </div>
     <div class="review">
       <div class="review__author"><img src='../../../assets/admin.png' alt="avatar" class="author__img">
-        <div class="author__name">{{ user.name }}</div>
+        <div class="author__name">{{ review.user_name  }}</div>
       </div>
-      <div class="review__title">{{ review.title }}</div>
+      <div class="review__rate">
+        <stars-rate :rate="this.review.rating"></stars-rate>
+      </div>
       <div class="review__text">
-        {{ review.body }}
+        {{ review.text }}
       </div>
-      <div class="review__date">22/04/22</div>
+      <div class="review__date">{{ review.createdAt }}</div>
+    </div>
+    <div class="block__btns">
+      <button class="up" @click="previous">Предыдущий</button>
+      <button class="down" @click="deleteComment" v-if="review.user_id===+this.GET_ALL_USER_INFO.id">Удалить</button>
+      <button class="down" @click="next">Следующий</button>
     </div>
   </div>
 
 </template>
 
 <script>
+import StarsRate from "@/components/UI/StarsRate.vue";
+import {mapGetters} from "vuex";
+
 export default {
   name: "ReviewBlock",
+  components: StarsRate,
   props: {
-    users: Array,
     review: {
-      userId: Number,
       id: Number,
-      title: String,
-      body: String
+      userId: Number,
+      inventory_id: Number,
+      rating: Number,
+      text: String,
+      createdAt: String,
+      user_name: String,
     }
   },
   data() {
@@ -46,24 +55,20 @@ export default {
       currentUserId: null,
     }
   },
+  computed: {
+    ...mapGetters(['GET_ALL_USER_INFO'])
+  },
   methods: {
-    findReviewAuthor(userId) {
-      for (let i = 0; i < this.users.length; i++) {
-        if (userId === this.users[i].id) {
-          this.user = this.users[i];
-        }
-      }
-    },
     previous() {
       this.$emit('prev');
     },
     next() {
       this.$emit('next');
+    },
+    deleteComment(){
+      this.$emit('deleteComment', this.review.id)
     }
   },
-  mounted() {
-    this.findReviewAuthor(this.review.userId);
-  }
 }
 </script>
 

@@ -138,20 +138,27 @@ button.action {
 .my-booking-item__id {
     margin: 0;
     font-size: 1.25rem;
-    font-weight: bold;
     width: 100%;
     text-align: left;
 }
 
+
 .my-booking-item__resort {
     margin: 0;
     font-size: 1.25rem;
-    color: #666;
     width: 100%;
     text-align: left;
 }
 
 .my-booking-item__body {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    justify-items: center;
+}
+.my-booking-item__user {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -166,6 +173,20 @@ button.action {
 
 .active {
     display: block;
+}
+
+.showMore {
+    width: 93%;
+    order: 1;
+    transition: all .3ms;
+    padding: 40px;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 16px;
+    margin-top: 10px;
+
 }
 
 @media (max-width: 767px) {
