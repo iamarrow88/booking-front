@@ -58,7 +58,15 @@ export default {
   methods: {
     async bookingItem() {
       const startTime = this.$route.query.startTime + ':00:00';
-      const endTime = this.$route.query.endTime + ':00:00';
+      /*const endTime = this.$route.query.endTime + ':00:00';*/
+      let endTime, endDate;
+      if(+this.$route.query.endTime === 24){
+        endTime = '00:00:00';
+        endDate = this.addDayToDate(this.$route.query.selDateStartShort, 'short', 1);
+      } else {
+        endTime = this.$route.query.endTime;
+        endDate = this.$route.query.selDateStartShort;
+      }
       try {
         const response = await fetch('/api/booking', {
           method: 'POST',
@@ -70,7 +78,7 @@ export default {
           body: JSON.stringify({
             inventory_id: +this.$route.query.itemId,
             start_time: this.$route.query.selDateStartShort + 'T' + startTime + 'Z',
-            end_time: this.$route.query.selDateStartShort + 'T' + endTime + 'Z'
+            end_time: endDate + 'T' + endTime + 'Z'
           })
         });
         if (response.ok) {
@@ -88,7 +96,11 @@ export default {
     closePopUp(bool1) {
       this.isOpen = bool1;
       this.$router.push(paths.UserBookingPage)
-    }
+    },
+    addDayToDate(dateFull, dateType, daysToAdd) {
+      let date = dateType === 'short' ? new Date(dateFull) : dateFull;
+      return new Date(date.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
+    },
   },
   created() {
     if(!localStorage.getItem('firstName')){

@@ -124,15 +124,20 @@ export default {
       this.createEndOptions(newTime);
       this.duration = this.calcDuration();
       this.calcHoursNaming(this.duration);
-
-    },
+      this.$store.commit('setStartTime', this.startTime);
+      this.$store.commit('setEndTime', this.endTime);
+      },
     endTime() {
-      this.duration = this.calcDuration();
+
       this.calcHoursNaming(this.duration);
+      this.createEndOptions('00');
+      this.$store.commit('setEndTime', this.endTime);
+      this.duration = this.calcDuration();
     },
     selDateEndShort() {
       this.duration = this.calcDuration();
       this.calcHoursNaming(this.duration);
+      this.$store.commit('setEndDate', this.selDateEndShort);
     },
     selDateStartShort(newDate) {
       if (newDate !== this.todayShortDate) {
@@ -142,9 +147,14 @@ export default {
         this.createStartOptions(this.startTime, false);
         this.createEndOptions(this.startTime);
       }
+      this.$store.commit('setStartDate', this.selDateStartShort);
       this.duration = this.calcDuration();
       this.calcHoursNaming(this.duration);
+
     },
+    selectedType(newInvType){
+      this.$store.commit('setSelectedInvType', newInvType);
+    }
   },
   computed: {
     ...mapGetters(['GET_INVENTORY_TYPES', 'GET_CITIES']),
@@ -191,7 +201,15 @@ export default {
     },
     async getResorts() {
       const startTime = this.startTime + ':00:00';
-      const endTime = (this.endTime === 24 ? '23:59:59' : this.endTime + ':00:00');
+      let endTime, endDate;
+      if(+this.endTime === 24) {
+        endTime = '00:00:00';
+        endDate = this.addDayToDate(this.selDateEndShort, 'short', 1);
+      } else {
+        endTime = this.endTime;
+        endDate = this.selDateEndShort;
+      }
+
       console.log(`Getting resorts for ${this.selectedCity.name}`);
 
       try {
@@ -205,7 +223,7 @@ export default {
             city_id: this.selectedCity.id,
             type_id: this.selectedType.id,
             start_time: this.selDateStartShort + 'T' + startTime + '.000Z',
-            end_time: this.selDateStartShort + 'T' + endTime + '.000Z',
+            end_time: endDate + 'T' + endTime + '.000Z',
           })
         });
         if (response.ok) {
@@ -239,9 +257,6 @@ export default {
         this.hoursNaming = 'часа';
       }
     },
-/*    setStars() {
-      return Math.floor((Math.random() * 5) + 1);
-    },*/
     checkStartTime() {
       if (+this.startTime === 24) {
         this.selDateStartShort = this.addDayToDate(this.todayShortDate, 'short', 1);

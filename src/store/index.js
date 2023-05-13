@@ -2,6 +2,7 @@ import {createStore} from 'vuex';
 import authorization from "@/store/modules/authorization";
 import inventory from "@/store/modules/inventory";
 import selected from "@/store/modules/selected";
+import comments from "@/store/modules/comments";
 
 
 const store = createStore({
@@ -22,7 +23,7 @@ const store = createStore({
     },
 
     modules: {
-        authorization, inventory, selected
+        authorization, inventory, selected, comments
     }
 });
 
