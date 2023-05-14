@@ -313,7 +313,6 @@ export default {
 
 <style scoped>
 .equipment-item {
-  width: 23%;
   padding: 40px;
   border: 0 solid #899bb0;
   box-shadow: 7px 7px 20px #c5daf3;

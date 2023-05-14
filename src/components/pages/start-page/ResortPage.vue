@@ -65,7 +65,7 @@
     <div class="results" ref="results">
       <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
       <div class="results__wrapper" v-if="items.length > 0">
-        <ul class="results__list">
+        <div class="results__grid">
           <search-equipment-item v-for="item in filteredItems"
                                  class="results__item"
                                  :key="item.id"
@@ -78,12 +78,10 @@
                                  :startTime="startTime"
                                  :endTime="endTime"
                                  :duration="duration"
-                                 :hoursNaming="hoursNaming"
-          ></search-equipment-item>
-
-        </ul>
-      </div>
-      <div v-else class="results__empty-list-error">
+                                 :hoursNaming="hoursNaming">
+          </search-equipment-item>
+        </div>
+      </div>      <div v-else class="results__empty-list-error">
         Ничего не найдено
       </div>
     </div>
@@ -354,14 +352,15 @@ label.date__label, label.time__label, label.type__label {
   margin-bottom: 50px;
 }
 
-.results__list {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
-  justify-items: stretch;
-  flex-wrap: wrap;
+
+.results__wrapper {
+  margin: 0 auto;
+}
+
+.results__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 16px;
 }
 
 .results__item {

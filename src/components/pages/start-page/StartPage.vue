@@ -58,19 +58,21 @@
     <div ref="results">
       <div v-if="resorts.length > 0" class="results-block">
         <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
-        <ul class="results-list">
-          <result-item-from-start-page v-for="resort in resorts"
-                                       :key="resort.id"
-                                       :resort="resort"
-                                       :selectedType="selectedType"
-                                       :selectedCity="selectedCity"
-                                       :selDateStartShort="selDateStartShort"
-                                       :selDateEndShort="selDateEndShort"
-                                       :startTime="startTime"
-                                       :endTime="endTime"
-                                       :duration="duration"
-                                       :rate="resort.rate"/>
-        </ul>
+        <div class="results__wrapper">
+          <div class="results__grid">
+            <result-item-from-start-page v-for="resort in resorts"
+                                         :key="resort.id"
+                                         :resort="resort"
+                                         :selectedType="selectedType"
+                                         :selectedCity="selectedCity"
+                                         :selDateStartShort="selDateStartShort"
+                                         :selDateEndShort="selDateEndShort"
+                                         :startTime="startTime"
+                                         :endTime="endTime"
+                                         :duration="duration"
+                                         :rate="resort.rate"/>
+          </div>
+        </div>
       </div>
       <div v-else-if="isNotFoundShown" class="results-none">
         Ничего на найдено, попробуйте другой город или другое снаряжение
@@ -126,7 +128,7 @@ export default {
       this.calcHoursNaming(this.duration);
       this.$store.commit('setStartTime', this.startTime);
       this.$store.commit('setEndTime', this.endTime);
-      },
+    },
     endTime() {
 
       this.calcHoursNaming(this.duration);
@@ -152,7 +154,7 @@ export default {
       this.calcHoursNaming(this.duration);
 
     },
-    selectedType(newInvType){
+    selectedType(newInvType) {
       this.$store.commit('setSelectedInvType', newInvType);
     }
   },
@@ -398,13 +400,16 @@ export default {
   font-size: 2em;
 }
 
-.results-list {
+.results__wrapper {
   margin: 0 auto;
-  width: 76vw;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 30px;
+}
+
+.results__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 2%;
+  padding: 3%;
+
 }
 
 .form-title {

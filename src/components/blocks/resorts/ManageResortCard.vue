@@ -11,7 +11,9 @@
     </button>
     <create-resort-block v-if="isEditComponent"
                          :editMode="false"
-                         @updateResort="editResort"></create-resort-block>
+                         @updateResort="editResort">
+
+    </create-resort-block>
   </div>
   <div v-if="errorMessage" class="error-message">
     {{ errorMessage }}

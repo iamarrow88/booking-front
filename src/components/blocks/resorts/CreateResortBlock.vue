@@ -32,20 +32,25 @@
               @click="getEquipments">Управлять инвентарем
       </button>
       <div class="equipment-list" v-if="!isEquipmManagingHide && equipments.length > 0">
-        <search-equipment-item v-for="item in equipments"
-                               :key="item.id"
-                               :item="item"
-                               :resortId="resortId"
-                               :types="types"
-                               :editMode="true"
-                               @DeleteItem="deleteItem"></search-equipment-item>
+        <div class="equipment-grid">
+          <div class="equipment-grid-item" v-for="item in equipments" :key="item.id">
+            <search-equipment-item :item="item"
+                                   :resortId="resortId"
+                                   :types="types"
+                                   :editMode="true"
+                                   @DeleteItem="deleteItem">
+            </search-equipment-item>
+          </div>
+        </div>
       </div>
       <div class="add-item">
         <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
         <inventory-card :IsEditEquipmModeOnFParent="false"
                         :resortIdFromParent="resortId"
                         v-if="isAddingItemModeOn"
-                        @isAddItemBlockOpen="closeAddItem"></inventory-card>
+                        @isAddItemBlockOpen="closeAddItem">
+
+        </inventory-card>
 
       </div>
     </div>
@@ -234,5 +239,20 @@ input {
 
 .resort-name label {
   margin-bottom: 10px;
+}
+.equipment-list {
+  margin: 0 auto;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 16px;
+}
+.equipment-grid-item {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
