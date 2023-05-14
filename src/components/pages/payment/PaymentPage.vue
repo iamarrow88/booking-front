@@ -42,6 +42,7 @@
 <script>
 import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import {mapGetters} from "vuex";
+import paths from "@/data-and-functions/constants/paths";
 
 export default {
   name: "PaymentPage",
@@ -99,7 +100,7 @@ export default {
     },
     closePopUp(bool1) {
       this.isOpen = bool1;
-      this.$router.push('/mybooking')
+      this.$router.push(paths.UserBookingPage)
     }
   },
   created() {
@@ -108,14 +109,6 @@ export default {
 
     }
     this.total = this.$route.query.total;
-    /*
-    * props: {
-    selDateStartShort: String,
-    startTime: String,
-    endTime: String,
-    itemId: String,
-    total: String
-  },*/
   }
 }
 </script>
