@@ -1,9 +1,9 @@
 <template>
-  <div class="login-block">
+  <div class="login">
     <div v-if="GET_ERROR_MESSAGE" class="error-message">
       {{ GET_ERROR_MESSAGE }}
     </div>
-    <div v-if="!IS_LOGGED_IN">
+    <div v-if="!IS_LOGGED_IN" class="login-block">
       <h3 class="subtitle">Войти</h3>
       <div class="form-group">
         <label for="emailLogInput">Email:</label>
@@ -30,13 +30,15 @@
              v-if="isPasswordLoginNull">Введите пароль
         </div>
       </div>
-      <button class="btn btn-primary cards-btn"
-              @click="login">Войти в аккаунт
-      </button>
+      <div class="buttons">
+        <button class="btn cards-btn"
+                @click="login">Войти в аккаунт
+        </button>
 
-      <button @click="this.$emit('entryBlockToggle', false)"
-              class="sub-btn">Зарегистрироваться
-      </button>
+        <button @click="this.$emit('entryBlockToggle', false)"
+                class="sub-btn">Зарегистрироваться
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -79,5 +81,23 @@ export default {
 </script>
 
 <style scoped>
+
+.login-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px
+}
+button {
+  width: 30%;
+  margin: 0 auto;
+}
 
 </style>

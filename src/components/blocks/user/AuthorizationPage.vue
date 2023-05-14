@@ -69,12 +69,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .container {
   max-width: 600px;
+  min-height: 300px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 40px;
+  border: 2px solid grey;
+  box-shadow: 1px 1px 12px #fdd4bd;
 }
 
 .form-group {

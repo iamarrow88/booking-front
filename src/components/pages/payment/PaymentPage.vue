@@ -75,7 +75,6 @@ export default {
           end_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.endTime + ':00:00Z'
         }
       }
-      console.log(body);
       try {
         const response = await fetch('/api/booking', {
           method: 'POST',

@@ -236,51 +236,6 @@ export default {
       }
     }
   },
-
-      }
-    },
-    duration(newDuration) {
-      this.calcHoursNaming(newDuration);
-    },
-    startTime(newTime) {
-      if (this.startCounter !== 0) {
-        this.endTime = (+this.startTime + 1) < 10 ? '0' + (+this.startTime + 1) : (+this.startTime + 1).toString();
-      } else {
-        this.startCounter += 1;
-      }
-      if (this.endTime > 24) {
-        const MsInHour = 60 * 60 * 1000;
-        const hoursToAdd = (+newTime + 1) * MsInHour;
-        let endTime = +new Date(Date.parse(this.startDateFull) + hoursToAdd).toString().split(':')[0].slice(-2);
-        this.endTime = endTime.toString().length === 1 ? '0' + endTime : endTime.toString();
-        this.selDateEndShort = this.addDayToDate(this.todayDateFull, 1);
-      }
-      this.createEndOptions(newTime);
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    endTime() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateEndShort() {
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-    selDateStartShort(newDate) {
-      if (newDate !== this.todayShortDate) {
-        document.querySelector('#dateEnd').setAttribute('min', this.selDateStartShort);
-        if (this.startCounter !== 0) {
-          this.startTime = '10';
-          this.selDateEndShort = newDate;
-        }
-        this.createStartOptions(this.startTime, false);
-        this.createEndOptions(this.startTime);
-      }
-      this.duration = this.calcDuration();
-      this.calcHoursNaming(this.duration);
-    },
-  },
   async mounted() {
     this.itemTypeId = +this.$route.query.type_id;
     this.selDateStartShort = this.$route.query.selDateStartShort;

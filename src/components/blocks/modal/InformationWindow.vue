@@ -32,6 +32,14 @@ export default {
   width: 350px;
   height: 160px;
   gap: 30px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 .btn:last-child {
   margin: 10px auto 0;
