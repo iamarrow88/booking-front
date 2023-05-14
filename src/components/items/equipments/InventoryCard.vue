@@ -14,12 +14,8 @@
   <label for="price" class="create-price">Введите стоимость</label>
   <input type="number" class="create-price-input" v-model="price" min="1">
 
-  <!--  <label class="create-upload" for="upload-img">Загрузите фото</label>
-    <input type="file" name="img" id="img" accept="image/*" class="create-upload-file">-->
-  <form action="/upload" method="post" enctype="multipart/form-data" ref="uploadPhoto">
-    <input type="file" name="photo">
-    <input type="submit" value="Upload">
-  </form>
+  <label for="uploadPhoto" class="upload-photo-label">Загрузить фото</label>
+  <input type="file" id="uploadPhoto" ref="uploadPhoto" @change="onFileSelected"/>
 
   <button @click="createItem" class="cards-btn">{{
       IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать"
@@ -55,6 +51,9 @@ export default {
 
       isEditEquipmModeOnFComp: null,
       counter: 0,
+
+      selectedFile: null,
+
     }
   },
   methods: {
@@ -95,31 +94,40 @@ export default {
       }
     },
     async uploadPhoto(itemId) {
-      const photoBlock = this.$refs.uploadPhoto;
-      const uploadPhotoForm = new FormData(photoBlock);
-      console.log(itemId);
-      for (let [name, value] in uploadPhotoForm) {
-        console.log(`name - ${name}, value - ${value}`);
+      if (!this.selectedFile) {
+        console.log('No file selected');
+        return;
       }
+
+      const uploadPhotoForm = new FormData();
+      uploadPhotoForm.append('id', itemId);
+      uploadPhotoForm.append('image', this.selectedFile);
 
       try {
         const response = await fetch(`/api/inventories/update_img/${itemId}`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${localStorage.getItem('token')}`
           },
           body: uploadPhotoForm
         });
+
         if (response.ok) {
           console.log('OK upload photo');
         } else {
-          console.log('ошибка upload photo')
+          console.log('ошибка upload photo');
         }
       } catch (error) {
         console.error(error);
       }
     },
+
+    onFileSelected(event) {
+      if (event.target.files.length > 0) {
+        this.selectedFile = event.target.files[0];
+      }
+    },
+
     getResortName() {
       this.resorts.forEach(resort => {
         if (resort.id === this.resortIdFromParent) this.resortName = resort.name;

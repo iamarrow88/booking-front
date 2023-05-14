@@ -3,6 +3,7 @@ import authorization from "@/store/modules/authorization";
 import inventory from "@/store/modules/inventory";
 import selected from "@/store/modules/selected";
 import comments from "@/store/modules/comments";
+import savedData from "@/store/modules/savedData";
 
 
 const store = createStore({
@@ -23,7 +24,7 @@ const store = createStore({
     },
 
     modules: {
-        authorization, inventory, selected, comments
+        authorization, inventory, selected, comments, savedData
     }
 });
 

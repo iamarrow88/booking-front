@@ -165,7 +165,7 @@ export default {
           this.createStartOptions(this.startTime, false);
         } else {
           this.createStartOptions(this.startTime, true);
-          this.startDateCounter+= 1;
+          this.startDateCounter += 1;
         }
         this.createEndOptions(this.startTime);
       }
@@ -236,7 +236,6 @@ export default {
       }
     }
   },
-
   async mounted() {
     this.itemTypeId = +this.$route.query.type_id;
     this.selDateStartShort = this.$route.query.selDateStartShort;

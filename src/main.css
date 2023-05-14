@@ -12,6 +12,11 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0;
 }
 
+a, a:visited, a:active, a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
 button {
     padding: 7px 20px;
     border: 2px solid #fb946d;
@@ -142,7 +147,6 @@ button.action {
     text-align: left;
 }
 
-
 .my-booking-item__resort {
     margin: 0;
     font-size: 1.25rem;
@@ -169,6 +173,10 @@ button.action {
 
 .body__term {
     text-align: left;
+}
+
+.active {
+    display: block;
 }
 
 .active {

@@ -21,6 +21,7 @@ export default {
 
         },
         async loginUser(context, body) {
+            console.log('loggin in');
             try {
                 const res = await asyncRequest(user.login.URL, body, user.login.METHOD, headerAPI);
                 if (!res.ok) {
