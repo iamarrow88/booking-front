@@ -41,6 +41,7 @@
 
 <script>
 import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
+import {mapGetters} from "vuex";
 import paths from "@/data-and-functions/constants/paths";
 
 export default {
@@ -55,23 +56,34 @@ export default {
       isCVCVisible: false
     }
   },
+  computed: {
+    ...mapGetters(['GET_SAVED_DATA', 'GET_USER_TOKEN']),
+  },
   methods: {
     async bookingItem() {
-      const startTime = this.$route.query.startTime + ':00:00';
-      const endTime = this.$route.query.endTime + ':00:00';
+      let body;
+      if(this.GET_SAVED_DATA.item.id){
+        body = {
+          "inventory_id": +this.GET_SAVED_DATA.item.id,
+          "start_time": this.GET_SAVED_DATA.startDateShort + 'T' + this.GET_SAVED_DATA.startTime + ':00:00Z',
+          "end_time": this.GET_SAVED_DATA.endDateShort + 'T' + this.GET_SAVED_DATA.endTime + ':00:00Z',
+        }
+      } else {
+        body = {
+          inventory_id: +this.$route.query.itemId,
+          start_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.startTime + ':00:00Z',
+          end_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.endTime + ':00:00Z'
+        }
+      }
       try {
         const response = await fetch('/api/booking', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Accept': '*',
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
+            'Authorization': 'Bearer ' + this.GET_USER_TOKEN
           },
-          body: JSON.stringify({
-            inventory_id: +this.$route.query.itemId,
-            start_time: this.$route.query.selDateStartShort + 'T' + startTime + 'Z',
-            end_time: this.$route.query.selDateStartShort + 'T' + endTime + 'Z'
-          })
+          body: JSON.stringify(body)
         });
         if (response.ok) {
           this.bookings = await response.json();
@@ -96,14 +108,6 @@ export default {
 
     }
     this.total = this.$route.query.total;
-    /*
-    * props: {
-    selDateStartShort: String,
-    startTime: String,
-    endTime: String,
-    itemId: String,
-    total: String
-  },*/
   }
 }
 </script>

@@ -236,7 +236,6 @@ export default {
       }
     }
   },
-
   async mounted() {
     this.itemTypeId = +this.$route.query.type_id;
     this.selDateStartShort = this.$route.query.selDateStartShort;

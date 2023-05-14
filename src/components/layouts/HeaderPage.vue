@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import LoginPage from "@/components/pages/user/LoginPage.vue";
 import {mapGetters, mapMutations} from "vuex";
 import paths from "@/data-and-functions/constants/paths.js";
+import AuthorizationPage from "@/components/blocks/user/AuthorizationPage.vue";
 
 export default {
   name: "HeaderPage",
@@ -54,7 +54,7 @@ export default {
   methods: {
     ...mapMutations(['login', 'checkLogin']),
     goToLoginPage() {
-      this.$router.push({path: paths.LoginPage, component: LoginPage})
+      this.$router.push({path: paths.LoginPage, component: AuthorizationPage})
     },
     logout() {
       this.$store.commit('logoutUser');

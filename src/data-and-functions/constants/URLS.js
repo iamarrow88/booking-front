@@ -100,31 +100,31 @@ const resorts = {
 
 const inventory = {
     getInventoriesByID: {
-        URL: 'api/inventories/',
+        URL: '/api/inventories/',
         METHOD: 'GET',
     },
     filteredInventories: {
-        URL: 'api/inventories/filter',
+        URL: '/api/inventories/filter',
         METHOD: 'POST',
     },
     updateInventoryImgByID: {
-        URL: 'api/inventories/update_img/',
+        URL: '/api/inventories/update_img/',
         METHOD: 'POST',
     },
     getInventoryImgByID: {
-        URL: 'api/inventories/get_img/',
+        URL: '/api/inventories/get_img/',
         METHOD: 'GET',
     },
     createInventory: {
-        URL: 'api/inventories',
+        URL: '/api/inventories',
         METHOD: 'POST',
     },
     updateInventory: {
-        URL: 'api/inventories',
+        URL: '/api/inventories',
         METHOD: 'PUT',
     },
     deleteInventoryByID: {
-        URL: 'api/inventories/',
+        URL: '/api/inventories/',
         METHOD: 'DELETE',
     },
 
@@ -157,19 +157,19 @@ const inventory = {
 
 const bookings = {
     getBookingByID: {
-        URL: 'api/booking/',
+        URL: '/api/booking/',
         METHOD: 'GET',
     },
     getBookingInResortByID: {
-        URL: 'api/resorts/bookings/',
+        URL: '/api/resorts/bookings/',
         METHOD: 'GET',
     },
     getBookingByOwner: {
-        URL: 'api/resorts/bookings',
+        URL: '/api/resorts/bookings',
         METHOD: 'GET',
     },
     createBooking: {
-        URL: 'api/booking',
+        URL: '/api/booking',
         METHOD: 'POST',
     },
 

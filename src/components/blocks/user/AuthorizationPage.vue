@@ -37,6 +37,15 @@ export default {
   computed: {
     ...mapGetters(['IS_LOGGED_IN', 'GET_USER_SURNAME', 'IS_USER_OWNER']),
   },
+  watch:{
+    IS_LOGGED_IN(){
+      if(this.$route.query.toPayment === 'true') {
+        this.$router.push({
+          path: paths.PaymentPage,
+        })
+      }
+    }
+  },
   methods: {
     goToProfile() {
       this.$router.push({path: paths.UserPage});
@@ -56,15 +65,19 @@ export default {
     goToResortPage() {
       this.$router.push({path: paths.ManageResort});
     }
-  }
+  },
 }
 </script>
 
-<style scoped>
+<style>
+
 .container {
   max-width: 600px;
+  min-height: 300px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 40px;
+  border: 2px solid grey;
+  box-shadow: 1px 1px 12px #fdd4bd;
 }
 
 .form-group {
@@ -97,23 +110,6 @@ select:focus {
   border-color: #007bff;
 }
 
-button {
-  display: inline-block;
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-button:hover {
-  background-color: #0069d9;
-}
-
 .error-message {
   color: #dc3545;
   font-size: 16px;
@@ -130,6 +126,25 @@ button:hover {
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 15px;
+}
+
+
+button {
+  display: inline-block;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+
+button:hover {
+  background-color: #0069d9;
 }
 
 </style>

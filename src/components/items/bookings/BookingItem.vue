@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "BookingItem",
@@ -39,7 +39,6 @@ export default {
       start_time: String,
       end_time: String
     },
-    inventoryTypes: Array,
     page: String
   },
   data() {
@@ -50,6 +49,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchInventoryTypes']),
     formatTime(originTime) {
       let arrDate = originTime.split('-');
       let arrTime = arrDate[2].split(':');
@@ -63,16 +63,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['IS_USER_OWNER']),
+    ...mapGetters(['IS_USER_OWNER', 'GET_INVENTORY_TYPES']),
     getInvTypeName() {
       let typeName = '';
-      this.inventoryTypes.forEach(type => {
+      this.GET_INVENTORY_TYPES.forEach(type => {
         if (type.id === this.item.inventory.type_id) typeName = type.name;
       })
       return typeName;
     },
   },
-  created() {
+  async created() {
+    if(this.GET_INVENTORY_TYPES.length === 0) await this.fetchInventoryTypes();
     this.startTimeFormatted = this.formatTime(this.item.start_time).join(' ');
     this.endTimeFormatted = this.formatTime(this.item.end_time).join(' ');
   }

@@ -65,10 +65,12 @@
           <option value="3">Owner</option>
         </select>
       </div>
-      <button class="btn btn-primary cards-btn" @click="register">Зарегистрироваться</button>
-      <button @click="this.$emit('entryBlockToggle', true)"
-              class="sub-btn">У меня уже есть аккаунт
-      </button>
+      <div class="buttons">
+        <button class="btn btn-primary cards-btn" @click="register">Зарегистрироваться</button>
+        <button @click="this.$emit('entryBlockToggle', true)"
+                class="sub-btn">У меня уже есть аккаунт
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -126,5 +128,17 @@ export default {
 </script>
 
 <style scoped>
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px
+}
+
+button {
+  width: 50%;
+  margin: 0 auto;
+}
 
 </style>
