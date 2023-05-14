@@ -5,7 +5,7 @@
         <div class="equipment-item__type-name"><b>{{ type.name }}</b></div>
         <div class="equipment-item__photo-block">
           <img v-if="item.photo" class="equipment-item__photo"
-               src="item.photo"
+               :src="itemPhotoSrc(item)"
                alt="Item Photo">
           <img v-else class="equipment-item__photo"
                src="../../../assets/no-photo.jpg"
@@ -33,7 +33,8 @@
                       @deleteComment="deleteComment"></review-block>
         <create-comment v-if="showAddComment"
                         @postComment="postComment"
-                        @next="next">добавьте комментарий</create-comment>
+                        @next="next">добавьте комментарий
+        </create-comment>
 
       </div>
     </div>
@@ -114,7 +115,8 @@ export default {
       photo: String,
       price: Number,
       resort_id: Number,
-      type_id: Number
+      type_id: Number,
+      inventory_name: String,
     },
     resortId: Number,
     typeId: Number,
@@ -153,14 +155,33 @@ export default {
     endTime() {
       this.componentDuration = this.calcDuration();
     },
-    currentReview(){
+    currentReview() {
       this.showAddComment = this.currentReview === this.reviews.length;
     }
   },
   computed: {
-    ...mapGetters(['GET_ALL_USER_INFO', 'GET_INVENTORY_TYPES'])
+    ...mapGetters(['GET_ALL_USER_INFO', 'GET_INVENTORY_TYPES']),
   },
   methods: {
+    itemPhotoSrc(item) {
+      if (item.photo) {
+        const mimeType = this.getMimeTypeFromFilename(item.inventory_name);
+        return 'data:' + mimeType + item.photo
+      }
+      return null;
+    },
+    getMimeTypeFromFilename(filename) {
+      const extension = filename.split('.').pop().toLowerCase();
+      const mimeTypes = {
+        'jpg': 'image/jpeg;base64,',
+        'jpeg': 'image/jpeg;base64,',
+        'png': 'image/png;base64,',
+        'gif': 'image/gif;base64,',
+        'bmp': 'image/bmp;base64,',
+        'webp': 'image/webp;base64,',
+      };
+      return mimeTypes[extension] || 'application/octet-stream';
+    },
     async getReviewsByInventoryID() {
       try {
         const res = await fetch(`${comments.getCommentsByInventoryID.URL}${this.item.id}`);
@@ -184,13 +205,13 @@ export default {
       this.currentReview += 1;
       if (this.currentReview > this.reviews.length) this.currentReview = 0;
     },
-    async deleteComment(id){
+    async deleteComment(id) {
       console.log('deleteComment');
 
       try {
         const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
 
-        if(res.ok){
+        if (res.ok) {
           console.log(res);
           console.log('комментарий удален');
           this.currentReview -= 1;
@@ -204,7 +225,7 @@ export default {
         console.error(e)
       }
     },
-    async postComment(comment){
+    async postComment(comment) {
       const body = {
         "inventory_id": +this.item.id,
         "rating": +comment.rating,
@@ -214,7 +235,7 @@ export default {
       try {
         const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
         console.log('комментарий отправлен');
-        if(!res.ok){
+        if (!res.ok) {
           console.log('комментарий не создан, ошибка.');
         } else {
           console.log('Комментарий отправлен');
@@ -229,7 +250,7 @@ export default {
       }
     },
     showMore(e) {
-      if([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
         e.target.closest('.equipment-item').classList.remove('showMore');
       } else {
         document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
@@ -318,6 +339,7 @@ export default {
 .showMore ..equipment-item__body {
   justify-content: space-between;
 }
+
 .equipment-item__about {
   display: flex;
   flex-direction: column;
