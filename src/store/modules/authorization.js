@@ -5,12 +5,10 @@ import {headerAPI, headerWithToken, user} from "@/data-and-functions/constants/U
 export default {
     actions: {
         async registerUser(context, body) {
-            /*const token = this.$store.getters.GET_USER_TOKEN;*/
             console.log(body);
             const res = await asyncRequest(user.register.URL, body, user.register.METHOD, headerAPI);
             if (res.status === 200) {
                 console.log('не вошли в акк');
-                console.log(res);
                 context.commit('updateErrorMessage', 'Не удалось войти в аккаунт. Проверьте введенные данные.');
                 context.commit('login', false);
             } else {
@@ -26,8 +24,6 @@ export default {
             console.log('loggin in');
             try {
                 const res = await asyncRequest(user.login.URL, body, user.login.METHOD, headerAPI);
-                console.log('запрос отправили');
-
                 if (!res.ok) {
                     console.log('не вошли в акк');
                     context.commit('updateErrorMessage', 'Не удалось войти в аккаунт. Проверьте логин и пароль.');
@@ -46,6 +42,7 @@ export default {
         },
         async updateUser(context, body) {
             console.log(body);
+            console.log(user.updateUser.URL);
             try {
                 const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, headerWithToken);
                 console.log('обновляем данные пользователя');

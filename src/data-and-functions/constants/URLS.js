@@ -1,26 +1,26 @@
 const user = {
     register: {
-        URL: 'api/user/register',
+        URL: '/api/user/register',
         METHOD: 'POST',
     },
     login: {
-        URL: 'api/user/login',
+        URL: '/api/user/login',
         METHOD: 'POST',
     },
     bookings: {
-        URL: 'api/user/bookings',
+        URL: '/api/user/bookings',
         METHOD: 'GET',
     },
     getUser: {
-        URL: 'api/user',
+        URL: '/api/user',
         METHOD: 'GET',
     },
     updateUser: {
-        URL: 'api/user',
+        URL: '/api/user',
         METHOD: 'PUT',
     },
     deleteUser: {
-        URL: 'api/user',
+        URL: '/api/user',
         METHOD: 'DELETE',
     },
 
@@ -186,12 +186,91 @@ const bookings = {
     }
 }
 
+const comments = {
+    createComment: {
+        URL: '/api/comments',
+        METHOD: 'POST',
+        model: {
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекOOомендую!"
+        },
+        response: {
+            "id": 57,
+            "user_id": 3,
+            "user_name": "owner",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекOOомендую!",
+            "created_at": "2023-05-12T11:47:59.575921Z"
+        }
+    },
+    getCommentByID: {
+        URL: '/api/comments/',
+        METHOD: 'GET',
+        model: null,
+        response: {
+            "id": 57,
+            "user_id": 3,
+            "user_name": "owner",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекOOомендую!",
+            "created_at": "2023-05-12T11:47:59.575921Z"
+        }
+
+    },
+    getCommentsByResortID: {
+        URL: '/api/resorts/comments/',
+        METHOD: 'GET',
+        model: null,
+        response: [{
+            "id": 1,
+            "user_id": 1,
+            "user_name": "admin",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекомендую!",
+            "created_at": "2023-05-08T18:01:14.346394Z"
+        },]
+    },
+    deleteCommentByID: {
+        URL: '/api/comments/',
+        METHOD: 'DELETE',
+        model: null,
+        response: 'status: ok, response: null'
+    },
+    getCommentsByInventoryID: {
+        URL: '/api/inventories/comments/',
+        METHOD: 'GET',
+        model: null,
+        response: {
+            "id": 1,
+            "user_id": 1,
+            "user_name": "",
+            "inventory_id": 1,
+            "rating": 4,
+            "text": "Хороший товар, рекомендую!",
+            "created_at": "2023-05-08T18:01:14.346394Z"
+        }
+    },
+
+    model: {
+        id: 'Number',
+        user_id: 'Number',
+        inventory_id: 'Number',
+        rating: 'Number',
+        text: 'String',
+        created_at: 'String'
+    }
+}
+
 const headerAPI = {'Content-Type': 'application/json'};
 
 const headerWithToken = {
     'Content-Type': 'application/json',
     'Accept': '*',
-    'Authorization': 'Bearer '
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
 }
 
-export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken}
+export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken, comments}

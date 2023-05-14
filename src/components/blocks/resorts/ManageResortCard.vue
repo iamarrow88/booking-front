@@ -1,5 +1,10 @@
 <template>
-
+  <div class="resorts-list" v-if="resorts.length > 0">
+    <resort-item @editResortFromItem="editResort"
+                 @deleteResort="deleteResort" v-for="resort in resorts"
+                 :key="resort.id"
+                 :resort="resort"></resort-item>
+  </div>
   <div class="add-resort">
     <button class="sub-btn"
             @click="editComponent">Добавить курорт
@@ -7,12 +12,6 @@
     <create-resort-block v-if="isEditComponent"
                          :editMode="false"
                          @updateResort="editResort"></create-resort-block>
-  </div>
-  <div class="resorts-list" v-if="resorts.length > 0">
-    <resort-item @editResortFromItem="editResort"
-                 @deleteResort="deleteResort" v-for="resort in resorts"
-                 :key="resort.id"
-                 :resort="resort"></resort-item>
   </div>
   <div v-if="errorMessage" class="error-message">
     {{ errorMessage }}
@@ -122,10 +121,8 @@ export default {
     }
   },
   async mounted() {
-    if (localStorage.getItem('firstName').length === 0) {
-      console.log(localStorage.getItem('firstName').length);
-    }
     await this.getUserResorts();
+
     try {
       const cities = await fetch('/api/cities');
       this.cities = await cities.json();

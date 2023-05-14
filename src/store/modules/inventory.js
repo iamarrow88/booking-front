@@ -4,9 +4,10 @@ import {dataArrays} from "@/data-and-functions/constants/URLS";
 export default {
     actions: {
         async fetchInventoryTypes(context) {
-            try {
-                const res = await asyncRequest(dataArrays.inventoryTypes.URL);
+            const path = dataArrays.inventoryTypes.URL;
 
+            try {
+                const res = await asyncRequest(path);
                 if (!res.ok) {
                     console.log('не получили данные типов инвентаря');
                     context.commit('updateErrorMessage', 'Не удалось получить данные.');

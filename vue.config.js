@@ -6,7 +6,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://3.15.188.30:8081',
+                target: 'http://158.160.36.229:8081',
                 changeOrigin: true
             }
         }

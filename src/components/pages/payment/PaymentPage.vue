@@ -139,7 +139,7 @@ export default {
 
 .card__img {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   /*background-image: url("../assets/card.png");*/
 }
 
@@ -162,7 +162,7 @@ input {
 .front-card__inputs {
   z-index: 5;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: column;
   background-color: #dae8f6;
 }

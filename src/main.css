@@ -68,15 +68,15 @@ input[type="date"], select {
 }
 
 .pop-up {
-    position: absolute;
+    position: fixed;
+    z-index: 5;
     top: 0;
     left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: rgba(178, 178, 178, .3);
-    z-index: 2;
-    overflow: hidden;
-    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: table;
+    transition: opacity 0.3s ease;
 }
 
 .pop-up__block {
@@ -138,7 +138,6 @@ button.action {
 .my-booking-item__id {
     margin: 0;
     font-size: 1.25rem;
-    font-weight: bold;
     width: 100%;
     text-align: left;
 }
@@ -159,6 +158,14 @@ button.action {
     font-size: 1.1rem;
     justify-items: center;
 }
+.my-booking-item__user {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    justify-items: center;
+}
 
 .body__term {
     text-align: left;
@@ -166,6 +173,24 @@ button.action {
 
 .active {
     display: block;
+}
+
+.active {
+    display: block;
+}
+
+.showMore {
+    width: 93%;
+    order: 1;
+    transition: all .3ms;
+    padding: 40px;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 16px;
+    margin-top: 10px;
+
 }
 
 @media (max-width: 767px) {
