@@ -201,14 +201,16 @@ export default {
     },
     async getResorts() {
       const startTime = this.startTime + ':00:00';
-      let endTime, endDate;
-      if(+this.endTime === 24) {
-        endTime = '00:00:00';
-        endDate = this.addDayToDate(this.selDateEndShort, 'short', 1);
-      } else {
-        endTime = this.endTime;
-        endDate = this.selDateEndShort;
+      const endTime = +this.endTime === 24 ? '00:00:00' : this.endTime + ':00:00';
+      const endDate = +this.endTime === 24 ? this.addDayToDate(this.selDateEndShort, 'short', 1) : this.selDateEndShort;
+
+      const body = {
+        city_id: +this.selectedCity.id,
+        type_id: +this.selectedType.id,
+        start_time: this.selDateStartShort + 'T' + startTime + '.000Z',
+        end_time: endDate + 'T' + endTime + '.000Z',
       }
+      console.log(body);
 
       console.log(`Getting resorts for ${this.selectedCity.name}`);
 
@@ -219,16 +221,10 @@ export default {
             'Content-Type': 'application/json',
             'Accept': '*'
           },
-          body: JSON.stringify({
-            city_id: this.selectedCity.id,
-            type_id: this.selectedType.id,
-            start_time: this.selDateStartShort + 'T' + startTime + '.000Z',
-            end_time: endDate + 'T' + endTime + '.000Z',
-          })
+          body: JSON.stringify(body)
         });
         if (response.ok) {
           this.resorts = await response.json();
-          /*this.resorts.forEach(resort => resort.rate = this.setStars())*/
           console.log(`Found ${this.resorts.length} resorts in ${this.selectedCity.name}`);
           this.isNotFoundShown = this.resorts.length === 0;
           setTimeout(() => {
