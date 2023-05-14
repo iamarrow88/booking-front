@@ -6,7 +6,6 @@ import BookingResortPage from "@/components/pages/bookings/BookingResortPage.vue
 import PaymentPage from "@/components/pages/payment/PaymentPage.vue";
 import ResortPage from "@/components/pages/start-page/ResortPage.vue";
 import StartPage from "@/components/pages/start-page/StartPage.vue";
-import LoginPage from "@/components/pages/user/LoginPage.vue";
 import RegistrationBlock from "@/components/pages/user/RegistrationBlock.vue";
 import UserPage from "@/components/pages/user/UserPage.vue";
 
@@ -70,7 +69,6 @@ app.component('StarsRate', StarsRate);
 app.component('AuthorizationPage', AuthorizationPage);
 app.component('LoginBlock', LoginBlock);
 app.component('RegistrationBlock', RegistrationBlock);
-app.component('LoginPage', LoginPage);
 
 
 app.mixin({

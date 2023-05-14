@@ -71,10 +71,10 @@ export default {
     },
     GoToAuthPage(){
       console.log('go to auth page');
+      console.log(this.item);
       const saved = {
-        itemTypeName: this.typeName,
-        itemPrice: this.item.price,
-        resortName: this.resortName,
+        item: this.item,
+        resort: this.resort,
         startDateShort: this.selDateStartShort,
         endDateShort: this.selDateEndShort,
         startTime: this.startTime,

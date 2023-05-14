@@ -44,7 +44,6 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import validationMixins from "@/components/mixins/validationMixins.js";
-import paths from "@/data-and-functions/constants/paths.js";
 
 
 export default {
@@ -72,27 +71,10 @@ export default {
       if (!this.checkLoginPass(this.passwordLogin) ||
           this.validateLoginMail(this.emailLogin)) {
         this.$store.dispatch('loginUser', body);
-        if (this.IS_LOGGED_IN) {
-          if(this.$route.query.toPayment === 'true'){
-            this.$router.push({
-              path: paths.PaymentPage,
-            });
-          } else {
-            this.$router.push({
-              path: paths.UserPage,
-              params: {id: this.$store.state.authorization.user.id}
-            });
-          }
         }
-        /*if (this.$store.getters.IS_LOGGED_IN) this.$router.push({
-          path: paths.UserPage,
-          params: {id: this.$store.state.authorization.user.id}
-        });*/
+
       }
     },
-
-  }
-
 }
 </script>
 

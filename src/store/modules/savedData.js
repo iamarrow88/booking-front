@@ -4,9 +4,7 @@ export default {
     },
     mutations: {
         updateSavedData(state, data){
-            state.itemTypeName = data.itemTypeName;
-            state.itemPrice = data.itemPrice;
-            state.resortName = data.resortName;
+            state.item = data.item;
             state.startDateShort = data.startDateShort;
             state.endDateShort = data.endDateShort;
             state.startTime = data.startTime;
@@ -16,9 +14,7 @@ export default {
         }
     },
     state: {
-        itemTypeName: '',
-        itemPrice: null,
-        resortName: '',
+        item: {},
         startDateShort: '',
         endDateShort: '',
         startTime: '',
