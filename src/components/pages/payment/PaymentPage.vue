@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     async bookingItem() {
+
       let body;
       if(this.GET_SAVED_DATA.item.id){
         body = {
@@ -74,6 +75,7 @@ export default {
           start_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.startTime + ':00:00Z',
           end_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.endTime + ':00:00Z'
         }
+
       }
       try {
         const response = await fetch('/api/booking', {
@@ -83,7 +85,10 @@ export default {
             'Accept': '*',
             'Authorization': 'Bearer ' + this.GET_USER_TOKEN
           },
+
+
           body: JSON.stringify(body)
+
         });
         if (response.ok) {
           this.bookings = await response.json();
@@ -100,7 +105,11 @@ export default {
     closePopUp(bool1) {
       this.isOpen = bool1;
       this.$router.push(paths.UserBookingPage)
-    }
+    },
+    addDayToDate(dateFull, dateType, daysToAdd) {
+      let date = dateType === 'short' ? new Date(dateFull) : dateFull;
+      return new Date(date.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
+    },
   },
   created() {
     if(!localStorage.getItem('firstName')){

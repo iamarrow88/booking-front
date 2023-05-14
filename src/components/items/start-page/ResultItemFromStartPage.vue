@@ -18,17 +18,7 @@
       <p class="item__description" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
 
       <button
-          @click="$router.push({ path: '/resorts/' + resort.id, query:
-                   {
-                    type_id: selectedType.id,
-                    selectedCityId: selectedCity.id,
-                    selDateStartShort: selDateStartShort,
-                    selDateEndShort:selDateEndShort,
-                    startTime: startTime,
-                    endTime: endTime,
-                    duration: duration
-                   }
-                  })"
+          @click="goToResortPage"
           class="cards-btn">
         Посмотреть инвентарь
       </button>
@@ -96,9 +86,40 @@ export default {
   watch: {
     currentReview(){
       this.showAddComment = this.currentReview === this.reviews.length;
-    }
+    },
+    selDateStartShort(newDate){
+      this.$store.commit('setStartDate', newDate);
+    },
+    selDateEndShort(newDate){
+      this.$store.commit('setEndDate', newDate);
+    },
+    startTime(newTime){
+      this.$store.commit('setStartTime', newTime);
+    },
+    endTime(newTime){
+      this.$store.commit('setEndTime', newTime);
+    },
+    selectedType(newInvType){
+      this.$store.commit('setSelectedInvType', newInvType);
+    },
   },
   methods: {
+    goToResortPage(){
+      this.$store.commit('setSelectedResort', this.resort);
+
+
+      this.$router.push({ path: '/resorts/' + this.resort.id, query:
+            {
+              type_id: this.selectedType.id,
+              selectedCityId: this.selectedCity.id,
+              selDateStartShort: this.selDateStartShort,
+              selDateEndShort:this.selDateEndShort,
+              startTime: this.startTime,
+              endTime: this.endTime,
+              duration: this.duration
+            }
+      })
+    },
     showMore(e) {
       if([...e.target.closest('.result-item').classList].includes('showMore')) {
         e.target.closest('.result-item').classList.remove('showMore');
