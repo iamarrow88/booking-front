@@ -17,8 +17,8 @@
         <div class="popup" v-show="popupVisible">
           <div class="popup-container">
             <div class="popup-content">
-              <span class="close" @click="closePopup">&times;</span>
-              <img :src="fullImageSrc" alt="Full Image" @click="closePopup">
+              <span class="close" @click="closePopupImage">&times;</span>
+              <img :src="fullImageSrc" alt="Full Image" @click="closePopupImage">
             </div>
           </div>
         </div>
@@ -194,8 +194,21 @@ export default {
       this.fullImageSrc = src;
       this.popupVisible = true;
     },
-    closePopup() {
+    closePopupImage() {
       this.popupVisible = false;
+    },
+
+    showMore() {
+      /*      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+              e.target.closest('.equipment-item').classList.remove('showMore');
+            } else {
+              document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
+              e.target.closest('.equipment-item').classList.add('showMore');
+            }*/
+      this.morePopupVisible = true;
+    },
+    closeMorePopup() {
+      this.morePopupVisible = false;
     },
     itemPhotoSrc(item) {
       if (item.photo) {
@@ -284,18 +297,6 @@ export default {
       }
     },
 
-    showMore() {
-      /*      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-              e.target.closest('.equipment-item').classList.remove('showMore');
-            } else {
-              document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-              e.target.closest('.equipment-item').classList.add('showMore');
-            }*/
-      this.morePopupVisible = true;
-    },
-    closeMorePopup() {
-      this.morePopupVisible = false;
-    },
 
     getEquipmentType() {
       this.GET_INVENTORY_TYPES.forEach(type => {
