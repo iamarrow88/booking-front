@@ -25,18 +25,18 @@
 
     </div>
     <div class="reviews">
-      {{resort.description}}
-<!--      <div class="reviews__title">Отзывы</div>-->
-<!--      <review-block v-for="review in reviews"-->
-<!--                    :review="review"-->
-<!--                    :key="review.id"-->
-<!--                    :class="{active: review.index === this.currentReview}"-->
-<!--                    @prev="prev"-->
-<!--                    @next="next"-->
-<!--                    @deleteComment="deleteComment"></review-block>-->
+      {{ resort.description }}
+      <!--      <div class="reviews__title">Отзывы</div>-->
+      <!--      <review-block v-for="review in reviews"-->
+      <!--                    :review="review"-->
+      <!--                    :key="review.id"-->
+      <!--                    :class="{active: review.index === this.currentReview}"-->
+      <!--                    @prev="prev"-->
+      <!--                    @next="next"-->
+      <!--                    @deleteComment="deleteComment"></review-block>-->
 
-<!--      <create-comment v-if="showAddComment" @next="next"-->
-<!--                      @postComment="postComment"></create-comment>-->
+      <!--      <create-comment v-if="showAddComment" @next="next"-->
+      <!--                      @postComment="postComment"></create-comment>-->
     </div>
   </li>
 </template>
@@ -84,36 +84,37 @@ export default {
     }
   },
   watch: {
-    currentReview(){
+    currentReview() {
       this.showAddComment = this.currentReview === this.reviews.length;
     },
-    selDateStartShort(newDate){
+    selDateStartShort(newDate) {
       this.$store.commit('setStartDate', newDate);
     },
-    selDateEndShort(newDate){
+    selDateEndShort(newDate) {
       this.$store.commit('setEndDate', newDate);
     },
-    startTime(newTime){
+    startTime(newTime) {
       this.$store.commit('setStartTime', newTime);
     },
-    endTime(newTime){
+    endTime(newTime) {
       this.$store.commit('setEndTime', newTime);
     },
-    selectedType(newInvType){
+    selectedType(newInvType) {
       this.$store.commit('setSelectedInvType', newInvType);
     },
   },
   methods: {
-    goToResortPage(){
+    goToResortPage() {
       this.$store.commit('setSelectedResort', this.resort);
 
 
-      this.$router.push({ path: '/resorts/' + this.resort.id, query:
+      this.$router.push({
+        path: '/resorts/' + this.resort.id, query:
             {
               type_id: this.selectedType.id,
               selectedCityId: this.selectedCity.id,
               selDateStartShort: this.selDateStartShort,
-              selDateEndShort:this.selDateEndShort,
+              selDateEndShort: this.selDateEndShort,
               startTime: this.startTime,
               endTime: this.endTime,
               duration: this.duration
@@ -121,7 +122,7 @@ export default {
       })
     },
     showMore(e) {
-      if([...e.target.closest('.result-item').classList].includes('showMore')) {
+      if ([...e.target.closest('.result-item').classList].includes('showMore')) {
         e.target.closest('.result-item').classList.remove('showMore');
       } else {
         document.querySelectorAll('.result-item').forEach(card => card.classList.remove('showMore'));
@@ -142,7 +143,7 @@ export default {
     },
     async getReviewsByResortID() {
       try {
-        const res = await fetch(comments.getCommentsByResortID.URL+this.resort.id);
+        const res = await fetch(comments.getCommentsByResortID.URL + this.resort.id);
         if (res.ok) {
           this.reviews = await res.json();
         } else {

@@ -6,11 +6,23 @@
         <div class="equipment-item__photo-block">
           <img v-if="item.photo" class="equipment-item__photo"
                :src="itemPhotoSrc(item)"
-               alt="Item Photo">
+               alt="Item Photo"
+               @click="showFullImage(itemPhotoSrc(item))">
+
           <img v-else class="equipment-item__photo"
                src="../../../assets/no-photo.jpg"
                alt="Item Photo">
         </div>
+
+        <div class="popup" v-show="popupVisible">
+          <div class="popup-container">
+            <div class="popup-content">
+              <span class="close" @click="closePopup">&times;</span>
+              <img :src="fullImageSrc" alt="Full Image" @click="closePopup">
+            </div>
+          </div>
+        </div>
+
         <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
         <div class="equipment-item__summary">
           <div class="summary__duration"
@@ -46,7 +58,7 @@
       </button>
       <button @click="showMore"
               v-if="!editMode"
-              class="cards-btn">Подробнее
+              class="btn cards-btn">Подробнее
       </button>
       <button v-if="editMode"
               @click="showAddItemBlock"
@@ -56,6 +68,16 @@
               @click="this.$emit('DeleteItem', item.id)"
               class="btn cards-btn">Удалить
       </button>
+    </div>
+    <div class="popup" v-show="morePopupVisible">
+      <div class="popup-container">
+        <div class="popup-content">
+          <span class="close" @click="closeMorePopup">&times;</span>
+          <!-- Здесь вы можете добавить содержимое попапа "Подробнее" -->
+          <p>Подробная информация о товаре...</p>
+
+        </div>
+      </div>
     </div>
 
     <div v-if="isAddingItemModeOn">
@@ -143,6 +165,11 @@ export default {
       currentReview: 0,
       showAddComment: false,
       refreshCommentID: 0,
+
+      popupVisible: false,
+      fullImageSrc: '',
+      morePopupVisible: false,
+
     }
   },
   watch: {
@@ -163,6 +190,13 @@ export default {
     ...mapGetters(['GET_ALL_USER_INFO', 'GET_INVENTORY_TYPES']),
   },
   methods: {
+    showFullImage(src) {
+      this.fullImageSrc = src;
+      this.popupVisible = true;
+    },
+    closePopup() {
+      this.popupVisible = false;
+    },
     itemPhotoSrc(item) {
       if (item.photo) {
         const mimeType = this.getMimeTypeFromFilename(item.inventory_name);
@@ -249,14 +283,20 @@ export default {
         console.error(e);
       }
     },
-    showMore(e) {
-      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-        e.target.closest('.equipment-item').classList.remove('showMore');
-      } else {
-        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-        e.target.closest('.equipment-item').classList.add('showMore');
-      }
+
+    showMore() {
+      /*      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+              e.target.closest('.equipment-item').classList.remove('showMore');
+            } else {
+              document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
+              e.target.closest('.equipment-item').classList.add('showMore');
+            }*/
+      this.morePopupVisible = true;
     },
+    closeMorePopup() {
+      this.morePopupVisible = false;
+    },
+
     getEquipmentType() {
       this.GET_INVENTORY_TYPES.forEach(type => {
         if (type.id === this.item.type_id) {
@@ -335,7 +375,7 @@ export default {
   justify-content: center;
 }
 
-.showMore ..equipment-item__body {
+.showMore .equipment-item__body {
   justify-content: space-between;
 }
 
@@ -381,7 +421,8 @@ export default {
 
 .equipment-item__photo {
   max-width: 100%;
-  max-height: 100%;
+  height: 200px; /* Задайте высоту, которую вы хотите */
+  object-fit: cover;
 }
 
 .showMore .equipment-item__photo {
@@ -447,4 +488,54 @@ export default {
     font-size: 1.25rem;
   }
 }
+
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+}
+
+.popup-content {
+  position: relative;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cards-btn {
+  width: 100%; /* Задайте ширину кнопок */
+  height: 40px; /* Задайте высоту кнопок */
+  display: inline-block;
+  border: 2px solid #fba91c;
+  color: #fba91c;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
 </style>
