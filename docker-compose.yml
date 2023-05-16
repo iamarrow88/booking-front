@@ -11,6 +11,12 @@ services:
       - '80:80'
     networks:
       - frontend
+    deploy:
+      resources:
+        limits:
+          memory: '1024M'
+        reservations:
+          memory: '0'
 
 networks:
   frontend:
