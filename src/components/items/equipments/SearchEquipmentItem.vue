@@ -228,15 +228,15 @@ export default {
       this.popupVisible = false;
     },
 
-    showMore() {
-      /*      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+    /*showMore() {
+      /!*      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
               e.target.closest('.equipment-item').classList.remove('showMore');
             } else {
               document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
               e.target.closest('.equipment-item').classList.add('showMore');
-            }*/
+            }*!/
       this.morePopupVisible = true;
-    },
+    },*/
     closeMorePopup() {
       this.morePopupVisible = false;
     },
