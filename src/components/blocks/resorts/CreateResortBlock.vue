@@ -1,7 +1,7 @@
 <template>
   <div class="add-resort">
     <h2 class="add-resort__header">
-      {{ editMode ? "Страница создания карточки курорта" : "Страница редактирования карточки курорта" }}</h2>
+      {{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта"}}</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
@@ -9,7 +9,7 @@
     <div class="form-block resort-address">
       <label for="resortAddress">Адрес курорта</label>
       <select v-model="cityName">
-        <option v-for="city in cities" :key="city.id">{{ city.name }}</option>
+        <option v-for="city in GET_CITIES" :key="city.id">{{ city.name }}</option>
       </select>
       <input type="text" id="resortAddress" v-model="resortAddress">
     </div>
@@ -18,20 +18,20 @@
       <input type="text" id="resortDescription" v-model="resortDescription">
     </div>
 
-    <button @click="addResort" class="cards-btn">{{
-        editMode ? "Создать карточку курорта" : "Изменить данные курорта"
-      }}
-    </button>
+    <div class="buttons">
+      <button @click="addResort" class="cards-btn action">{{
+          editMode ? "Изменить данные курорта" : "Создать карточку курорта"
+        }}
+      </button>
 
-    <button class="cards-btn" @click="cancel">Отмена</button>
+      <button class="cards-btn" @click="cancel">Отмена</button>
 
-    <button @click="goToInventoryManagementPage" class="sub-btn">Управлять инвентарем ></button>
+      <button @click="goToInventoryManagementPage" class="sub-btn">Управлять инвентарем ></button>
 
+    </div>
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
-
-
   </div>
 </template>
 
@@ -41,7 +41,7 @@ import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
 import InventoryManagementPage from "@/components/pages/inventory/InventoryManagementPage.vue";
 import paths from "@/data-and-functions/constants/paths";
-import {mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   components: InventoryCard, SearchEquipmentItem, InventoryManagementPage,
@@ -75,8 +75,12 @@ export default {
       itemsCounter: 0,
     }
   },
+  computed: {
+    ...mapGetters(['GET_INVENTORY_TYPES', 'GET_CITIES']),
+  },
   methods: {
     ...mapMutations(['setSelectedResort']),
+    ...mapActions(['fetchInventoryTypes', 'fetchCities']),
     cancel(e){
       this.$emit('closeAndRefreshAddWindow', e)
     },
@@ -88,8 +92,6 @@ export default {
         description: this.resortDescription,
         city_id: +this.cityId,
       }
-      console.log(resort);
-      console.log('resort');
       this.setSelectedResort(resort);
       this.$router.push({path: paths.InventoryManagementPage, query: {
           id: +this.resortId,
@@ -120,10 +122,6 @@ export default {
         console.error(e);
       }
     },
-    getEquipments() {
-      this.isEquipmManagingHide = !this.isEquipmManagingHide;
-      this.getInventoryByResort();
-    },
     async deleteItem(id) {
       const res = await fetch(`/api/inventories/${id}`, {
         method: 'DELETE',
@@ -136,33 +134,23 @@ export default {
         this.counter += 1;
         console.log('inventory item deleted');
       } else {
-        console.log('inventory item didn\'t delete')
-
+        console.log('inventory item didn\'t delete');
       }
     },
-    addItem() {
-      this.isAddingItemModeOn = !this.isAddingItemModeOn;
-    },
-    closeAddItem(bool) {
-      this.isAddingItemModeOn = bool;
-      this.itemsCounter += 1;
-    }
   },
   async created() {
     this.userId = localStorage.getItem('userId');
-    this.isEditComponent = this.editMode;
     this.resortId = this.resortIdFromParent ? this.resortIdFromParent : Date.now();
     await this.getResorts();
 
-    try {
-      const cities = await fetch('/api/cities');
-      this.cities = await cities.json();
-      if (!this.editMode) {
-        this.cityName = this.cities[0].name;
-        this.cityId = this.cities[0].id
-      }
-    } catch (error) {
-      console.error(error)
+    if(this.GET_INVENTORY_TYPES.length === 0) await this.fetchInventoryTypes();
+    if(this.GET_CITIES.length === 0) await this.fetchCities();
+
+    if(this.editMode){
+      console.log(this.resortIdFromParent);
+    } else {
+      this.cityId = this.GET_CITIES[0].id;
+      this.cityName = this.GET_CITIES[0].name;
     }
 
     this.resorts.forEach(resort => {
@@ -171,22 +159,11 @@ export default {
         this.resortAddress = resort.address;
         this.resortDescription = resort.description;
         this.cityId = resort.city_id;
-        this.cities.forEach(city => {
+        this.GET_CITIES.forEach(city => {
           if (city.id === this.cityId) this.cityName = city.name;
         })
       }
     })
-
-    try {
-      const types = await fetch('/api/inventories/types');
-      this.types = await types.json();
-    } catch (e) {
-      console.error(e);
-    }
-
-    /*try {
-      const types = await fetch('/api/')
-    }*/
   },
   watch: {
     counter() {
@@ -237,22 +214,15 @@ input {
   text-align: center;
 }
 
-.resort-name label {
-  margin-bottom: 10px;
-}
-.equipment-list {
-  margin: 0 auto;
+.resort-name label, label {
+  margin: 10px 0;
 }
 
-.equipment-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 16px;
-}
-.equipment-grid-item {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.buttons {
+  width: 40%;
+  margin: 1em auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 </style>

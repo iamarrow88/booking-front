@@ -48,15 +48,16 @@ input, select {
 }
 
 .sub-btn {
-    padding: 7px;
+    /*padding: 7px;*/
     background-color: transparent;
     cursor: pointer;
-    color: #1c3b65;
-    text-decoration: underline;
+    color: #f6a28a;
 }
 
 .sub-btn:hover {
-    background-color: #d6e6ff;
+    /*background-color: #d6e6ff;*/
+    background-color: rgba(241, 96, 41, .5);
+    color: #fff;
 }
 
 label, input {

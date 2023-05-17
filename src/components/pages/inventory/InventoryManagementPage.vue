@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['GET_SEL_RESORT', 'GET_INVENTORY_TYPES', 'GET_USER_TOKEN']),
+    ...mapGetters(['GET_SEL_RESORT', 'GET_INVENTORY_TYPES']),
   },
   watch: {
     refreshInventoryArrayCounter(){
@@ -65,7 +65,7 @@ export default {
       const res = await fetch(`/api/inventories/${id}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${this.GET_USER_TOKEN}`
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
       console.log(res.json());
@@ -79,6 +79,17 @@ export default {
     },
     refreshInventoryArray(){
       this.refreshInventoryArrayCounter += 1;
+    },
+    getEquipments() {
+      this.isEquipmManagingHide = !this.isEquipmManagingHide;
+      this.getInventoryByResort();
+    },
+    addItem() {
+      this.isAddingItemModeOn = !this.isAddingItemModeOn;
+    },
+    closeAddItem(bool) {
+      this.isAddingItemModeOn = bool;
+      this.itemsCounter += 1;
     }
   },
   async mounted() {
@@ -93,7 +104,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .equipment-list {
   display: flex;
@@ -109,4 +120,30 @@ export default {
   padding: 3em;
 }
 
+.equipment-list > .equipment-item > .buttons {
+  width: 55%;
+  margin: 0 auto;
+}
+
+.equipment-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.equipment-item__price2 {
+  display: block;
+  color: red;
+}
+.manage-equipment-block > .equipment-item__body {
+  height: auto;
+}
+
+.manage-equipment-block > .equipment-item__price {
+  display: none;
+}
+
+.manage-equipment-block > .equipment-item__price2 {
+  display: block;
+}
 </style>

@@ -1,13 +1,15 @@
 <template>
   <div class="add-resort">
-    <button class="sub-btn"
+    <button class="sub-btn create-resort-btn"
             @click="editComponent">Добавить курорт
     </button>
-    <create-resort-block v-if="isEditComponent"
-                         :editMode="false"
-                         @updateResort="editResort">
+    <modal-window v-if="isCreateResortWindowOpen">
+      <create-resort-block :editMode="false"
+                           @updateResort="editResort"
+      @closeAndRefreshAddWindow="editComponent">
 
-    </create-resort-block>
+      </create-resort-block>
+    </modal-window>
   </div>
 
   <div class="resorts-list" v-if="resorts.length > 0">
@@ -39,6 +41,7 @@ export default {
       isEditComponent: false,
       cities: [],
       wasChangeResorts: 0,
+      isCreateResortWindowOpen: false,
     }
   },
   computed: {
@@ -64,7 +67,6 @@ export default {
     },
     async editResort(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
       console.log('edit', resortId);
-      console.log(arguments);
 
       const method = editMode ? 'PUT' : 'POST';
       const body = {
@@ -91,11 +93,7 @@ export default {
         if (response.ok) {
           console.log('ok');
           this.wasChangeResorts += 1;
-          this.isEditComponent = false;
-          this.resortName = '';
-          this.resortAddress = '';
-          this.resortDescription = '';
-          this.city = this.cities[0].name;
+          this.isCreateResortWindowOpen = false;
         } else {
           this.errorMessage = "Invalid data provided, please try again";
         }
@@ -105,7 +103,7 @@ export default {
       }
     },
     editComponent() {
-      this.isEditComponent = !this.isEditComponent;
+      this.isCreateResortWindowOpen = !this.isCreateResortWindowOpen;
     },
     async getUserResorts() {
       try {
@@ -132,11 +130,6 @@ export default {
   async mounted() {
     await this.getUserResorts();
     if(this.GET_CITIES.length === 0) await this.fetchCities();
-
-    if(!this.editMode){
-      this.cityName = this.GET_CITIES[0].name;
-      this.cityId = this.GET_CITIES[0].id;
-    }
   },
 }
 </script>
@@ -151,13 +144,7 @@ export default {
   margin: 0 auto;
 }
 
-.sub-btn {
-  padding: 7px;
-  background-color: transparent;
-  cursor: pointer;
-  color: darkslateblue;
-  text-decoration: underline;
-
+.create-resort-btn {
+  margin: 1em;
 }
-
 </style>

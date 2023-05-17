@@ -128,6 +128,7 @@ export default {
             return state.user;
         },
         GET_USER_TOKEN(state) {
+            if(!state.user.token) state.user.token = localStorage.getItem('token');
             return state.user.token;
         },
         IS_USER_OWNER(state) {

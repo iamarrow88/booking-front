@@ -1,11 +1,13 @@
 <template>
   <div class="resort-item">
     <div class="resort-item__name">{{ resort.name }}</div>
-    <button @click="editResortDown" class="cards-btn">Редактировать</button>
-    <button @click="deleteResort" class="cards-btn">Удалить</button>
+    <div class="buttons">
+      <button @click="editResortDown" class="cards-btn action">Редактировать</button>
+      <button @click="deleteResort" class="cards-btn">Удалить</button>
+    </div>
     <modal-window v-if="isEditResortWindowOpen">
       <create-resort-block :resortIdFromParent="resort.id"
-                           :editMode="false"
+                           :editMode="true"
                            @updateResort="updateResortUp"
       @closeAndRefreshAddWindow="closeAndRefreshAddWindow"></create-resort-block>
     </modal-window>
@@ -31,7 +33,6 @@ export default {
   },
   data() {
     return {
-      /*isEditComponent: false,*/
       isEditResortWindowOpen: false,
     }
   },
@@ -43,7 +44,6 @@ export default {
       this.$emit('deleteResort', this.resort.id);
     },
     updateResortUp(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
-      /*this.isEditComponent = false;*/
       this.isEditResortWindowOpen = !this.isEditResortWindowOpen;
       this.$emit('editResortFromItem', editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId);
     },
@@ -68,6 +68,14 @@ export default {
   order: 2;
   transition: all .3ms;
   width: 26%;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 60%;
+  margin: 1em auto 0;
 }
 
 </style>

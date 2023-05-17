@@ -11,7 +11,7 @@
                src="../../../assets/no-photo.jpg"
                alt="Item Photo">
         </div>
-        <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
+        <div class="equipment-item__price" v-if="isFirstPriceShown">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
         <div class="equipment-item__summary">
           <div class="summary__duration"
                v-if="!editMode">Аренда на {{ duration }} {{ hoursNaming }}
@@ -40,6 +40,8 @@
     </div>
 
     <div class="buttons">
+      <div class="equipment-item__price" v-if="!isFirstPriceShown">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
+
       <button @click="showPopUp"
               v-if="!editMode"
               class="btn cards-btn">Забронировать
@@ -140,7 +142,8 @@ export default {
       currentReview: 0,
       showAddComment: false,
       refreshCommentID: 0,
-      editModalWindowOpen: false
+      editModalWindowOpen: false,
+      isFirstPriceShown: false,
     }
   },
   watch: {
@@ -467,8 +470,11 @@ export default {
 
 .buttons {
   display: flex;
+  flex-direction: column;
+  width: 55%;
+  margin: 1em auto 0;
   justify-content: center;
-  gap: 20px;
+  gap: 1em;
 }
 
 .inventory-edit {
@@ -479,6 +485,7 @@ export default {
   display: block;
   margin: 0 auto;
 }
+
 
 @media (max-width: 767px) {
 
