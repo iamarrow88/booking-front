@@ -50,12 +50,7 @@ export default {
     }
     await this.fetchInventoryTypes();
     await this.fetchCities();
-    console.log(this.$route.fullPath.split('/'));
-    if(this.$route.fullPath.split('/').includes('user')) {
-      this.isUserBookingsPage = true;
-    } else {
-      this.isUserBookingsPage = false;
-    }
+    this.isUserBookingsPage = !!this.$route.fullPath.split('/').includes('user');
   }
 
 }

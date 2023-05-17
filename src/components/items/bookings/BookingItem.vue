@@ -14,8 +14,8 @@
         <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
 
       </div>
-      <div v-if="isUserBookingsPage">
-        <button  class="btn cards-btn">Отменить бронирование</button>
+      <div v-if="isUserBookingsPage" class="button">
+        <button  class="btn cards-btn" @click="deleteBooking">Отменить бронирование</button>
       </div>
       <div class="my-booking-item__user" v-else>
         <div class="body__term">
@@ -29,6 +29,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import {bookings, headerWithToken} from "@/data-and-functions/constants/URLS";
 
 export default {
   name: "BookingItem",
@@ -50,6 +51,7 @@ export default {
     return {
       startTimeFormatted: '',
       endTimeFormatted: '',
+      res: {},
     }
   },
 
@@ -65,6 +67,25 @@ export default {
       let hour = arrTime[0].slice(3, 5);
       let time = hour + ':00';
       return [date, time];
+    },
+    async deleteBooking(){
+      const deleteL = [
+        bookings.deleteBookingByID.URL+this.item.id, {
+          method: bookings.deleteBookingByID.METHOD,
+          headers: headerWithToken,
+        }
+      ];
+      console.log(deleteL);
+      const res = await fetch(bookings.deleteBookingByID.URL+this.item.id, {
+        method: bookings.deleteBookingByID.METHOD,
+        headers: headerWithToken
+      })
+      this.res = await res;
+      if(res.ok){
+        console.log('удалено');
+      } else {
+        console.log('не удалено');
+      }
     }
   },
   computed: {
@@ -98,6 +119,10 @@ export default {
   grid-template-columns: 2fr 5fr 1fr;
   gap: 0.5em;
   align-items: start;
+}
+
+.button > button.cards-btn {
+  height: auto;
 }
 
 .my-booking-item__user {

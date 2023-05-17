@@ -230,6 +230,9 @@ export default {
     },
 
 
+    closeMorePopup() {
+      this.morePopupVisible = false;
+    },
     itemPhotoSrc(item) {
       if (item.photo) {
         const mimeType = this.getMimeTypeFromFilename(item.inventory_name);
@@ -351,15 +354,15 @@ export default {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
-    /*    showAddItemBlock(e) {
-          console.log('equipment-item');
-          if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-            e.target.closest('.equipment-item').classList.remove('showMore');
-          } else {
-            document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-            e.target.closest('.equipment-item').classList.add('showMore');
-          }
-        },*/
+/*    showAddItemBlock(e) {
+      console.log('equipment-item');
+      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+        e.target.closest('.equipment-item').classList.remove('showMore');
+      } else {
+        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
+        e.target.closest('.equipment-item').classList.add('showMore');
+      }
+    },*/
     /*closeAddItem(event) {
       console.log('equipment-item close');
       if ([...event.target.closest('.equipment-item').classList].includes('showMore')) {
@@ -423,8 +426,8 @@ export default {
   width: 100%;
   transition: all .3ms;
   order: 1;
-  /*  display: flex;
-    flex-wrap: wrap;*/
+/*  display: flex;
+  flex-wrap: wrap;*/
 }
 
 .equipment-item__body {
@@ -437,8 +440,8 @@ export default {
 .showMore .equipment-item__body {
 
   display: none;
-  /*  order: 1;
-    width: 40%;*/
+/*  order: 1;
+  width: 40%;*/
 }
 
 .showMore .buttons {
