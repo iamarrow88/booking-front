@@ -167,11 +167,6 @@ export default {
             localStorage.clear();
             this.commit('login', false);
         },
-        /*const options = {
-            instance: instanceName|null,
-            fields: [fieldsNames],
-            values: [fieldsValues]
-        }*/
         updateField(state, options) {
             if (options.instance) {
                 for (let i = 0; i < options.fields.length; i++) {
@@ -228,6 +223,8 @@ export default {
             state.user.role_id = +localStorage.getItem('role_id');
         },
         checkLogin(state) {
+            console.log(localStorage.getItem('token'));
+            console.log(!!localStorage.getItem('token'));
             state.isLoggedIn = !!localStorage.getItem('token');
         },
         updateAuthorizationErrorMessage(state, newMessage) {

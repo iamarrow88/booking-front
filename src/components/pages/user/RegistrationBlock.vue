@@ -137,7 +137,7 @@ export default {
 }
 
 button {
-  width: 50%;
+  width: 70%;
   margin: 0 auto;
 }
 
