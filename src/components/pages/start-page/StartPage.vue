@@ -58,20 +58,18 @@
     <div ref="results">
       <div v-if="resorts.length > 0" class="results-block">
         <h3 class="results-header">Курорты в городе {{ selectedCity.name }}:</h3>
-        <div class="results__wrapper">
-          <div class="results__grid">
-            <result-item-from-start-page v-for="resort in resorts"
-                                         :key="resort.id"
-                                         :resort="resort"
-                                         :selectedType="selectedType"
-                                         :selectedCity="selectedCity"
-                                         :selDateStartShort="selDateStartShort"
-                                         :selDateEndShort="selDateEndShort"
-                                         :startTime="startTime"
-                                         :endTime="endTime"
-                                         :duration="duration"
-                                         :rate="resort.rate"/>
-          </div>
+        <div class="results__grid">
+          <result-item-from-start-page v-for="resort in resorts"
+                                       :key="resort.id"
+                                       :resort="resort"
+                                       :selectedType="selectedType"
+                                       :selectedCity="selectedCity"
+                                       :selDateStartShort="selDateStartShort"
+                                       :selDateEndShort="selDateEndShort"
+                                       :startTime="startTime"
+                                       :endTime="endTime"
+                                       :duration="duration"
+                                       :rate="resort.rate"/>
         </div>
       </div>
       <div v-else-if="isNotFoundShown" class="results-none">
@@ -393,15 +391,13 @@ export default {
 
 .results-block {
   padding-top: 40px;
+  margin: 0 auto;
+  width: 80%;
 }
 
 .results-header {
   margin-bottom: 35px;
   font-size: 2em;
-}
-
-.results__wrapper {
-  margin: 0 auto;
 }
 
 .results__grid {

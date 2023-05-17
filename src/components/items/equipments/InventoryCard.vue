@@ -1,26 +1,31 @@
 <template>
-  <h3>{{ IsEditEquipmModeOnFParent ? "Здесь можно изменить данные инвентаря" : "Здесь можно добавить инвентарь" }}</h3>
-  <div class="create-title">{{ IsEditEquipmModeOnFParent ? "Изменить данные инвентаря" : "Добавить инвентарь" }}</div>
-  <label class="create-type" for="itemType">Выберите тип инвентаря</label>
-  <select class="create-type-list" id="itemType" v-model="typeName">
-    <option class="create-type-list-item" v-for="type in types" v-bind:key="type.id">{{ type.name }}</option>
-  </select>
+  <div class="inventory-card">
+    <h3 class="inventory-card__title">{{ IsEditEquipmModeOnFParent ? "Здесь можно изменить данные инвентаря" : "Здесь можно добавить инвентарь" }}</h3>
+    <div class="create-title">{{ IsEditEquipmModeOnFParent ? "Изменить данные инвентаря" : "Добавить инвентарь" }}</div>
+    <label class="create-type" for="itemType">Выберите тип инвентаря</label>
+    <select class="create-type-list" id="itemType" v-model="typeName">
+      <option class="create-type-list-item" v-for="type in types" v-bind:key="type.id">{{ type.name }}</option>
+    </select>
 
-  <label class="create-resort" for="resortName">Выберите курорт</label>
-  <select class="create-resort-list" id="resortName" v-model="resortName">
-    <option class="create-resort-list-item" v-for="resort in resorts" v-bind:key="resort.id">{{ resort.name }}</option>
-  </select>
+    <label class="create-resort" for="resortName">Выберите курорт</label>
+    <select class="create-resort-list" id="resortName" v-model="resortName">
+      <option class="create-resort-list-item" v-for="resort in resorts" v-bind:key="resort.id">{{ resort.name }}</option>
+    </select>
 
-  <label for="price" class="create-price">Введите стоимость</label>
-  <input type="number" class="create-price-input" v-model="price" min="1">
+    <label for="price" class="create-price">Введите стоимость</label>
+    <input type="number" class="create-price-input" v-model="price" min="1">
 
-  <label for="uploadPhoto" class="upload-photo-label">Загрузить фото</label>
-  <input type="file" id="uploadPhoto" ref="uploadPhoto" @change="onFileSelected"/>
+    <label for="uploadPhoto" class="upload-photo-label">Загрузить фото</label>
+    <input type="file" id="uploadPhoto" ref="uploadPhoto" @change="onFileSelected"/>
 
-  <button @click="createItem" class="cards-btn">{{
-      IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать"
-    }}
-  </button>
+    <div class="buttons">
+      <button @click="createItem" class="cards-btn">{{
+          IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать"
+        }}
+      </button>
+      <button class="cards-btn" @click="cancel">Отмена</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -57,20 +62,16 @@ export default {
     }
   },
   methods: {
-    async createItem() {
+    async createItem(e) {
       const method = this.IsEditEquipmModeOnFParent ? 'PUT' : 'POST';
       const id = this.IsEditEquipmModeOnFParent ? this.itemFromParent.id : Date.now();
-      /*if(!this.IsEditEquipmModeOnFParent) {
-        this.photo = document.querySelector('.create-upload-file').files[0].webkitRelativePath;
-      }*/
+
       const body = {
         id: id,
         type_id: +this.typeId,
         resort_id: +this.resortId,
         price: +this.price,
       }
-      /*if(this.photo) body.photo = this.photo;*/
-
       console.log(body);
 
       try {
@@ -84,7 +85,7 @@ export default {
         });
         if (response.ok) {
           await this.uploadPhoto(id);
-          this.$emit('isAddItemBlockOpen', false)
+          this.$emit('isAddItemBlockOpen', e);
           console.log('OK');
         } else {
           console.log('ошибка')
@@ -92,6 +93,9 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    cancel(e){
+      this.$emit('closeAndRefreshAddWindow', e)
     },
     async uploadPhoto(itemId) {
       if (!this.selectedFile) {
@@ -185,6 +189,10 @@ export default {
 
 select {
   max-width: 500px;
+}
+
+.inventory-card {
+  padding: 3em;
 }
 
 </style>

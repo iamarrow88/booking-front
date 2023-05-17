@@ -1,20 +1,24 @@
 <template>
+  <div class="add-resort">
+    <button class="sub-btn create-resort-btn"
+            @click="editComponent">Добавить курорт
+    </button>
+    <modal-window v-if="isCreateResortWindowOpen">
+      <create-resort-block :editMode="false"
+                           @updateResort="editResort"
+      @closeAndRefreshAddWindow="editComponent">
+
+      </create-resort-block>
+    </modal-window>
+  </div>
+
   <div class="resorts-list" v-if="resorts.length > 0">
     <resort-item @editResortFromItem="editResort"
                  @deleteResort="deleteResort" v-for="resort in resorts"
                  :key="resort.id"
                  :resort="resort"></resort-item>
   </div>
-  <div class="add-resort">
-    <button class="sub-btn"
-            @click="editComponent">Добавить курорт
-    </button>
-    <create-resort-block v-if="isEditComponent"
-                         :editMode="false"
-                         @updateResort="editResort">
 
-    </create-resort-block>
-  </div>
   <div v-if="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
@@ -23,6 +27,7 @@
 <script>
 import ResortItem from "@/components/items/resorts/ResortItem.vue";
 import CreateResortBlock from "@/components/blocks/resorts/CreateResortBlock.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "ManageResortCard",
@@ -36,7 +41,11 @@ export default {
       isEditComponent: false,
       cities: [],
       wasChangeResorts: 0,
+      isCreateResortWindowOpen: false,
     }
+  },
+  computed: {
+    ...mapGetters(['GET_CITIES']),
   },
   methods: {
     async deleteResort(resortId) {
@@ -58,7 +67,6 @@ export default {
     },
     async editResort(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
       console.log('edit', resortId);
-      console.log(arguments);
 
       const method = editMode ? 'PUT' : 'POST';
       const body = {
@@ -85,11 +93,7 @@ export default {
         if (response.ok) {
           console.log('ok');
           this.wasChangeResorts += 1;
-          this.isEditComponent = false;
-          this.resortName = '';
-          this.resortAddress = '';
-          this.resortDescription = '';
-          this.city = this.cities[0].name;
+          this.isCreateResortWindowOpen = false;
         } else {
           this.errorMessage = "Invalid data provided, please try again";
         }
@@ -99,7 +103,7 @@ export default {
       }
     },
     editComponent() {
-      this.isEditComponent = !this.isEditComponent;
+      this.isCreateResortWindowOpen = !this.isCreateResortWindowOpen;
     },
     async getUserResorts() {
       try {
@@ -115,7 +119,8 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    }
+    },
+    ...mapActions(['fetchCities']),
   },
   watch: {
     wasChangeResorts() {
@@ -124,34 +129,29 @@ export default {
   },
   async mounted() {
     await this.getUserResorts();
-
-    try {
-      const cities = await fetch('/api/cities');
-      this.cities = await cities.json();
-      if (!this.editMode) {
-        this.cityName = this.cities[0].name;
-        this.cityId = this.cities[0].id
-      }
-    } catch (error) {
-      console.error(error)
-    }
+    if(this.GET_CITIES.length === 0) await this.fetchCities();
   },
-  /*computed: {
-    getUsersResorts() {
-      return [...this.allResorts].filter(resort => resort.owner_id === +this.userId);
-    }
-  }*/
 }
 </script>
 
 <style scoped>
-.sub-btn {
-  padding: 7px;
-  background-color: transparent;
-  cursor: pointer;
-  color: darkslateblue;
-  text-decoration: underline;
-
+.resorts-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2em;
+  justify-content: flex-start;
+  width: 90%;
+  margin: 0 auto;
 }
 
+.create-resort-btn {
+  margin: 1em;
+}
+
+.add-resort {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+}
 </style>

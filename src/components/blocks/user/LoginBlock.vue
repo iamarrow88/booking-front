@@ -96,7 +96,7 @@ export default {
   gap: 15px
 }
 button {
-  width: 30%;
+  width: 70%;
   margin: 0 auto;
 }
 

@@ -65,22 +65,21 @@
     <div class="results" ref="results">
       <h3 class="results__title">Инвентарь в "{{ resortName }}":</h3>
       <div class="results__wrapper" v-if="items.length > 0">
-        <div class="results__grid">
-          <search-equipment-item v-for="item in filteredItems"
-                                 class="results__item"
-                                 :key="item.id"
-                                 :item="item"
-                                 :typeId="item.type_id"
-                                 :resortName="resortName"
-                                 :editMode="false"
-                                 :selDateStartShort="selDateStartShort"
-                                 :selDateEndShort="selDateEndShort"
-                                 :startTime="startTime"
-                                 :endTime="endTime"
-                                 :duration="duration"
-                                 :hoursNaming="hoursNaming">
-          </search-equipment-item>
-        </div>
+        <search-equipment-item v-for="item in filteredItems"
+                               class="results__item"
+                               :key="item.id"
+                               :item="item"
+                               :typeId="item.type_id"
+                               :resortName="resortName"
+                               :editMode="false"
+                               :selDateStartShort="selDateStartShort"
+                               :selDateEndShort="selDateEndShort"
+                               :startTime="startTime"
+                               :endTime="endTime"
+                               :duration="duration"
+                               :hoursNaming="hoursNaming"
+        :isFirstPriceShown="false">
+        </search-equipment-item>
       </div>      <div v-else class="results__empty-list-error">
         Ничего не найдено
       </div>
@@ -355,16 +354,24 @@ label.date__label, label.time__label, label.type__label {
 
 .results__wrapper {
   margin: 0 auto;
-}
-
-.results__grid {
+  width: 80%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 16px;
 }
 
+
 .results__item {
   padding: 1em;
+}
+
+.results__item > .equipment-item__body {
+  width: 100%;
+}
+
+.equipment-item__type-name {
+  text-align: center;
+  font-size: 28px;
 }
 
 @media (max-width: 767px) {

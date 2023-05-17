@@ -53,8 +53,10 @@
             {{ isPhoneNumberWrong ? "Допускаются только цифры" :
               isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
         </div>
-        <button class="cards-btn" @click="editUserData">{{ isEditModeOn ? 'Обновить' : 'Редактировать'}}</button>
-        <button class="cards-btn" @click="deleteUserData" v-show="!isEditModeOn">Удалить аккаунт</button>
+        <div class="buttons">
+          <button class="cards-btn" @click="editUserData">{{ isEditModeOn ? 'Обновить' : 'Редактировать'}}</button>
+          <button class="cards-btn" @click="deleteUserData" v-show="!isEditModeOn">Удалить аккаунт</button>
+        </div>
       </div>
     </div>
     <div class="error-msg-block" v-if="IS_UPDATE_ERROR_DETECTED">{{ GET_ERROR_MESSAGE }}</div>
@@ -98,13 +100,13 @@ export default {
     editUserData() {
       if(this.isEditModeOn){
         const body = {
-          id: +this.$store.getters.GET_ALL_USER_INFO.id,
-          first_name: this.firstName,
-          surname: this.surname,
-          middle_name: this.middleName,
-          email: this.email,
-          phone: +this.phone,
-          role_id: +this.$store.getters.GET_ALL_USER_INFO.role_id,
+          "id": +this.$store.getters.GET_ALL_USER_INFO.id,
+          "first_name": this.firstName,
+          "surname": this.surname,
+          "middle_name": this.middleName,
+          "email": this.email,
+          "phone": this.phone,
+          "role_id": +this.$store.getters.GET_ALL_USER_INFO.role_id,
         }
         console.log(body);
         this.$store.dispatch('updateUser', body);
@@ -115,7 +117,6 @@ export default {
         this.middleName = this.$store.getters.GET_ALL_USER_INFO.middleName;
         this.email = this.$store.getters.GET_ALL_USER_INFO.email;
         this.phone = +this.$store.getters.GET_ALL_USER_INFO.phone;
-        console.log('ща как отредактируем!');
       }
       this.isEditModeOn = !this.isEditModeOn;
       this.$store.commit('updateKey');
@@ -169,6 +170,15 @@ export default {
     text-align: center;
     color: darkred;
     font-size: 26px;
+  }
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+  }
+
+  .buttons > .cards-btn {
+    width: 47%;
   }
 
 </style>

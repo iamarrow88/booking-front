@@ -15,7 +15,35 @@
       <button @click="showMore"
               class="cards-btn">Подробнее
       </button>
-      <p class="item__description" v-if="isMoreShown"><b>Описание:</b> {{ resort.description }}</p>
+<!--      <p class="item__description" v-if="isMoreShown">
+        <b>Описание:</b> {{ resort.description }}
+      </p>-->
+      <teleport to="body">
+        <modal-window v-if="isMoreShown" @closePopUp="isMoreShown=false">
+          <div class="item">
+            <div class="item__header">{{ resort.name }}</div>
+            <div class="item__address">
+              <img class="address__img" src="../../../assets/icons/map-pin.svg" alt="pin">
+              <p class="address__text">
+                {{ resort.address }}
+              </p>
+            </div>
+            <div class="item__rate">
+              <stars-rate :rate="Math.round(resort.avg_rating)"></stars-rate>
+            </div>
+            <p class="item__description">
+              <b>Описание:</b> {{ resort.description }}
+            </p>
+
+            <button
+                @click="goToResortPage"
+                class="cards-btn">
+              Посмотреть инвентарь
+            </button>
+          </div>
+        </modal-window>
+      </teleport>
+
 
       <button
           @click="goToResortPage"
@@ -25,18 +53,7 @@
 
     </div>
     <div class="reviews">
-      {{ resort.description }}
-      <!--      <div class="reviews__title">Отзывы</div>-->
-      <!--      <review-block v-for="review in reviews"-->
-      <!--                    :review="review"-->
-      <!--                    :key="review.id"-->
-      <!--                    :class="{active: review.index === this.currentReview}"-->
-      <!--                    @prev="prev"-->
-      <!--                    @next="next"-->
-      <!--                    @deleteComment="deleteComment"></review-block>-->
-
-      <!--      <create-comment v-if="showAddComment" @next="next"-->
-      <!--                      @postComment="postComment"></create-comment>-->
+      {{resort.description}}
     </div>
   </li>
 </template>
@@ -45,10 +62,11 @@
 import starsRate from "@/components/UI/StarsRate.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
 import {comments} from "@/data-and-functions/constants/URLS";
+import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
 
 export default {
   name: "ResultItemFromStartPage",
-  components: starsRate, ReviewBlock,
+  components: starsRate, ReviewBlock, ModalWindow,
   props: {
     resort: {
       id: Number,
@@ -121,13 +139,17 @@ export default {
             }
       })
     },
-    showMore(e) {
-      if ([...e.target.closest('.result-item').classList].includes('showMore')) {
-        e.target.closest('.result-item').classList.remove('showMore');
-      } else {
-        document.querySelectorAll('.result-item').forEach(card => card.classList.remove('showMore'));
-        e.target.closest('.result-item').classList.add('showMore');
-      }
+
+    showMore() {
+      /*console.log(e);*/
+      this.isMoreShown = !this.isMoreShown;
+      /*      if([...e.target.closest('.result-item').classList].includes('showMore')) {
+              e.target.closest('.result-item').classList.remove('showMore');
+            } else {
+              document.querySelectorAll('.result-item').forEach(card => card.classList.remove('showMore'));
+              e.target.closest('.result-item').classList.add('showMore');
+            }*/
+
     },
     async getUsers() {
       try {

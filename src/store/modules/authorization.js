@@ -128,6 +128,7 @@ export default {
             return state.user;
         },
         GET_USER_TOKEN(state) {
+            if(!state.user.token) state.user.token = localStorage.getItem('token');
             return state.user.token;
         },
         IS_USER_OWNER(state) {
@@ -166,11 +167,6 @@ export default {
             localStorage.clear();
             this.commit('login', false);
         },
-        /*const options = {
-            instance: instanceName|null,
-            fields: [fieldsNames],
-            values: [fieldsValues]
-        }*/
         updateField(state, options) {
             if (options.instance) {
                 for (let i = 0; i < options.fields.length; i++) {
@@ -227,6 +223,8 @@ export default {
             state.user.role_id = +localStorage.getItem('role_id');
         },
         checkLogin(state) {
+            console.log(localStorage.getItem('token'));
+            console.log(!!localStorage.getItem('token'));
             state.isLoggedIn = !!localStorage.getItem('token');
         },
         updateAuthorizationErrorMessage(state, newMessage) {

@@ -6,7 +6,7 @@
       </div>
       <div class="pop-up-text">
         Проверить свои бронирования можно в
-        <router-link to="/user/bookings"><b> Вашем аккаунте</b></router-link>
+        <router-link :to="{name: 'UserBookings', params: {isUserBookingsPage: true}}"><b> Вашем аккаунте</b></router-link>
       </div>
       <button class="pop-up__close-btn cards-btn" @click="closePopUp">Х</button>
     </div>

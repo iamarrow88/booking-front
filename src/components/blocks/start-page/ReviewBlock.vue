@@ -12,10 +12,11 @@
       </div>
       <div class="review__date">{{ review.createdAt }}</div>
     </div>
+    <div class="review__counter"> 1 из {{ reviewsLength }}</div>
     <div class="block__btns">
       <button class="up" @click="previous">Предыдущий</button>
-      <button class="down" @click="deleteComment" v-if="review.user_id===+this.GET_ALL_USER_INFO.id">Удалить</button>
       <button class="down" @click="next">Следующий</button>
+      <button class="down" @click="deleteComment" v-if="review.user_id===+this.GET_ALL_USER_INFO.id">Удалить</button>
     </div>
   </div>
 
@@ -37,7 +38,8 @@ export default {
       text: String,
       createdAt: String,
       user_name: String,
-    }
+    },
+    reviewsLength: Number,
   },
   data() {
     return {
@@ -140,6 +142,13 @@ button:hover {
 
 .active {
   display: block;
+}
+
+.review__counter {
+  margin-bottom: 1em;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
 }
 
 </style>

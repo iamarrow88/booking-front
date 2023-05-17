@@ -1,13 +1,16 @@
 <template>
-  <div>
-    <div>{{ resort.name }}</div>
-    <button @click="editResortDown" class="cards-btn">Редактировать</button>
-    <button @click="deleteResort" class="cards-btn">Удалить</button>
-    <div v-if="isEditComponent">
-      <create-resort-block :resortIdFromParent="resort.id"
-                           :editMode="isEditComponent"
-                           @updateResort="updateResortUp"></create-resort-block>
+  <div class="resort-item">
+    <div class="resort-item__name">{{ resort.name }}</div>
+    <div class="buttons">
+      <button @click="editResortDown" class="cards-btn action">Редактировать</button>
+      <button @click="deleteResort" class="cards-btn">Удалить</button>
     </div>
+    <modal-window v-if="isEditResortWindowOpen" @closePopUp="isEditResortWindowOpen=false">
+      <create-resort-block :resortIdFromParent="resort.id"
+                           :editMode="true"
+                           @updateResort="updateResortUp"
+      @closeAndRefreshAddWindow="closeAndRefreshAddWindow"></create-resort-block>
+    </modal-window>
   </div>
 </template>
 
@@ -30,19 +33,23 @@ export default {
   },
   data() {
     return {
-      isEditComponent: false,
+      isEditResortWindowOpen: false,
     }
   },
   methods: {
     editResortDown() {
-      this.isEditComponent = !this.isEditComponent
+      this.isEditResortWindowOpen = !this.isEditResortWindowOpen;
     },
     deleteResort() {
       this.$emit('deleteResort', this.resort.id);
     },
     updateResortUp(editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId) {
-      this.isEditComponent = false;
+      this.isEditResortWindowOpen = !this.isEditResortWindowOpen;
       this.$emit('editResortFromItem', editMode, cityId, resortId, resortName, resortAddress, resortDescription, userId);
+    },
+    closeAndRefreshAddWindow(e){
+      this.isEditResortWindowOpen = !this.isEditResortWindowOpen;
+      console.log(e);
     }
   },
   created() {
@@ -53,5 +60,22 @@ export default {
 </script>
 
 <style scoped>
+.resort-item {
+  padding: 40px;
+  border: 0 solid #899bb0;
+  box-shadow: 7px 7px 20px #c5daf3;
+  font-size: 1.25rem;
+  order: 2;
+  transition: all .3ms;
+  width: 26%;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 60%;
+  margin: 1em auto 0;
+}
 
 </style>
