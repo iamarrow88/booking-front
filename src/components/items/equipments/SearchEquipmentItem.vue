@@ -33,22 +33,22 @@
         </div>
       </div>
 
-<!--      <div class="equipment-item__reviews" data-refresh="0" v-if="!editMode">
-        <div class="reviews__title">Отзывы</div>
-        <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
-        <review-block v-for="review in reviews"
-                      :review="review"
-                      :key="review.id"
-                      :class="{active: review.index === this.currentReview}"
-                      @prev="prev"
-                      @next="next"
-                      @deleteComment="deleteComment"></review-block>
-        <create-comment v-if="showAddComment"
-                        @postComment="postComment"
-                        @next="next">добавьте комментарий
-        </create-comment>
+      <!--      <div class="equipment-item__reviews" data-refresh="0" v-if="!editMode">
+              <div class="reviews__title">Отзывы</div>
+              <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
+              <review-block v-for="review in reviews"
+                            :review="review"
+                            :key="review.id"
+                            :class="{active: review.index === this.currentReview}"
+                            @prev="prev"
+                            @next="next"
+                            @deleteComment="deleteComment"></review-block>
+              <create-comment v-if="showAddComment"
+                              @postComment="postComment"
+                              @next="next">добавьте комментарий
+              </create-comment>
 
-      </div>-->
+            </div>-->
     </div>
 
     <div class="buttons">
@@ -117,7 +117,8 @@
             </button>
 
             <button class="btn cards-btn"
-                    @click="editModalWindowOpen=false">Назад</button>
+                    @click="editModalWindowOpen=false">Назад
+            </button>
           </div>
         </div>
       </modal-window>
@@ -228,18 +229,7 @@ export default {
       this.popupVisible = false;
     },
 
-    showMore() {
-      /*      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-              e.target.closest('.equipment-item').classList.remove('showMore');
-            } else {
-              document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-              e.target.closest('.equipment-item').classList.add('showMore');
-            }*/
-      this.morePopupVisible = true;
-    },
-    closeMorePopup() {
-      this.morePopupVisible = false;
-    },
+
     itemPhotoSrc(item) {
       if (item.photo) {
         const mimeType = this.getMimeTypeFromFilename(item.inventory_name);
@@ -276,7 +266,7 @@ export default {
     },
     prev() {
       this.currentReview -= 1;
-      if(this.showCreateComment) {
+      if (this.showCreateComment) {
         if (this.currentReview < 0) this.currentReview = this.reviews.length;
       } else {
         if (this.currentReview < 0) this.currentReview = this.reviews.length - 1;
@@ -284,7 +274,7 @@ export default {
     },
     next() {
       this.currentReview += 1;
-      if(this.showCreateComment){
+      if (this.showCreateComment) {
         if (this.currentReview > this.reviews.length) this.currentReview = 0;
       } else {
         if (this.currentReview > this.reviews.length - 1) this.currentReview = 0;
@@ -361,15 +351,15 @@ export default {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
-/*    showAddItemBlock(e) {
-      console.log('equipment-item');
-      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-        e.target.closest('.equipment-item').classList.remove('showMore');
-      } else {
-        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-        e.target.closest('.equipment-item').classList.add('showMore');
-      }
-    },*/
+    /*    showAddItemBlock(e) {
+          console.log('equipment-item');
+          if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+            e.target.closest('.equipment-item').classList.remove('showMore');
+          } else {
+            document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
+            e.target.closest('.equipment-item').classList.add('showMore');
+          }
+        },*/
     /*closeAddItem(event) {
       console.log('equipment-item close');
       if ([...event.target.closest('.equipment-item').classList].includes('showMore')) {
@@ -433,8 +423,8 @@ export default {
   width: 100%;
   transition: all .3ms;
   order: 1;
-/*  display: flex;
-  flex-wrap: wrap;*/
+  /*  display: flex;
+    flex-wrap: wrap;*/
 }
 
 .equipment-item__body {
@@ -447,8 +437,8 @@ export default {
 .showMore .equipment-item__body {
 
   display: none;
-/*  order: 1;
-  width: 40%;*/
+  /*  order: 1;
+    width: 40%;*/
 }
 
 .showMore .buttons {
@@ -460,6 +450,7 @@ export default {
   order: 2;
   width: 60%;
 }
+
 .equipment-item__about {
   display: flex;
   flex-direction: column;
@@ -619,6 +610,7 @@ export default {
 .modal-reviews__title {
   font-size: 26px;
 }
+
 .modal-equipment-item__reviews > .active {
   width: auto;
 }
@@ -633,6 +625,7 @@ export default {
 .active > .block__btns > button {
   width: 47%;
 }
+
 .modal-buttons {
   display: flex;
   justify-content: center;
@@ -643,7 +636,7 @@ export default {
   width: 40%;
 }
 
-.pop-up__confirm > .pop-up__block{
+.pop-up__confirm > .pop-up__block {
   width: 30%;
 }
 

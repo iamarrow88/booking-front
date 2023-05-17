@@ -284,7 +284,7 @@ export default {
 .item__header {
   text-align: left;
   text-transform: uppercase;
-  width: 83%;
+  width: 100%;
   padding-left: 13%;
   font-size: 21px;
   font-weight: 800;
