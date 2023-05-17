@@ -102,42 +102,44 @@ export default {
     }
   },
   watch: {
-    currentReview(){
+    currentReview() {
       this.showAddComment = this.currentReview === this.reviews.length;
     },
-    selDateStartShort(newDate){
+    selDateStartShort(newDate) {
       this.$store.commit('setStartDate', newDate);
     },
-    selDateEndShort(newDate){
+    selDateEndShort(newDate) {
       this.$store.commit('setEndDate', newDate);
     },
-    startTime(newTime){
+    startTime(newTime) {
       this.$store.commit('setStartTime', newTime);
     },
-    endTime(newTime){
+    endTime(newTime) {
       this.$store.commit('setEndTime', newTime);
     },
-    selectedType(newInvType){
+    selectedType(newInvType) {
       this.$store.commit('setSelectedInvType', newInvType);
     },
   },
   methods: {
-    goToResortPage(){
+    goToResortPage() {
       this.$store.commit('setSelectedResort', this.resort);
 
 
-      this.$router.push({ path: '/resorts/' + this.resort.id, query:
+      this.$router.push({
+        path: '/resorts/' + this.resort.id, query:
             {
               type_id: this.selectedType.id,
               selectedCityId: this.selectedCity.id,
               selDateStartShort: this.selDateStartShort,
-              selDateEndShort:this.selDateEndShort,
+              selDateEndShort: this.selDateEndShort,
               startTime: this.startTime,
               endTime: this.endTime,
               duration: this.duration
             }
       })
     },
+
     showMore() {
       /*console.log(e);*/
       this.isMoreShown = !this.isMoreShown;
@@ -147,6 +149,7 @@ export default {
               document.querySelectorAll('.result-item').forEach(card => card.classList.remove('showMore'));
               e.target.closest('.result-item').classList.add('showMore');
             }*/
+
     },
     async getUsers() {
       try {
@@ -162,7 +165,7 @@ export default {
     },
     async getReviewsByResortID() {
       try {
-        const res = await fetch(comments.getCommentsByResortID.URL+this.resort.id);
+        const res = await fetch(comments.getCommentsByResortID.URL + this.resort.id);
         if (res.ok) {
           this.reviews = await res.json();
         } else {
