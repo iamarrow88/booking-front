@@ -1,7 +1,7 @@
 <template>
   <div class="add-resort">
     <h2 class="add-resort__header">
-      {{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
+      {{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта"}}</h2>
     <div class="form-block resort-name">
       <label for="ResortName">Название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
