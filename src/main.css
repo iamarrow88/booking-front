@@ -85,9 +85,13 @@ input[type="date"], select {
 }
 
 .pop-up__block {
-    position: absolute;
+    /*position: absolute;
     top: 46%;
-    left: 35%;
+    left: 35%;*/
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     padding: 3em;
     background-color: #fff;
     display: flex;

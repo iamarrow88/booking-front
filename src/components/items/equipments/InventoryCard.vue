@@ -17,10 +17,13 @@
   <label for="uploadPhoto" class="upload-photo-label">Загрузить фото</label>
   <input type="file" id="uploadPhoto" ref="uploadPhoto" @change="onFileSelected"/>
 
-  <button @click="createItem" class="cards-btn">{{
-      IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать"
-    }}
-  </button>
+  <div class="buttons">
+    <button @click="createItem" class="cards-btn">{{
+        IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать"
+      }}
+    </button>
+    <button class="cards-btn" @click="cancel">Отмена</button>
+  </div>
 </template>
 
 <script>
@@ -57,20 +60,16 @@ export default {
     }
   },
   methods: {
-    async createItem() {
+    async createItem(e) {
       const method = this.IsEditEquipmModeOnFParent ? 'PUT' : 'POST';
       const id = this.IsEditEquipmModeOnFParent ? this.itemFromParent.id : Date.now();
-      /*if(!this.IsEditEquipmModeOnFParent) {
-        this.photo = document.querySelector('.create-upload-file').files[0].webkitRelativePath;
-      }*/
+
       const body = {
         id: id,
         type_id: +this.typeId,
         resort_id: +this.resortId,
         price: +this.price,
       }
-      /*if(this.photo) body.photo = this.photo;*/
-
       console.log(body);
 
       try {
@@ -84,7 +83,7 @@ export default {
         });
         if (response.ok) {
           await this.uploadPhoto(id);
-          this.$emit('isAddItemBlockOpen', false)
+          this.$emit('isAddItemBlockOpen', e);
           console.log('OK');
         } else {
           console.log('ошибка')
@@ -92,6 +91,9 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    cancel(e){
+      this.$emit('closeAndRefreshAddWindow', e)
     },
     async uploadPhoto(itemId) {
       if (!this.selectedFile) {

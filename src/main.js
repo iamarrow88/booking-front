@@ -31,6 +31,8 @@ import store from "@/store";
 import StarsRate from "@/components/UI/StarsRate.vue";
 import InformationWindow from "@/components/blocks/modal/InformationWindow.vue";
 import CreateComment from "@/components/UI/CreateComment.vue";
+import InventoryManagementPage from "@/components/pages/inventory/InventoryManagementPage.vue";
+import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
 
 
 
@@ -48,6 +50,7 @@ const router = createRouter({
         {path: '/resorts/manage', component: ManageResortCard},
         {path: '/payment', component: PaymentPage},
         {path: '/profile', component: UserPage},
+        {path: '/equipment/manage', component: InventoryManagementPage},
     ]
 })
 const app = createApp(App);
@@ -72,6 +75,8 @@ app.component('CreateComment', CreateComment);
 app.component('AuthorizationPage', AuthorizationPage);
 app.component('LoginBlock', LoginBlock);
 app.component('RegistrationBlock', RegistrationBlock);
+app.component('InventoryManagementPage', InventoryManagementPage);
+app.component('ModalWindow', ModalWindow);
 
 
 app.mixin({

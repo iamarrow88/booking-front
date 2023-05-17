@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="equipment-item__reviews" data-refresh="0">
+      <div class="equipment-item__reviews" data-refresh="0" v-if="!editMode">
         <div class="reviews__title">Отзывы</div>
         <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
         <review-block v-for="review in reviews"
@@ -49,7 +49,8 @@
               class="cards-btn">Подробнее
       </button>
       <button v-if="editMode"
-              @click="showAddItemBlock"
+
+              @click="editModalWindowOpen=!editModalWindowOpen"
               class="btn cards-btn">Редактировать
       </button>
       <button v-if="editMode"
@@ -57,21 +58,17 @@
               class="btn cards-btn">Удалить
       </button>
     </div>
-
-    <div v-if="isAddingItemModeOn">
+    <modal-window v-if="editModalWindowOpen">
       <inventory-card :IsEditEquipmModeOnFParent="true"
                       :resortIdFromParent="resortId"
                       :itemFromParent="item"
-                      @isAddItemBlockOpen="closeAddItem"></inventory-card>
-    </div>
+                      @isAddItemBlockOpen="closeAndRefreshAddWindow"
+      @closeAndRefreshAddWindow="closeAndRefreshAddWindow"></inventory-card>
+    </modal-window>
 
+<!--    <div class="inventory-edit">
 
-    <div v-if="isAddingItemModeOn">
-      <inventory-card :IsEditEquipmModeOnFParent="true"
-                      :resortIdFromParent="resortId"
-                      :itemFromParent="item"
-                      @isAddItemBlockOpen="closeAddItem"></inventory-card>
-    </div>
+    </div>-->
 
     <teleport to="body">
       <confirm-window v-if="!editMode" :item="item"
@@ -143,6 +140,7 @@ export default {
       currentReview: 0,
       showAddComment: false,
       refreshCommentID: 0,
+      editModalWindowOpen: false
     }
   },
   watch: {
@@ -250,6 +248,7 @@ export default {
       }
     },
     showMore(e) {
+      console.log('equipment-item');
       if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
         e.target.closest('.equipment-item').classList.remove('showMore');
       } else {
@@ -271,12 +270,29 @@ export default {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
-    showAddItemBlock() {
-      this.isAddingItemModeOn = !this.isAddingItemModeOn;
-    },
-    closeAddItem(bool) {
-      this.isAddingItemModeOn = bool;
-      this.itemsCounter += 1;
+/*    showAddItemBlock(e) {
+      console.log('equipment-item');
+      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
+        e.target.closest('.equipment-item').classList.remove('showMore');
+      } else {
+        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
+        e.target.closest('.equipment-item').classList.add('showMore');
+      }
+    },*/
+    /*closeAddItem(event) {
+      console.log('equipment-item close');
+      if ([...event.target.closest('.equipment-item').classList].includes('showMore')) {
+        event.target.closest('.equipment-item').classList.remove('showMore');
+      } else {
+        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
+        event.target.closest('.equipment-item').classList.add('showMore');
+      }
+    },*/
+    closeAndRefreshAddWindow(event) {
+      this.editModalWindowOpen = !this.editModalWindowOpen;
+      this.$emit('refreshInventoryArray');
+      console.log(event);
+      /*this.closeAddItem(event)*/
     },
     async getInventoryByResort() {
       try {
@@ -319,6 +335,7 @@ export default {
   font-size: 1.25rem;
   order: 2;
   transition: all .3ms;
+  width: 26%;
 }
 
 .equipment-item.showMore {
@@ -326,6 +343,8 @@ export default {
   width: 100%;
   transition: all .3ms;
   order: 1;
+/*  display: flex;
+  flex-wrap: wrap;*/
 }
 
 .equipment-item__body {
@@ -335,10 +354,25 @@ export default {
   justify-content: center;
 }
 
-.showMore ..equipment-item__body {
-  justify-content: space-between;
+.showMore .equipment-item__body {
+  display: none;
+/*  order: 1;
+  width: 40%;*/
 }
 
+/*.showMore .equipment-item__body {
+  justify-content: space-between;
+}*/
+
+.showMore .buttons {
+  /*order: 3;*/
+  display: none;
+}
+
+.showMore .inventory-edit {
+  order: 2;
+  width: 60%;
+}
 .equipment-item__about {
   display: flex;
   flex-direction: column;
@@ -365,7 +399,7 @@ export default {
 
 .equipment-item__photo-block {
   margin: 0 auto 30px;
-  width: 90%;
+  width: 50%;
   min-height: 150px;
   display: flex;
   order: 2;
@@ -381,8 +415,9 @@ export default {
 
 .equipment-item__photo {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 250px;
 }
+
 
 .showMore .equipment-item__photo {
   height: 100%;
@@ -436,11 +471,20 @@ export default {
   gap: 20px;
 }
 
+.inventory-edit {
+  display: none;
+}
+
+.showMore .inventory-edit {
+  display: block;
+  margin: 0 auto;
+}
 
 @media (max-width: 767px) {
 
   .equipment-item {
     font-size: 1rem;
+    width: 23%;
   }
 
   .equipment-item__type-name {

@@ -1,10 +1,4 @@
 <template>
-  <div class="resorts-list" v-if="resorts.length > 0">
-    <resort-item @editResortFromItem="editResort"
-                 @deleteResort="deleteResort" v-for="resort in resorts"
-                 :key="resort.id"
-                 :resort="resort"></resort-item>
-  </div>
   <div class="add-resort">
     <button class="sub-btn"
             @click="editComponent">Добавить курорт
@@ -15,6 +9,14 @@
 
     </create-resort-block>
   </div>
+
+  <div class="resorts-list" v-if="resorts.length > 0">
+    <resort-item @editResortFromItem="editResort"
+                 @deleteResort="deleteResort" v-for="resort in resorts"
+                 :key="resort.id"
+                 :resort="resort"></resort-item>
+  </div>
+
   <div v-if="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
@@ -23,6 +25,7 @@
 <script>
 import ResortItem from "@/components/items/resorts/ResortItem.vue";
 import CreateResortBlock from "@/components/blocks/resorts/CreateResortBlock.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "ManageResortCard",
@@ -37,6 +40,9 @@ export default {
       cities: [],
       wasChangeResorts: 0,
     }
+  },
+  computed: {
+    ...mapGetters(['GET_CITIES']),
   },
   methods: {
     async deleteResort(resortId) {
@@ -115,7 +121,8 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    }
+    },
+    ...mapActions(['fetchCities']),
   },
   watch: {
     wasChangeResorts() {
@@ -124,27 +131,26 @@ export default {
   },
   async mounted() {
     await this.getUserResorts();
+    if(this.GET_CITIES.length === 0) await this.fetchCities();
 
-    try {
-      const cities = await fetch('/api/cities');
-      this.cities = await cities.json();
-      if (!this.editMode) {
-        this.cityName = this.cities[0].name;
-        this.cityId = this.cities[0].id
-      }
-    } catch (error) {
-      console.error(error)
+    if(!this.editMode){
+      this.cityName = this.GET_CITIES[0].name;
+      this.cityId = this.GET_CITIES[0].id;
     }
   },
-  /*computed: {
-    getUsersResorts() {
-      return [...this.allResorts].filter(resort => resort.owner_id === +this.userId);
-    }
-  }*/
 }
 </script>
 
 <style scoped>
+.resorts-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2em;
+  justify-content: flex-start;
+  width: 90%;
+  margin: 0 auto;
+}
+
 .sub-btn {
   padding: 7px;
   background-color: transparent;

@@ -1,59 +1,37 @@
 <template>
   <div class="add-resort">
     <h2 class="add-resort__header">
-      {{ editMode ? "Страница редактирования карточки курорта" : "Страница создания карточки курорта" }}</h2>
+      {{ editMode ? "Страница создания карточки курорта" : "Страница редактирования карточки курорта" }}</h2>
     <div class="form-block resort-name">
-      <label for="ResortName">Введите название курорта</label>
+      <label for="ResortName">Название курорта</label>
       <input type="text" id="ResortName" v-model="resortName">
     </div>
     <div class="form-block resort-address">
-      <label for="resortAddress">Введите адрес курорта</label>
+      <label for="resortAddress">Адрес курорта</label>
       <select v-model="cityName">
         <option v-for="city in cities" :key="city.id">{{ city.name }}</option>
       </select>
       <input type="text" id="resortAddress" v-model="resortAddress">
     </div>
     <div class="form-block resort-description">
-      <label for="resortDescription">Введите описание курорта</label>
+      <label for="resortDescription">Описание курорта</label>
       <input type="text" id="resortDescription" v-model="resortDescription">
     </div>
 
     <button @click="addResort" class="cards-btn">{{
-        editMode ? "Изменить данные курорта" : "Создать карточку курорта"
+        editMode ? "Создать карточку курорта" : "Изменить данные курорта"
       }}
     </button>
+
+    <button class="cards-btn" @click="cancel">Отмена</button>
+
+    <button @click="goToInventoryManagementPage" class="sub-btn">Управлять инвентарем ></button>
 
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
 
-    <div class="manage-equipment-block" v-if="editMode">
-      <button class="sub-btn"
-              @click="getEquipments">Управлять инвентарем
-      </button>
-      <div class="equipment-list" v-if="!isEquipmManagingHide && equipments.length > 0">
-        <div class="equipment-grid">
-          <div class="equipment-grid-item" v-for="item in equipments" :key="item.id">
-            <search-equipment-item :item="item"
-                                   :resortId="resortId"
-                                   :types="types"
-                                   :editMode="true"
-                                   @DeleteItem="deleteItem">
-            </search-equipment-item>
-          </div>
-        </div>
-      </div>
-      <div class="add-item">
-        <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
-        <inventory-card :IsEditEquipmModeOnFParent="false"
-                        :resortIdFromParent="resortId"
-                        v-if="isAddingItemModeOn"
-                        @isAddItemBlockOpen="closeAddItem">
 
-        </inventory-card>
-
-      </div>
-    </div>
   </div>
 </template>
 
@@ -61,9 +39,12 @@
 
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
+import InventoryManagementPage from "@/components/pages/inventory/InventoryManagementPage.vue";
+import paths from "@/data-and-functions/constants/paths";
+import {mapMutations} from "vuex";
 
 export default {
-  components: InventoryCard, SearchEquipmentItem,
+  components: InventoryCard, SearchEquipmentItem, InventoryManagementPage,
   name: "CreateResortBlock",
   props: {
     resortIdFromParent: Number,
@@ -95,6 +76,25 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setSelectedResort']),
+    cancel(e){
+      this.$emit('closeAndRefreshAddWindow', e)
+    },
+    goToInventoryManagementPage() {
+      const resort = {
+        id: +this.resortId,
+        name: this.resortName,
+        address: this.resortAddress,
+        description: this.resortDescription,
+        city_id: +this.cityId,
+      }
+      console.log(resort);
+      console.log('resort');
+      this.setSelectedResort(resort);
+      this.$router.push({path: paths.InventoryManagementPage, query: {
+          id: +this.resortId,
+        }});
+    },
     addResort() {
       console.log('create resort');
       this.$emit('updateResort', this.editMode, this.cityId, this.resortId, this.resortName, this.resortAddress, this.resortDescription, this.userId);
