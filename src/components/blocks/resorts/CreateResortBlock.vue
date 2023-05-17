@@ -26,7 +26,7 @@
 
       <button class="cards-btn" @click="cancel">Отмена</button>
 
-      <button @click="goToInventoryManagementPage" class="sub-btn">Управлять инвентарем ></button>
+      <button @click="goToInventoryManagementPage" class="cards-btn sub-btn">Управлять инвентарем ></button>
 
     </div>
     <div v-if="errorMessage" class="error-message">
@@ -81,7 +81,7 @@ export default {
   methods: {
     ...mapMutations(['setSelectedResort']),
     ...mapActions(['fetchInventoryTypes', 'fetchCities']),
-    cancel(e){
+    cancel(e) {
       this.$emit('closeAndRefreshAddWindow', e)
     },
     goToInventoryManagementPage() {
@@ -93,9 +93,11 @@ export default {
         city_id: +this.cityId,
       }
       this.setSelectedResort(resort);
-      this.$router.push({path: paths.InventoryManagementPage, query: {
+      this.$router.push({
+        path: paths.InventoryManagementPage, query: {
           id: +this.resortId,
-        }});
+        }
+      });
     },
     addResort() {
       console.log('create resort');
@@ -143,10 +145,10 @@ export default {
     this.resortId = this.resortIdFromParent ? this.resortIdFromParent : Date.now();
     await this.getResorts();
 
-    if(this.GET_INVENTORY_TYPES.length === 0) await this.fetchInventoryTypes();
-    if(this.GET_CITIES.length === 0) await this.fetchCities();
+    if (this.GET_INVENTORY_TYPES.length === 0) await this.fetchInventoryTypes();
+    if (this.GET_CITIES.length === 0) await this.fetchCities();
 
-    if(this.editMode){
+    if (this.editMode) {
       console.log(this.resortIdFromParent);
     } else {
       this.cityId = this.GET_CITIES[0].id;

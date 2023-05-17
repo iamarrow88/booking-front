@@ -6,7 +6,7 @@
     <modal-window v-if="isCreateResortWindowOpen">
       <create-resort-block :editMode="false"
                            @updateResort="editResort"
-      @closeAndRefreshAddWindow="editComponent">
+                           @closeAndRefreshAddWindow="editComponent">
 
       </create-resort-block>
     </modal-window>
@@ -129,7 +129,7 @@ export default {
   },
   async mounted() {
     await this.getUserResorts();
-    if(this.GET_CITIES.length === 0) await this.fetchCities();
+    if (this.GET_CITIES.length === 0) await this.fetchCities();
   },
 }
 </script>
@@ -145,7 +145,7 @@ export default {
 }
 
 .create-resort-btn {
-  margin: 1em;
+  margin: 1em 1em 1em auto;
 }
 
 .add-resort {

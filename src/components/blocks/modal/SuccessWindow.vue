@@ -43,6 +43,7 @@ export default {
   top: 17px;
   right: 17px;
   padding: 5px 9px;
+  width: 3em;
 }
 
 </style>

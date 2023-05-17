@@ -14,7 +14,7 @@
         <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
 
       </div>
-      <div v-if="isUserBookingsPage">
+      <div v-if="isUserBookingsPage" class="button">
         <button  class="btn cards-btn" @click="deleteBooking">Отменить бронирование</button>
       </div>
       <div class="my-booking-item__user" v-else>
@@ -119,6 +119,10 @@ export default {
   grid-template-columns: 2fr 5fr 1fr;
   gap: 0.5em;
   align-items: start;
+}
+
+.button > button.cards-btn {
+  height: auto;
 }
 
 .my-booking-item__user {
