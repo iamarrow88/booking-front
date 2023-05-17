@@ -11,7 +11,7 @@
                src="../../../assets/no-photo.jpg"
                alt="Item Photo">
         </div>
-        <div class="equipment-item__price" v-if="isFirstPriceShown">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
+        <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
         <div class="equipment-item__summary">
           <div class="summary__duration"
                v-if="!editMode">Аренда на {{ duration }} {{ hoursNaming }}
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="equipment-item__reviews" data-refresh="0" v-if="!editMode">
+<!--      <div class="equipment-item__reviews" data-refresh="0" v-if="!editMode">
         <div class="reviews__title">Отзывы</div>
         <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
         <review-block v-for="review in reviews"
@@ -36,15 +36,14 @@
                         @next="next">добавьте комментарий
         </create-comment>
 
-      </div>
+      </div>-->
     </div>
 
     <div class="buttons">
-      <div class="equipment-item__price" v-if="!isFirstPriceShown">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
 
       <button @click="showPopUp"
               v-if="!editMode"
-              class="btn cards-btn">Забронировать
+              class="btn cards-btn action">Забронировать
       </button>
       <button @click="showMore"
               v-if="!editMode"
@@ -60,17 +59,55 @@
               class="btn cards-btn">Удалить
       </button>
     </div>
-    <modal-window v-if="editModalWindowOpen">
-      <inventory-card :IsEditEquipmModeOnFParent="true"
-                      :resortIdFromParent="resortId"
-                      :itemFromParent="item"
-                      @isAddItemBlockOpen="closeAndRefreshAddWindow"
-      @closeAndRefreshAddWindow="closeAndRefreshAddWindow"></inventory-card>
-    </modal-window>
+    <teleport to="body">
+      <modal-window v-if="editModalWindowOpen" @closePopUp="editModalWindowOpen=false">
+        <div class="modal-equipment-item">
+          <div class="modal-equipment-item__body">
+            <div class="modal-equipment-item__about">
+              <div class="modal-equipment-item__type-name"><b>{{ type.name }}</b></div>
+              <div class="modal-equipment-item__photo-block">
+                <img v-if="item.photo" class="modal-equipment-item__photo"
+                     :src="itemPhotoSrc(item)"
+                     alt="Item Photo">
+                <img v-else class="modal-equipment-item__photo"
+                     src="../../../assets/no-photo.jpg"
+                     alt="Item Photo">
+              </div>
+              <div class="modal-equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
+              <div class="modal-equipment-item__summary">
+                <div class="modal-summary__duration"
+                     v-if="!editMode">Аренда на {{ duration }} {{ hoursNaming }}
+                </div>
+                <div class="modal-summary__total"
+                     v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
+              </div>
+            </div>
 
-<!--    <div class="inventory-edit">
+            <div class="modal-equipment-item__reviews" data-refresh="0" v-if="!editMode">
+              <div class="modal-reviews__title">Отзывы</div>
+              <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
+              <review-block v-for="review in reviews"
+                            :reviewsLength="reviews.length"
+                            :review="review"
+                            :key="review.id"
+                            :class="{active: review.index === this.currentReview}"
+                            @prev="prev"
+                            @next="next"
+                            @deleteComment="deleteComment"></review-block>
+            </div>
+          </div>
 
-    </div>-->
+          <div class="modal-buttons">
+            <button @click="showPopUp"
+                    class="btn cards-btn action">Забронировать
+            </button>
+
+            <button class="btn cards-btn"
+                    @click="editModalWindowOpen=false">Назад</button>
+          </div>
+        </div>
+      </modal-window>
+    </teleport>
 
     <teleport to="body">
       <confirm-window v-if="!editMode" :item="item"
@@ -103,10 +140,11 @@ import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
 import {comments, headerWithToken} from "@/data-and-functions/constants/URLS";
 import asyncRequest from "@/data-and-functions/API/asyncRequest";
 import {mapGetters} from "vuex";
+import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
 
 
 export default {
-  components: ConfirmWindow, SuccessWindow, InventoryCard, StarsRate, ReviewBlock,
+  components: ConfirmWindow, SuccessWindow, InventoryCard, StarsRate, ReviewBlock, ModalWindow,
   name: "SearchEquipmentItem",
   props: {
     item: {
@@ -144,6 +182,7 @@ export default {
       refreshCommentID: 0,
       editModalWindowOpen: false,
       isFirstPriceShown: false,
+      showCreateComment: false,
     }
   },
   watch: {
@@ -200,11 +239,19 @@ export default {
     },
     prev() {
       this.currentReview -= 1;
-      if (this.currentReview < 0) this.currentReview = this.reviews.length;
+      if(this.showCreateComment) {
+        if (this.currentReview < 0) this.currentReview = this.reviews.length;
+      } else {
+        if (this.currentReview < 0) this.currentReview = this.reviews.length - 1;
+      }
     },
     next() {
       this.currentReview += 1;
-      if (this.currentReview > this.reviews.length) this.currentReview = 0;
+      if(this.showCreateComment){
+        if (this.currentReview > this.reviews.length) this.currentReview = 0;
+      } else {
+        if (this.currentReview > this.reviews.length - 1) this.currentReview = 0;
+      }
     },
     async deleteComment(id) {
       console.log('deleteComment');
@@ -250,14 +297,15 @@ export default {
         console.error(e);
       }
     },
-    showMore(e) {
-      console.log('equipment-item');
+    showMore() {
+      this.editModalWindowOpen = !this.editModalWindowOpen;
+      /*console.log('equipment-item');
       if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
         e.target.closest('.equipment-item').classList.remove('showMore');
       } else {
         document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
         e.target.closest('.equipment-item').classList.add('showMore');
-      }
+      }*/
     },
     getEquipmentType() {
       this.GET_INVENTORY_TYPES.forEach(type => {
@@ -267,6 +315,7 @@ export default {
       })
     },
     showPopUp() {
+      this.editModalWindowOpen = false;
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
     },
     closePopUp(bool1, bool2) {
@@ -330,7 +379,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
 .equipment-item {
   padding: 40px;
   border: 0 solid #899bb0;
@@ -338,7 +387,6 @@ export default {
   font-size: 1.25rem;
   order: 2;
   transition: all .3ms;
-  width: 26%;
 }
 
 .equipment-item.showMore {
@@ -387,14 +435,14 @@ export default {
   flex-wrap: wrap;
 }
 
-.equipment-item__type-name {
+/*.equipment-item__type-name {
   margin-bottom: 20px;
   width: 100%;
   display: flex;
   justify-content: flex-start;
   font-size: 28px;
   order: 2;
-}
+}*/
 
 .showMore .equipment-item__type-name {
   margin-top: 40px;
@@ -403,7 +451,7 @@ export default {
 .equipment-item__photo-block {
   margin: 0 auto 30px;
   width: 50%;
-  min-height: 150px;
+  height: 250px;
   display: flex;
   order: 2;
   justify-content: center;
@@ -417,7 +465,7 @@ export default {
 }
 
 .equipment-item__photo {
-  max-width: 100%;
+  /*max-width: 100%;*/
   max-height: 250px;
 }
 
@@ -443,10 +491,10 @@ export default {
   order: 2;
 }
 
-.equipment-item__reviews {
+/*.equipment-item__reviews {
   display: none;
   min-width: 35%;
-}
+}*/
 
 .showMore .equipment-item__reviews {
   display: block;
@@ -486,6 +534,76 @@ export default {
   margin: 0 auto;
 }
 
+.equipment.inventory-card {
+  padding: 1em;
+}
+
+.inventory-card__title {
+  display: none;
+}
+
+.pop-up__block {
+  width: 65vw;
+}
+
+.modal-equipment-item {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.modal-equipment-item__body {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+}
+
+.modal-equipment-item__about {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1em;
+  font-size: 18px;
+}
+
+.modal-equipment-item__type-name {
+  font-size: 28px;
+}
+
+.modal-equipment-item__photo-block {
+  width: 92%;
+}
+
+.modal-equipment-item__photo {
+  width: 100%;
+}
+
+.modal-reviews__title {
+  font-size: 26px;
+}
+.modal-equipment-item__reviews > .active {
+  width: auto;
+}
+
+.active > .block__btns {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.5em;
+}
+
+.active > .block__btns > button {
+  width: 47%;
+}
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+}
+
+.modal-buttons > button {
+  width: 40%;
+}
 
 @media (max-width: 767px) {
 

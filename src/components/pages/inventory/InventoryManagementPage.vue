@@ -107,8 +107,8 @@ export default {
 <style>
 
 .equipment-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: .2em;
   justify-content: flex-start;
   width: 90%;

@@ -1,6 +1,6 @@
 <template>
   <div class="inventory-card">
-    <h3>{{ IsEditEquipmModeOnFParent ? "Здесь можно изменить данные инвентаря" : "Здесь можно добавить инвентарь" }}</h3>
+    <h3 class="inventory-card__title">{{ IsEditEquipmModeOnFParent ? "Здесь можно изменить данные инвентаря" : "Здесь можно добавить инвентарь" }}</h3>
     <div class="create-title">{{ IsEditEquipmModeOnFParent ? "Изменить данные инвентаря" : "Добавить инвентарь" }}</div>
     <label class="create-type" for="itemType">Выберите тип инвентаря</label>
     <select class="create-type-list" id="itemType" v-model="typeName">
