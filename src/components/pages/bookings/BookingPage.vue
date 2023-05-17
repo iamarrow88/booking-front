@@ -4,7 +4,8 @@
     <booking-item v-for="item in booking"
                   :key="item.id"
                   :item="item"
-                  :inventoryTypes="inv_types">
+                  :inventoryTypes="inv_types"
+    :isUserBookingsPage="isUserBookingsPage">
     </booking-item>
   </div>
 </template>
@@ -24,7 +25,8 @@ export default {
     return {
       booking: [],
       inv_types: [],
-      ...mapGetters(['GET_ALL_USER_INFO'])
+      ...mapGetters(['GET_ALL_USER_INFO']),
+      isUserBookingsPage: null,
     }
   },
   methods: mapActions(['fetchInventoryTypes', 'fetchCities']),
@@ -48,6 +50,12 @@ export default {
     }
     await this.fetchInventoryTypes();
     await this.fetchCities();
+    console.log(this.$route.fullPath.split('/'));
+    if(this.$route.fullPath.split('/').includes('user')) {
+      this.isUserBookingsPage = true;
+    } else {
+      this.isUserBookingsPage = false;
+    }
   }
 
 }

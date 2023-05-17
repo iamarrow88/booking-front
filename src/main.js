@@ -42,7 +42,7 @@ const router = createRouter({
         {path: '/', component: StartPage},
         {path: '/resorts/:id', component: ResortPage},
         {path: '/login', component: AuthorizationPage},
-        {path: '/user/bookings', component: BookingPage},
+        {path: '/user/bookings', component: BookingPage, name: "UserBookings"},
         // {path: '/:notFound(.*)', redirect: '/'},
         {path: '/resorts/bookings', component: BookingResortPage},
         {path: '/add-equipment', component: InventoryCard},

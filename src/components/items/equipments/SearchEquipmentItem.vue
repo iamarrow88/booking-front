@@ -120,6 +120,7 @@
                       :endTime="endTime"
                       :total="item.price * duration"
                       :duration="duration"
+                      class="pop-up__confirm"
                       @closePopUp="closePopUp"></confirm-window>
     </teleport>
     <teleport to="body">
@@ -543,7 +544,7 @@ export default {
 }
 
 .pop-up__block {
-  width: 65vw;
+  width: 65%;
 }
 
 .modal-equipment-item {
@@ -603,6 +604,10 @@ export default {
 
 .modal-buttons > button {
   width: 40%;
+}
+
+.pop-up__confirm > .pop-up__block{
+  width: 30%;
 }
 
 @media (max-width: 767px) {

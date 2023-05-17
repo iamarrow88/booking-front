@@ -1,23 +1,27 @@
 <template>
   <div class="my-booking-item">
-    <div class="my-booking-item__header">
-      <div class="my-booking-item__id"><b>ID бронирования:</b> {{ item.id }}</div>
+    <div class="my-booking-item__id">
+      <b>ID бронирования:</b> {{ item.id }}
+    </div>
+    <div class="my-booking-item__block">
       <div class="my-booking-item__resort"><b>Курорт:</b> {{ item.resort.name }}</div>
-    </div>
-    <div class="my-booking-item__body">
-      <p><b>Тип инвентаря:</b> {{ getInvTypeName }}</p>
-      <div class="body__term">
-        <p><b>Начало:</b> {{ startTimeFormatted }}</p>
-        <p><b>Конец:</b> {{ endTimeFormatted }}</p>
-      </div>
-      <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
+      <div class="my-booking-item__body">
+        <p><b>Тип инвентаря:</b> {{ getInvTypeName }}</p>
+        <div class="body__term">
+          <p><b>Начало:</b> {{ startTimeFormatted }}</p>
+          <p><b>Конец:</b> {{ endTimeFormatted }}</p>
+        </div>
+        <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
 
-    </div>
-    <!-- отключить для страници бронирований пользователя -->
-    <div class="my-booking-item__user" v-if="IS_USER_OWNER">
-      <div class="body__term">
-        <p><b>Пользователь:</b> {{ item.user.first_name + " " + item.user.surname + " " + item.user.middle_name }}</p>
-        <p><b>Телефон: </b>{{ item.user.phone }} </p>
+      </div>
+      <div v-if="isUserBookingsPage">
+        <button  class="btn cards-btn">Отменить бронирование</button>
+      </div>
+      <div class="my-booking-item__user" v-else>
+        <div class="body__term">
+          <p><b>Пользователь:</b> {{ item.user.first_name + " " + item.user.surname + " " + item.user.middle_name }}</p>
+          <p><b>Телефон: </b>{{ item.user.phone }} </p>
+        </div>
       </div>
     </div>
   </div>
@@ -39,12 +43,13 @@ export default {
       start_time: String,
       end_time: String
     },
-    page: String
+    page: String,
+    isUserBookingsPage: Boolean,
   },
   data() {
     return {
       startTimeFormatted: '',
-      endTimeFormatted: ''
+      endTimeFormatted: '',
     }
   },
 
@@ -72,7 +77,7 @@ export default {
       return typeName;
     },
   },
-  async created() {
+  async mounted() {
     if(this.GET_INVENTORY_TYPES.length === 0) await this.fetchInventoryTypes();
     this.startTimeFormatted = this.formatTime(this.item.start_time).join(' ');
     this.endTimeFormatted = this.formatTime(this.item.end_time).join(' ');
@@ -81,5 +86,25 @@ export default {
 </script>
 
 <style scoped>
+
+.my-booking-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.my-booking-item__block {
+  display: grid;
+  grid-template-columns: 2fr 5fr 1fr;
+  gap: 0.5em;
+  align-items: start;
+}
+
+.my-booking-item__user {
+  margin: 0;
+}
+.my-booking-item__user > p{
+  margin: 0;
+}
 
 </style>

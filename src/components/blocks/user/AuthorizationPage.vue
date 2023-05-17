@@ -8,7 +8,7 @@
       <registration-block @entryBlockToggle="entryBlockToggle"></registration-block>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="actions">
     <h3 class="subtitle">Здравствуйте, {{ GET_USER_SURNAME }}</h3>
 
     <button class="sub-btn" @click="goToProfile">Редактировать профиль</button>
@@ -145,6 +145,14 @@ button {
 
 button:hover {
   background-color: #0069d9;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  gap: 1em;
 }
 
 </style>

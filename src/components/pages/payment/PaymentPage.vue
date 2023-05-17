@@ -83,7 +83,7 @@ export default {
           headers: {
             'Content-Type': 'application/json',
             'Accept': '*',
-            'Authorization': 'Bearer ' + this.GET_USER_TOKEN
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
 
 
@@ -104,7 +104,7 @@ export default {
     },
     closePopUp(bool1) {
       this.isOpen = bool1;
-      this.$router.push(paths.UserBookingPage)
+      this.$router.push({path: paths.UserBookingPage, query: {isUserBookingsPage: true}})
     },
     addDayToDate(dateFull, dateType, daysToAdd) {
       let date = dateType === 'short' ? new Date(dateFull) : dateFull;
