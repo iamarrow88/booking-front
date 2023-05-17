@@ -5,7 +5,7 @@
       <button @click="editResortDown" class="cards-btn action">Редактировать</button>
       <button @click="deleteResort" class="cards-btn">Удалить</button>
     </div>
-    <modal-window v-if="isEditResortWindowOpen">
+    <modal-window v-if="isEditResortWindowOpen" @closePopUp="isEditResortWindowOpen=false">
       <create-resort-block :resortIdFromParent="resort.id"
                            :editMode="true"
                            @updateResort="updateResortUp"
