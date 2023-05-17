@@ -172,6 +172,10 @@ const bookings = {
         URL: '/api/booking',
         METHOD: 'POST',
     },
+    deleteBookingByID: {
+        URL: '/api/booking/',
+        METHOD: 'DELETE',
+    },
 
 
     model: {
