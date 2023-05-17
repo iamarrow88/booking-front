@@ -1,5 +1,5 @@
 <template>
-  <div class="pop-up">
+  <div class="pop-up" @click="closePopUp">
     <div class="pop-up__block">
       <slot></slot>
     </div>
@@ -8,7 +8,12 @@
 
 <script>
 export default {
-  name: "ModalWindow"
+  name: "ModalWindow",
+  methods: {
+    closePopUp(e){
+      if([...e.target.classList].includes('pop-up')) this.$emit('closePopUp')
+    }
+  }
 }
 </script>
 
