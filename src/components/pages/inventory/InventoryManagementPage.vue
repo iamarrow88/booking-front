@@ -90,7 +90,7 @@ export default {
     closeAddItem(bool) {
       this.isAddingItemModeOn = bool;
       this.itemsCounter += 1;
-    }
+    },
   },
   async mounted() {
     if(!this.GET_SEL_RESORT) {

@@ -14,14 +14,14 @@
                alt="Item Photo">
         </div>
 
-        <div class="popup" v-show="popupVisible">
+<!--        <div class="popup" v-show="popupVisible">
           <div class="popup-container">
             <div class="popup-content">
               <span class="close" @click="closePopupImage">&times;</span>
               <img :src="fullImageSrc" alt="Full Image" @click="closePopupImage">
             </div>
           </div>
-        </div>
+        </div>-->
 
         <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
         <div class="equipment-item__summary">
@@ -32,27 +32,9 @@
                v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
         </div>
       </div>
-
-      <!--      <div class="equipment-item__reviews" data-refresh="0" v-if="!editMode">
-              <div class="reviews__title">Отзывы</div>
-              <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
-              <review-block v-for="review in reviews"
-                            :review="review"
-                            :key="review.id"
-                            :class="{active: review.index === this.currentReview}"
-                            @prev="prev"
-                            @next="next"
-                            @deleteComment="deleteComment"></review-block>
-              <create-comment v-if="showAddComment"
-                              @postComment="postComment"
-                              @next="next">добавьте комментарий
-              </create-comment>
-
-            </div>-->
     </div>
 
     <div class="buttons">
-
       <button @click="showPopUp"
               v-if="!editMode"
               class="btn cards-btn action">Забронировать
@@ -95,30 +77,12 @@
                      v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
               </div>
             </div>
-
-            <div class="modal-equipment-item__reviews" data-refresh="0" v-if="!editMode">
-              <div class="modal-reviews__title">Отзывы</div>
-              <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
-              <review-block v-for="review in reviews"
-                            :reviewsLength="reviews.length"
-                            :review="review"
-                            :key="review.id"
-                            :class="{active: review.index === this.currentReview}"
-                            @prev="prev"
-                            @next="next"
-                            @deleteComment="deleteComment"></review-block>
-            </div>
           </div>
-
-
-          <div class="modal-buttons">
-            <button @click="showPopUp"
-                    class="btn cards-btn action">Забронировать
-            </button>
-
-            <button class="btn cards-btn"
-                    @click="editModalWindowOpen=false">Назад
-            </button>
+          <div class="modal-inventory-card">
+            <inventory-card :IsEditEquipmModeOnFParent="true"
+            :resortIdFromParent="resortId"
+            :itemFromParent="item"
+            @closeAndRefreshAddWindow="closeAndRefreshAddWindow"></inventory-card>
           </div>
         </div>
       </modal-window>
@@ -200,7 +164,6 @@ export default {
       editModalWindowOpen: false,
       isFirstPriceShown: false,
       showCreateComment: false,
-
     }
   },
   watch: {
@@ -228,8 +191,6 @@ export default {
     closePopupImage() {
       this.popupVisible = false;
     },
-
-
     closeMorePopup() {
       this.morePopupVisible = false;
     },
@@ -330,13 +291,6 @@ export default {
 
     showMore() {
       this.editModalWindowOpen = !this.editModalWindowOpen;
-      /*console.log('equipment-item');
-      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-        e.target.closest('.equipment-item').classList.remove('showMore');
-      } else {
-        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-        e.target.closest('.equipment-item').classList.add('showMore');
-      }*/
     },
 
     getEquipmentType() {
@@ -465,15 +419,6 @@ export default {
   flex-wrap: wrap;
 }
 
-/*.equipment-item__type-name {
-  margin-bottom: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  font-size: 28px;
-  order: 2;
-}*/
-
 .showMore .equipment-item__type-name {
   margin-top: 40px;
 }
@@ -495,8 +440,6 @@ export default {
 }
 
 .equipment-item__photo {
-
-  /*max-width: 100%;*/
   max-height: 250px;
 
 }
@@ -522,11 +465,6 @@ export default {
   width: 100%;
   order: 2;
 }
-
-/*.equipment-item__reviews {
-  display: none;
-  min-width: 35%;
-}*/
 
 .showMore .equipment-item__reviews {
   display: block;
@@ -580,15 +518,10 @@ export default {
 
 .modal-equipment-item {
   padding: 2em;
-  display: flex;
-  flex-direction: column;
-  gap: 2em;
+  display: grid;
+  grid-template-columns: 2fr 3fr ;
 }
 
-.modal-equipment-item__body {
-  display: grid;
-  grid-template-columns: 2fr 3fr;
-}
 
 .modal-equipment-item__about {
   display: flex;
@@ -604,10 +537,14 @@ export default {
 
 .modal-equipment-item__photo-block {
   width: 92%;
+  height: 350px;
+  display: flex;
+  justify-content: center;
 }
 
 .modal-equipment-item__photo {
-  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .modal-reviews__title {
@@ -616,6 +553,39 @@ export default {
 
 .modal-equipment-item__reviews > .active {
   width: auto;
+}
+
+.modal-inventory-card > .inventory-card {
+  padding: 0;
+}
+
+.modal-inventory-card > .inventory-card > label{
+  margin: 0.7em 0;
+}
+
+.modal-inventory-card > .inventory-card > .create-price-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #d8d8d8;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.modal-inventory-card > .inventory-card > .buttons {
+  width: 100%;
+  margin: 0.7em 0 0;
+  flex-direction: row;
+}
+
+.modal-inventory-card > .inventory-card > .buttons > button {
+  margin: 0;
+  height: auto;
+}
+
+.modal-inventory-card > .inventory-card > .create-title {
+  font-size: 2em;
+  margin-bottom: 1em;
 }
 
 .active > .block__btns {
