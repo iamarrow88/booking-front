@@ -6,12 +6,12 @@
     <div class="my-booking-item__block" :class="{gridForUser: gridForUser, gridForResort: !gridForUser}">
       <div class="my-booking-item__resort"><b>Курорт:</b> {{ item.resort.name }}</div>
       <div class="my-booking-item__body">
-        <p><b>Тип инвентаря:</b> {{ getInvTypeName }}</p>
+        <div><b>Тип инвентаря:</b> {{ getInvTypeName }}</div>
         <div class="body__term">
           <p><b>Начало:</b> {{ startTimeFormatted }}</p>
           <p><b>Конец:</b> {{ endTimeFormatted }}</p>
         </div>
-        <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
+        <div><b>Полная стоимость:</b> {{ item.total_price }} RUB</div>
 
       </div>
       <div v-if="isUserBookingsPage" class="button">
@@ -126,11 +126,22 @@ export default {
   height: auto;
 }
 
+.my-booking-item__body {
+  display: grid;
+  grid-template-columns: 2fr 5fr 2fr;
+}
+
+.my-booking-item__body > div {
+  text-align: left;
+}
+
 .my-booking-item__user {
   margin: 0;
-}
-.my-booking-item__user > p{
-  margin: 0;
+  padding-left: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3em;
 }
 
 .gridForUser {
@@ -139,11 +150,6 @@ export default {
 
 .gridForResort {
   grid-template-columns: 1.5fr 3.5fr 2fr;
-}
-
-.my-booking-item__user {
-  display: flex;
-  gap: 0.3em;
 }
 
 </style>
