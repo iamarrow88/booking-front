@@ -33,6 +33,7 @@ import InformationWindow from "@/components/blocks/modal/InformationWindow.vue";
 import CreateComment from "@/components/UI/CreateComment.vue";
 import InventoryManagementPage from "@/components/pages/inventory/InventoryManagementPage.vue";
 import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
+import ChartPage from "@/components/pages/charts/ChartPage.vue";
 
 
 
@@ -51,6 +52,7 @@ const router = createRouter({
         {path: '/payment', component: PaymentPage},
         {path: '/profile', component: UserPage},
         {path: '/equipment/manage', component: InventoryManagementPage},
+        {path: '/charts', component: ChartPage},
     ]
 })
 const app = createApp(App);
@@ -77,6 +79,7 @@ app.component('LoginBlock', LoginBlock);
 app.component('RegistrationBlock', RegistrationBlock);
 app.component('InventoryManagementPage', InventoryManagementPage);
 app.component('ModalWindow', ModalWindow);
+app.component('ChartPage', ChartPage);
 
 
 app.mixin({
