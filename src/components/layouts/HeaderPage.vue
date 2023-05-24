@@ -13,6 +13,7 @@
             <button @click="goToMyBooking">Мои бронирования</button>
             <button v-if="IS_USER_OWNER" @click="goToResortBookings">Бронирования курорта</button>
             <button v-if="IS_USER_OWNER" @click="goToResortManagingPage">Управление курортом</button>
+            <button v-if="IS_USER_OWNER" @click="goToResortStatisticsPage">Статистика</button>
           </div>
           <div class="profile">
             <div v-if="IS_LOGGED_IN" class="profile-img" @click="isHoverOnProfileIcon=!isHoverOnProfileIcon">
@@ -74,6 +75,9 @@ export default {
     },
     goToProfile() {
       this.$router.push(paths.UserPage)
+    },
+    goToResortStatisticsPage() {
+      this.$router.push(paths.StatisticsPage)
     }
   },
   mounted() {
