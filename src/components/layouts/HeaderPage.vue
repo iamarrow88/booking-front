@@ -68,16 +68,16 @@ export default {
       this.$router.push(paths.UserBookingPage);
     },
     goToResortBookings() {
-      this.$router.push(paths.ResortBookingsPage)
+      this.$router.push(paths.ResortBookingsPage);
     },
     goToResortManagingPage() {
-      this.$router.push(paths.ManageResort)
+      this.$router.push(paths.ManageResort);
     },
     goToProfile() {
-      this.$router.push(paths.UserPage)
+      this.$router.push(paths.UserPage);
     },
     goToResortStatisticsPage() {
-      this.$router.push(paths.StatisticsPage)
+      this.$router.push(paths.StatisticsPage);
     }
   },
   mounted() {
