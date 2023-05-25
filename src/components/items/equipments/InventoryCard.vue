@@ -85,6 +85,7 @@ export default {
         });
         if (response.ok) {
           await this.uploadPhoto(id);
+          this.$emit('refreshInventoryArray');
           this.$emit('isAddItemBlockOpen');
           console.log('OK');
         } else {
@@ -100,6 +101,7 @@ export default {
     async uploadPhoto(itemId) {
       if (!this.selectedFile) {
         console.log('No file selected');
+        /*this.$emit('refreshInventoryArray');*/
         return;
       }
 

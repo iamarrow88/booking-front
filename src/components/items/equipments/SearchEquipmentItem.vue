@@ -45,7 +45,7 @@
     </div>
 
     <teleport to="body">
-      <modal-window v-if="editModalWindowOpen" @closePopUp="editModalWindowOpen=false">
+      <modal-window v-if="editModalWindowOpen" @refreshInventoryArray="closeAndRefreshAddWindow">
         <div class="modal-equipment-item" :class="{ 'hide': isEditBlockHide }">
           <div class="modal-equipment-item__body">
             <div class="modal-equipment-item__about" :class="{ 'centered': isEditBlockHide }">
@@ -72,7 +72,7 @@
             <inventory-card :IsEditEquipmModeOnFParent="editMode"
             :resortIdFromParent="resortId"
             :itemFromParent="item"
-            @closeAndRefreshAddWindow="closeAndRefreshAddWindow"></inventory-card>
+            @refreshInventoryArray="closeAndRefreshAddWindow"></inventory-card>
           </div>
           <div class="buttons" v-if="!isEditBlockShow">
             <button @click="showPopUp"
@@ -311,11 +311,9 @@ export default {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
-    closeAndRefreshAddWindow(event) {
-      this.editModalWindowOpen = !this.editModalWindowOpen;
+    closeAndRefreshAddWindow() {
+      this.editModalWindowOpen = false;
       this.$emit('refreshInventoryArray');
-      console.log(event);
-      /*this.closeAddItem(event)*/
     },
     async getInventoryByResort() {
       try {
