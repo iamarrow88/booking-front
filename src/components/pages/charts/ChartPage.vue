@@ -49,8 +49,9 @@ export default {
   data() {
     return {
       chartData: {
-        labels: [ 'January', 'February', 'March' ],
-        datasets: [ { data: [40, 20, 12] } ]
+        labels: [ ],
+        datasets: [ /*{ data: [40, 20, 12] }*/ ],
+        backgroundColor: '',
       },
       chartOptions: {
         responsive: true
@@ -60,8 +61,7 @@ export default {
       shortDateFrom: '',
       shortDateTo: '',
       groupBy: 'DAY',
-      stats: [],
-      resortIDArray: [],
+      backgroundColors: ['#f87979', '#c19efd', '#f45', '#d4f879', '#c19edd', '#c19fdd'],
     }
   },
   methods: {
@@ -71,28 +71,35 @@ export default {
         "end_time": `${this.shortDateTo}T23:00:00.000Z`,
         "group_by": this.groupBy,
       }
-      for(let i = 0; i < this.resortIDArray.length; i++){
-        const res = await fetch(stats.getStatsByResortID.URL+this.resortIDArray[i], {
+        const res = await fetch(stats.getStatsByResortID.URL+this.selectedResort.id, {
           method: stats.getStatsByResortID.METHOD,
           headers: headerWithToken,
           body: JSON.stringify(body)
         });
 
         if(res.ok) {
-          const stats = {
-            id: this.resortIDArray[i],
-            statistics: await res.json(),
-          }
-          this.stats[i] = stats;
-        }
-      }
+          const results = await res.json();
 
+          results.forEach((result, i) => {
+            let date = result.date.slice(0, 10);
+            console.log(date);
+            let dataset = {};
+            if(!this.chartData.labels.includes(date)) {
+              this.chartData.labels.push(date);
+              dataset.backgroundColor = this.backgroundColors[i];
+            }
+            dataset.count = result.count;
+            dataset.itemId = result.count;
+
+
+            this.chartData.datasets.push(dataset);
+          })
+        }
     },
     async getResorts(){
       const resortsArray= await fetch(resorts.allResorts.URL);
       this.resorts = await resortsArray.json();
       this.selectedResort = this.resorts[0];
-      this.getResortIdArray();
     },
     getShortDate(fullDate) {
       return (fullDate.toISOString().slice(0, 10));
@@ -101,11 +108,6 @@ export default {
       let date = dateType === 'short' ? new Date(dateFull) : dateFull;
       return new Date(date.setDate(new Date().getDate() - daysToSubstrat)).toISOString().slice(0, 10);
     },
-    getResortIdArray(){
-      this.resortIDArray = this.resorts.map(resort => {
-        return resort.id;
-      });
-    }
   },
   mounted() {
     this.getResorts();

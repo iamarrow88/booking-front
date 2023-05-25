@@ -15,23 +15,13 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 export default {
   name: 'RenderChart',
   components: { Bar },
-  data() {
-    return {
-      chartData: {
-        labels: [ 'January', 'February', 'March' ],
-        datasets: [ {
-          label: 'Data One',
-          backgroundColor: '#f87979',
-          data: [40, 20, 12] },
-          {
-            label: 'Data Two',
-            backgroundColor: '#c19efd',
-            data: [80, 15, 28] } ]
-      },
-      chartOptions: {
-        responsive: true
-      }
-    }
+  props: {
+    chartData: {
+      labels: Array,
+      backgroundColor: String,
+      data: Array,
+    },
+    chartOptions: Boolean,
   }
 }
 </script>
