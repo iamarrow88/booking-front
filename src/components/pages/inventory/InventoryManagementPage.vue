@@ -2,13 +2,17 @@
   <div class="manage-equipment-block">
     <div class="add-item">
       <button @click="addItem" class="sub-btn">Добавить инвентарь</button>
-      <inventory-card :IsEditEquipmModeOnFParent="false"
-                      :resortIdFromParent="resortId"
-                      v-if="isAddingItemModeOn"
-                      @isAddItemBlockOpen="closeAddItem">
+      <teleport to="body">
+        <modal-window v-if="isAddingItemModeOn" @closePopUp="isAddingItemModeOn=false">
+          <inventory-card :IsEditEquipmModeOnFParent="false"
+                          :resortIdFromParent="0"
+                          itemFromParent="undefined"
+                          @isAddItemBlockOpen="closeAddItem"
+                          @closeAndRefreshAddWindow="isAddingItemModeOn=false">
 
-      </inventory-card>
-
+          </inventory-card>
+        </modal-window>
+      </teleport>
     </div>
 
     <div class="equipment-list" v-if="equipments.length > 0">
@@ -26,16 +30,19 @@
 <script>
 import {mapGetters} from "vuex";
 import SearchEquipmentItem from "@/components/items/equipments/SearchEquipmentItem.vue";
+import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
+import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 
 export default {
   name: "InventoryManagementPage",
-  components: SearchEquipmentItem,
+  components: SearchEquipmentItem, ModalWindow, InventoryCard,
   data() {
     return {
       equipments: [],
       refreshInventoryArrayCounter: 0,
       resort: {
       },
+      isAddingItemModeOn: false,
     }
   },
   computed: {
@@ -71,6 +78,7 @@ export default {
       console.log(res.json());
       if (res.ok) {
         this.counter += 1;
+        this.refreshInventoryArray();
         console.log('inventory item deleted');
       } else {
         console.log('inventory item didn\'t delete')
@@ -87,9 +95,10 @@ export default {
     addItem() {
       this.isAddingItemModeOn = !this.isAddingItemModeOn;
     },
-    closeAddItem(bool) {
-      this.isAddingItemModeOn = bool;
+    closeAddItem() {
+      this.isAddingItemModeOn = false;
       this.itemsCounter += 1;
+      this.refreshInventoryArray();
     },
   },
   async mounted() {

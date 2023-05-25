@@ -69,7 +69,7 @@
             </div>
           </div>
           <div class="modal-inventory-card" v-if="isEditBlockShow">
-            <inventory-card :IsEditEquipmModeOnFParent="false"
+            <inventory-card :IsEditEquipmModeOnFParent="editMode"
             :resortIdFromParent="resortId"
             :itemFromParent="item"
             @closeAndRefreshAddWindow="closeAndRefreshAddWindow"></inventory-card>

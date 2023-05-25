@@ -62,7 +62,7 @@ export default {
     }
   },
   methods: {
-    async createItem(e) {
+    async createItem() {
       const method = this.IsEditEquipmModeOnFParent ? 'PUT' : 'POST';
       const id = this.IsEditEquipmModeOnFParent ? this.itemFromParent.id : Date.now();
 
@@ -85,7 +85,7 @@ export default {
         });
         if (response.ok) {
           await this.uploadPhoto(id);
-          this.$emit('isAddItemBlockOpen', e);
+          this.$emit('isAddItemBlockOpen');
           console.log('OK');
         } else {
           console.log('ошибка')
@@ -163,10 +163,10 @@ export default {
     } catch (error) {
       console.error(error);
     }
-    this.resortId = this.resortIdFromParent ? this.resortIdFromParent : this.resorts[0];
+    this.resortId = this.resortIdFromParent ? this.resortIdFromParent : this.resorts[0].id;
     this.getResortName();
-    this.price = this.itemFromParent.price ? this.itemFromParent.price : '';
-    this.photo = this.itemFromParent.photo ? this.itemFromParent.photo : '';
+    this.price = this.itemFromParent ? this.itemFromParent.price : '';
+    this.photo = this.itemFromParent ? this.itemFromParent.photo : '';
 
   },
   watch: {
