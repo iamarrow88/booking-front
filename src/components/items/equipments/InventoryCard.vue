@@ -19,7 +19,7 @@
     <input type="file" id="uploadPhoto" ref="uploadPhoto" @change="onFileSelected"/>
 
     <div class="buttons">
-      <button @click="createItem" class="cards-btn">{{
+      <button @click="createItem" class="cards-btn action">{{
           IsEditEquipmModeOnFParent ? "Сохранить изменения" : "Создать"
         }}
       </button>
