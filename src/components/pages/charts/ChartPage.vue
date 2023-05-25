@@ -138,7 +138,7 @@ export default {
     async getStats(){
       this.inventoriesArray = [];
       this.inventoryColorObj = {};
-      this.chartData = {};
+      this.chartData.labels = [];
       this.chartData.datasets = [];
       const body = {
         "start_time": `${this.shortDateFrom}T10:00:00.000Z`,
@@ -155,30 +155,36 @@ export default {
         const results = await res.json();
         console.log(results);
 
-       this.chartData.labels = this.getLabels(this.shortDateFrom, this.getDatesDifference(this.shortDateFrom, this.shortDateTo));
+        this.chartData.labels = this.getLabels(this.shortDateFrom, this.getDatesDifference(this.shortDateFrom, this.shortDateTo));
+        this.chartData.datasets[0] = [];
+        if(results.length === 0){
+          for(let i = 0; i < this.chartData.labels.length; i++){
+            this.chartData.datasets[0].push(0);
+          }
+        } else {
+          results.forEach(result => {
+            let date = this.formatDate(result.date.slice(0, 10));
+            this.inventoriesArray.push(result.inventory_id);
 
-        results.forEach(result => {
-          let date = this.formatDate(result.date.slice(0, 10));
-          this.inventoriesArray.push(result.inventory_id);
-
-          let dataset = {
-            data: []
-          };
-          this.chartData.labels.forEach(label => {
-            if(label === date){
-              dataset.data.push(result.count) ;
-            } else {
-              dataset.data.push(0);
-            }
+            let dataset = {
+              data: []
+            };
+            this.chartData.labels.forEach(label => {
+              if(label === date){
+                dataset.data.push(result.count) ;
+              } else {
+                dataset.data.push(0);
+              }
+            })
+            this.chartData.datasets.push(dataset);
+          });
+          await this.getInventoryByID();
+          this.setInvColor(this.inventoriesArray, this.backgroundColors, this.inventoryColorObj);
+          results.forEach((result, index) => {
+            this.chartData.datasets[index].backgroundColor = this.inventoryColorObj[result.inventory_id].color;
+            this.chartData.datasets[index].label = this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id) + ' ID ' + result.inventory_id;
           })
-          this.chartData.datasets.push(dataset);
-        });
-        await this.getInventoryByID();
-        this.setInvColor(this.inventoriesArray, this.backgroundColors, this.inventoryColorObj);
-        results.forEach((result, index) => {
-          this.chartData.datasets[index].backgroundColor = this.inventoryColorObj[result.inventory_id].color;
-          this.chartData.datasets[index].label = this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id) + ' ID ' + result.inventory_id;
-        })
+        }
       }
     },
     getEquipmentType(type_id) {

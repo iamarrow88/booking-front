@@ -1,7 +1,7 @@
 <template>
   <Bar
       id="my-chart-id"
-      :options="chartOptions"
+      :chartOptions="chartOptions"
       :data="chartData"
   />
 </template>
