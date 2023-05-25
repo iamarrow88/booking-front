@@ -3,7 +3,7 @@
     <button class="sub-btn create-resort-btn"
             @click="editComponent">Добавить курорт
     </button>
-    <modal-window v-if="isCreateResortWindowOpen">
+    <modal-window v-if="isCreateResortWindowOpen" @closePopUp="editComponent">
       <create-resort-block :editMode="false"
                            @updateResort="editResort"
                            @closeAndRefreshAddWindow="editComponent">
@@ -28,10 +28,11 @@
 import ResortItem from "@/components/items/resorts/ResortItem.vue";
 import CreateResortBlock from "@/components/blocks/resorts/CreateResortBlock.vue";
 import {mapActions, mapGetters} from "vuex";
+import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
 
 export default {
   name: "ManageResortCard",
-  components: ResortItem, CreateResortBlock,
+  components: ResortItem, CreateResortBlock, ModalWindow,
   data() {
     return {
       resorts: [],
@@ -154,4 +155,10 @@ export default {
   display: flex;
   justify-content: flex-start;
 }
+
+.pop-up__block > .add-resort {
+  flex-direction: column;
+  align-items: center;
+}
+
 </style>

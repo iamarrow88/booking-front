@@ -26,7 +26,8 @@
 
       <button class="cards-btn" @click="cancel">Отмена</button>
 
-      <button @click="goToInventoryManagementPage" class="cards-btn sub-btn">Управлять инвентарем ></button>
+      <button @click="goToInventoryManagementPage" class="cards-btn sub-btn"
+      v-if="editMode">Управлять инвентарем ></button>
 
     </div>
     <div v-if="errorMessage" class="error-message">
