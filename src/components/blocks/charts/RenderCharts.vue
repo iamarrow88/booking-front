@@ -18,10 +18,15 @@ export default {
   props: {
     chartData: {
       labels: Array,
-      backgroundColor: String,
-      data: Array,
+      datasets: [ {
+          label: String,
+          backgroundColor: String,
+          data: Array,
+        }]
     },
-    chartOptions: Boolean,
+    chartOptions: {
+      responsive: Boolean
+    },
   }
 }
 </script>
