@@ -383,8 +383,8 @@ export default {
 }
 
 .equipment-item__photo {
-  max-height: 250px;
-
+  width: 100%;
+  object-fit: contain;
 }
 
 .equipment-item__price {
