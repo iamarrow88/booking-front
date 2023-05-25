@@ -45,7 +45,7 @@
     </div>
 
     <teleport to="body">
-      <modal-window v-if="editModalWindowOpen" @refreshInventoryArray="closeAndRefreshAddWindow">
+      <modal-window v-if="editModalWindowOpen" @refreshInventoryArray="closeAndRefreshAddWindow" @closePopUp="editModalWindowOpen=false">
         <div class="modal-equipment-item" :class="{ 'hide': isEditBlockHide }">
           <div class="modal-equipment-item__body">
             <div class="modal-equipment-item__about" :class="{ 'centered': isEditBlockHide }">
@@ -72,7 +72,8 @@
             <inventory-card :IsEditEquipmModeOnFParent="editMode"
             :resortIdFromParent="resortId"
             :itemFromParent="item"
-            @refreshInventoryArray="closeAndRefreshAddWindow"></inventory-card>
+            @refreshInventoryArray="closeAndRefreshAddWindow"
+            @closeAndRefreshAddWindow="editModalWindowOpen=false"></inventory-card>
           </div>
           <div class="buttons" v-if="!isEditBlockShow">
             <button @click="showPopUp"
@@ -443,6 +444,10 @@ export default {
 
 .pop-up__block {
   width: 65%;
+}
+
+.pop-up__block > .modal-equipment-item {
+  justify-content: space-around;
 }
 
 .display-grid{
