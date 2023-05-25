@@ -33,7 +33,7 @@
       <button @click="getStats" class="cards-btn">Получить статистику</button>
     </div>
     <div class="chart-data">
-      <RenderChart :chartData="chartData" :options="chartOptions" />
+      <RenderChart :chartData="chartData" :chartOptions="chartOptions" />
     </div>
   </div>
 </template>
