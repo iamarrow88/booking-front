@@ -156,8 +156,9 @@ export default {
         console.log(results);
 
         this.chartData.labels = this.getLabels(this.shortDateFrom, this.getDatesDifference(this.shortDateFrom, this.shortDateTo));
-        this.chartData.datasets[0] = [];
+
         if(results.length === 0){
+          this.chartData.datasets[0] = [];
           for(let i = 0; i < this.chartData.labels.length; i++){
             this.chartData.datasets[0].push(0);
           }
