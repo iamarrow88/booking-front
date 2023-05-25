@@ -71,8 +71,6 @@ export default {
         "end_time": `${this.shortDateTo}T23:00:00.000Z`,
         "group_by": this.groupBy,
       }
-      console.log(body);
-
       for(let i = 0; i < this.resortIDArray.length; i++){
         const res = await fetch(stats.getStatsByResortID.URL+this.resortIDArray[i], {
           method: stats.getStatsByResortID.METHOD,
@@ -105,7 +103,6 @@ export default {
     },
     getResortIdArray(){
       this.resortIDArray = this.resorts.map(resort => {
-        console.log(resort.id);
         return resort.id;
       });
     }
