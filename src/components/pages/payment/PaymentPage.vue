@@ -70,13 +70,15 @@ export default {
           "end_time": this.GET_SAVED_DATA.endDateShort + 'T' + this.GET_SAVED_DATA.endTime + ':00:00Z',
         }
       } else {
+        const endTime = +this.$route.query.endTime === 24 ? '00' : +this.$route.query.endTime;
         body = {
           inventory_id: +this.$route.query.itemId,
           start_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.startTime + ':00:00Z',
-          end_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.endTime + ':00:00Z'
+          end_time: this.$route.query.selDateStartShort + 'T' + endTime + ':00:00Z'
         }
 
       }
+      console.log(body);
       try {
         const response = await fetch('/api/booking', {
           method: 'POST',

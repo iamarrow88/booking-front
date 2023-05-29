@@ -13,16 +13,6 @@
                src="../../../assets/no-photo.jpg"
                alt="Item Photo">
         </div>
-
-        <div class="popup" v-show="popupVisible">
-          <div class="popup-container">
-            <div class="popup-content">
-              <span class="close" @click="closePopupImage">&times;</span>
-              <img :src="fullImageSrc" alt="Full Image" @click="closePopupImage">
-            </div>
-          </div>
-        </div>
-
         <div class="equipment-item__price">Стоимость 1 часа - <span>{{ item.price }} RUB</span></div>
         <div class="equipment-item__summary">
           <div class="summary__duration"
@@ -32,27 +22,9 @@
                v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
         </div>
       </div>
-
-      <!--      <div class="equipment-item__reviews" data-refresh="0" v-if="!editMode">
-              <div class="reviews__title">Отзывы</div>
-              <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
-              <review-block v-for="review in reviews"
-                            :review="review"
-                            :key="review.id"
-                            :class="{active: review.index === this.currentReview}"
-                            @prev="prev"
-                            @next="next"
-                            @deleteComment="deleteComment"></review-block>
-              <create-comment v-if="showAddComment"
-                              @postComment="postComment"
-                              @next="next">добавьте комментарий
-              </create-comment>
-
-            </div>-->
     </div>
 
     <div class="buttons">
-
       <button @click="showPopUp"
               v-if="!editMode"
               class="btn cards-btn action">Забронировать
@@ -73,10 +45,10 @@
     </div>
 
     <teleport to="body">
-      <modal-window v-if="editModalWindowOpen" @closePopUp="editModalWindowOpen=false">
-        <div class="modal-equipment-item">
+      <modal-window v-if="editModalWindowOpen" @refreshInventoryArray="closeAndRefreshAddWindow" @closePopUp="editModalWindowOpen=false">
+        <div class="modal-equipment-item" :class="{ 'hide': isEditBlockHide }">
           <div class="modal-equipment-item__body">
-            <div class="modal-equipment-item__about">
+            <div class="modal-equipment-item__about" :class="{ 'centered': isEditBlockHide }">
               <div class="modal-equipment-item__type-name"><b>{{ type.name }}</b></div>
               <div class="modal-equipment-item__photo-block">
                 <img v-if="item.photo" class="modal-equipment-item__photo"
@@ -95,29 +67,22 @@
                      v-if="!editMode">Итого - <span>{{ item.price * duration }} RUB</span></div>
               </div>
             </div>
-
-            <div class="modal-equipment-item__reviews" data-refresh="0" v-if="!editMode">
-              <div class="modal-reviews__title">Отзывы</div>
-              <div v-if="reviews.length===0" class="reviews__no-reviews">Пока отзывов нет</div>
-              <review-block v-for="review in reviews"
-                            :reviewsLength="reviews.length"
-                            :review="review"
-                            :key="review.id"
-                            :class="{active: review.index === this.currentReview}"
-                            @prev="prev"
-                            @next="next"
-                            @deleteComment="deleteComment"></review-block>
-            </div>
           </div>
-
-
-          <div class="modal-buttons">
+          <div class="modal-inventory-card" v-if="isEditBlockShow">
+            <inventory-card :IsEditEquipmModeOnFParent="editMode"
+            :resortIdFromParent="resortId"
+            :itemFromParent="item"
+            @refreshInventoryArray="closeAndRefreshAddWindow"
+            @closeAndRefreshAddWindow="editModalWindowOpen=false"></inventory-card>
+          </div>
+          <div class="buttons" v-if="!isEditBlockShow">
             <button @click="showPopUp"
+                    v-if="!editMode"
                     class="btn cards-btn action">Забронировать
             </button>
-
-            <button class="btn cards-btn"
-                    @click="editModalWindowOpen=false">Назад
+            <button @click="showMore"
+                    v-if="!editMode"
+                    class="btn cards-btn">Отмена
             </button>
           </div>
         </div>
@@ -201,6 +166,8 @@ export default {
       isFirstPriceShown: false,
       showCreateComment: false,
 
+      isEditBlockShow: false,
+      isEditBlockHide: false,
     }
   },
   watch: {
@@ -228,8 +195,6 @@ export default {
     closePopupImage() {
       this.popupVisible = false;
     },
-
-
     closeMorePopup() {
       this.morePopupVisible = false;
     },
@@ -330,13 +295,6 @@ export default {
 
     showMore() {
       this.editModalWindowOpen = !this.editModalWindowOpen;
-      /*console.log('equipment-item');
-      if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-        e.target.closest('.equipment-item').classList.remove('showMore');
-      } else {
-        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-        e.target.closest('.equipment-item').classList.add('showMore');
-      }*/
     },
 
     getEquipmentType() {
@@ -354,29 +312,9 @@ export default {
       this.isBookingProcessStarted = bool1;
       this.isBooked = bool2;
     },
-    /*    showAddItemBlock(e) {
-          console.log('equipment-item');
-          if ([...e.target.closest('.equipment-item').classList].includes('showMore')) {
-            e.target.closest('.equipment-item').classList.remove('showMore');
-          } else {
-            document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-            e.target.closest('.equipment-item').classList.add('showMore');
-          }
-        },*/
-    /*closeAddItem(event) {
-      console.log('equipment-item close');
-      if ([...event.target.closest('.equipment-item').classList].includes('showMore')) {
-        event.target.closest('.equipment-item').classList.remove('showMore');
-      } else {
-        document.querySelectorAll('.equipment-item').forEach(card => card.classList.remove('showMore'));
-        event.target.closest('.equipment-item').classList.add('showMore');
-      }
-    },*/
-    closeAndRefreshAddWindow(event) {
-      this.editModalWindowOpen = !this.editModalWindowOpen;
+    closeAndRefreshAddWindow() {
+      this.editModalWindowOpen = false;
       this.$emit('refreshInventoryArray');
-      console.log(event);
-      /*this.closeAddItem(event)*/
     },
     async getInventoryByResort() {
       try {
@@ -405,6 +343,8 @@ export default {
     this.today = (new Date().toISOString().slice(0, 10));
     this.componentDuration = this.$route.query.duration;
     await this.getReviewsByInventoryID();
+    this.isEditBlockShow = !!this.$route.path.split('/').includes('manage');
+    this.isEditBlockHide = !this.isEditBlockShow;
   },
 
 }
@@ -421,15 +361,6 @@ export default {
   transition: all .3ms;
 }
 
-.equipment-item.showMore {
-  padding: 40px 84px;
-  width: 100%;
-  transition: all .3ms;
-  order: 1;
-  /*  display: flex;
-    flex-wrap: wrap;*/
-}
-
 .equipment-item__body {
   width: 100%;
   height: 90%;
@@ -437,45 +368,10 @@ export default {
   justify-content: center;
 }
 
-.showMore .equipment-item__body {
-
-  display: none;
-  /*  order: 1;
-    width: 40%;*/
-}
-
-.showMore .buttons {
-  /*order: 3;*/
-  display: none;
-}
-
-.showMore .inventory-edit {
-  order: 2;
-  width: 60%;
-}
-
 .equipment-item__about {
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-.showMore .equipment-item__about {
-  width: 65%;
-  flex-wrap: wrap;
-}
-
-/*.equipment-item__type-name {
-  margin-bottom: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  font-size: 28px;
-  order: 2;
-}*/
-
-.showMore .equipment-item__type-name {
-  margin-top: 40px;
 }
 
 .equipment-item__photo-block {
@@ -487,23 +383,9 @@ export default {
   justify-content: center;
 }
 
-.showMore .equipment-item__photo-block {
-  order: 1;
-  width: auto;
-  height: 100%;
-  justify-content: flex-start;
-}
-
 .equipment-item__photo {
-
-  /*max-width: 100%;*/
-  max-height: 250px;
-
-}
-
-
-.showMore .equipment-item__photo {
-  height: 100%;
+  width: 100%;
+  object-fit: contain;
 }
 
 .equipment-item__price {
@@ -521,15 +403,6 @@ export default {
   gap: 10px;
   width: 100%;
   order: 2;
-}
-
-/*.equipment-item__reviews {
-  display: none;
-  min-width: 35%;
-}*/
-
-.showMore .equipment-item__reviews {
-  display: block;
 }
 
 .reviews__title {
@@ -561,11 +434,6 @@ export default {
   display: none;
 }
 
-.showMore .inventory-edit {
-  display: block;
-  margin: 0 auto;
-}
-
 .equipment.inventory-card {
   padding: 1em;
 }
@@ -578,16 +446,24 @@ export default {
   width: 65%;
 }
 
-.modal-equipment-item {
-  padding: 2em;
-  display: flex;
-  flex-direction: column;
-  gap: 2em;
+.pop-up__block > .modal-equipment-item {
+  justify-content: space-around;
 }
 
-.modal-equipment-item__body {
+.display-grid{
+  padding: 2em;
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 2fr 3fr ;
+}
+
+.modal-equipment-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hide {
+  flex-direction: column;
 }
 
 .modal-equipment-item__about {
@@ -598,16 +474,24 @@ export default {
   font-size: 18px;
 }
 
+.centered {
+  align-items: center;
+}
+
 .modal-equipment-item__type-name {
   font-size: 28px;
 }
 
 .modal-equipment-item__photo-block {
   width: 92%;
+  height: 350px;
+  display: flex;
+  justify-content: center;
 }
 
 .modal-equipment-item__photo {
-  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .modal-reviews__title {
@@ -616,6 +500,39 @@ export default {
 
 .modal-equipment-item__reviews > .active {
   width: auto;
+}
+
+.modal-inventory-card > .inventory-card {
+  padding: 0;
+}
+
+.modal-inventory-card > .inventory-card > label{
+  margin: 0.7em 0;
+}
+
+.modal-inventory-card > .inventory-card > .create-price-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #d8d8d8;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.modal-inventory-card > .inventory-card > .buttons {
+  width: 100%;
+  margin: 0.7em 0 0;
+  flex-direction: row;
+}
+
+.modal-inventory-card > .inventory-card > .buttons > button {
+  margin: 0;
+  height: auto;
+}
+
+.modal-inventory-card > .inventory-card > .create-title {
+  font-size: 2em;
+  margin-bottom: 1em;
 }
 
 .active > .block__btns {

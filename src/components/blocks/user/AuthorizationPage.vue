@@ -12,9 +12,10 @@
     <h3 class="subtitle">Здравствуйте, {{ GET_USER_SURNAME }}</h3>
 
     <button class="sub-btn" @click="goToProfile">Редактировать профиль</button>
-    <button class="sub-btn" @click="goToStartPage">Забронировать чего-нибудь</button>
-    <button class="sub-btn" @click="goToMyBookingsPage">Посмотреть, чего уже набронировал</button>
-    <button class="sub-btn" @click="goToResortPage" v-if="IS_USER_OWNER">Поуправлять курортом xD</button>
+    <button class="sub-btn" @click="goToStartPage">Забронировать инвентарь</button>
+    <button class="sub-btn" @click="goToMyBookingsPage">Мои бронирования</button>
+    <button class="sub-btn" @click="goToResortBookings" v-if="IS_USER_OWNER">Бронирования курорта</button>
+    <button class="sub-btn" @click="goToResortPage" v-if="IS_USER_OWNER">Управление курортом</button>
     <button class="btn btn-primary cards-btn"
             @click="logout">Выйти из аккаунта
     </button>
@@ -64,6 +65,9 @@ export default {
     },
     goToResortPage() {
       this.$router.push({path: paths.ManageResort});
+    },
+    goToResortBookings(){
+      this.$router.push(paths.ResortBookingsPage);
     }
   },
 }

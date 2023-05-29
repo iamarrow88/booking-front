@@ -9,5 +9,6 @@ export default {
     ResortBookingsPage: '/resorts/bookings',
     UserBookingPage: '/user/bookings',
     PaymentPage: '/payment',
-    InventoryManagementPage: '/equipment/manage'
+    InventoryManagementPage: '/equipment/manage',
+    StatisticsPage: '/charts'
 }

@@ -3,25 +3,23 @@
     <div class="my-booking-item__id">
       <b>ID бронирования:</b> {{ item.id }}
     </div>
-    <div class="my-booking-item__block">
+    <div class="my-booking-item__block" :class="{gridForUser: gridForUser, gridForResort: !gridForUser}">
       <div class="my-booking-item__resort"><b>Курорт:</b> {{ item.resort.name }}</div>
       <div class="my-booking-item__body">
-        <p><b>Тип инвентаря:</b> {{ getInvTypeName }}</p>
+        <div><b>Тип инвентаря:</b> {{ getInvTypeName }}</div>
         <div class="body__term">
           <p><b>Начало:</b> {{ startTimeFormatted }}</p>
           <p><b>Конец:</b> {{ endTimeFormatted }}</p>
         </div>
-        <p><b>Полная стоимость:</b> {{ item.total_price }} RUB</p>
+        <div><b>Полная стоимость:</b> {{ item.total_price }} RUB</div>
 
       </div>
       <div v-if="isUserBookingsPage" class="button">
         <button  class="btn cards-btn" @click="deleteBooking">Отменить бронирование</button>
       </div>
       <div class="my-booking-item__user" v-else>
-        <div class="body__term">
-          <p><b>Пользователь:</b> {{ item.user.first_name + " " + item.user.surname + " " + item.user.middle_name }}</p>
-          <p><b>Телефон: </b>{{ item.user.phone }} </p>
-        </div>
+        <div><b>Пользователь:</b> {{ item.user.first_name + " " + item.user.surname + " " + item.user.middle_name }}</div>
+        <div><b>Телефон: </b>{{ item.user.phone }} </div>
       </div>
     </div>
   </div>
@@ -52,6 +50,7 @@ export default {
       startTimeFormatted: '',
       endTimeFormatted: '',
       res: {},
+      gridForUser: null,
     }
   },
 
@@ -98,6 +97,9 @@ export default {
       return typeName;
     },
   },
+  created() {
+    this.gridForUser = !!this.$route.fullPath.split('/').includes('user');
+  },
   async mounted() {
     if(this.GET_INVENTORY_TYPES.length === 0) await this.fetchInventoryTypes();
     this.startTimeFormatted = this.formatTime(this.item.start_time).join(' ');
@@ -116,7 +118,6 @@ export default {
 
 .my-booking-item__block {
   display: grid;
-  grid-template-columns: 2fr 5fr 1fr;
   gap: 0.5em;
   align-items: start;
 }
@@ -125,11 +126,30 @@ export default {
   height: auto;
 }
 
+.my-booking-item__body {
+  display: grid;
+  grid-template-columns: 2fr 5fr 2fr;
+}
+
+.my-booking-item__body > div {
+  text-align: left;
+}
+
 .my-booking-item__user {
   margin: 0;
+  padding-left: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3em;
 }
-.my-booking-item__user > p{
-  margin: 0;
+
+.gridForUser {
+  grid-template-columns: 2fr 5fr 1fr;
+}
+
+.gridForResort {
+  grid-template-columns: 1.5fr 3.5fr 2fr;
 }
 
 </style>

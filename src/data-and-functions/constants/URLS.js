@@ -269,6 +269,18 @@ const comments = {
     }
 }
 
+const stats = {
+    getStatsByResortID: {
+        URL: '/api/resorts/stats/',
+        METHOD: 'POST',
+        requestModel: {
+        "start_time": "2022-05-12T23:00:00.000Z",
+        "end_time": "2024-05-12T23:00:00.000Z",
+        "group_by": "MONTH"
+        },
+    }
+}
+
 const headerAPI = {'Content-Type': 'application/json'};
 
 const headerWithToken = {
@@ -277,4 +289,4 @@ const headerWithToken = {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
 }
 
-export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken, comments}
+export {user, dataArrays, resorts, inventory, bookings, headerAPI, headerWithToken, comments, stats}
