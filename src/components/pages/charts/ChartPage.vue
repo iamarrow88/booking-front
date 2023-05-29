@@ -33,7 +33,7 @@
       <button @click="getStats" class="cards-btn">Получить статистику</button>
     </div>
     <div class="chart-data">
-      <RenderChart :chartData="chartData" :chartOptions="chartOptions" />
+      <RenderChart v-if="isLoaded" :chartData="chartData" :chartOptions="chartOptions" />
     </div>
   </div>
 </template>
@@ -64,6 +64,8 @@ export default {
       backgroundColors: ['#f87979', '#c19efd', '#f45', '#d4f879', '#c19edd', '#c19fdd'],
       inventoryColorObj: {},
       inventoriesArray: [],
+      datasetsIDObj: {},
+      isLoaded: false,
     }
   },
   computed: {
@@ -74,33 +76,38 @@ export default {
     async getResorts(){
       const resortsArray= await fetch(resorts.allResorts.URL);
       this.resorts = await resortsArray.json();
-      this.selectedResort = this.resorts[0];
+      this.selectedResort = this.resorts[3];
     },
-    async getInventoryByID(){
+    async getInventoryByID(results){
       try {
         for (const inventoryId of this.inventoriesArray) {
-          const path = inventory.getInventoriesByID.URL+inventoryId;
-          const res = await fetch(path);
-          if(res.ok) {
-            const result = await res.json();
-            const inventory = {
-              inventory: result,
-              color: ''
-            };
-            this.inventoryColorObj[inventoryId] = inventory;
-          }
+            const path = inventory.getInventoriesByID.URL+inventoryId;
+            const res = await fetch(path);
+            if(res.ok) {
+              const result = await res.json();
+
+              if(this.inventoryColorObj[inventoryId]){
+                this.inventoryColorObj[inventoryId].inventory = result;
+              } else {
+                const inventory = {
+                  inventory: result,
+                  color: '',
+                };
+                this.inventoryColorObj[inventoryId] = inventory;
+              }
+            }
         }
       } catch (e) {
         console.log(e);
       }
+      return this.setCount(results);
     },
     getShortDate(fullDate) {
       return (fullDate.toISOString().slice(0, 10));
     },
     substratFromDate(dateFull, dateType, daysToSubstrat) {
       let date = dateType === 'short' ? new Date(dateFull) : dateFull;
-      console.log(new Date().getDate() - daysToSubstrat);
-      return new Date(date.setDate(new Date().getDate())).toISOString().slice(0, 10);
+      return new Date(date.setDate(new Date().getDate() - daysToSubstrat)).toISOString().slice(0, 10);
     },
     getDatesDifference(date1, date2){
       const date1formatted = new Date(date1);
@@ -109,10 +116,9 @@ export default {
       return (date2formatted - date1formatted) / msInDay;
     },
     getLabels(startDay, days){
-      console.log(startDay);
       let daysArray = [];
       for(let i = 0; i <= days; i++){
-        const addDays = new Date(startDay).getDate() + (i + 1);
+        const addDays = new Date(startDay).getDate() + i;
         const addedDays = new Date().setDate(addDays);
         const formatDate = new Date(addedDays).toISOString().slice(0, 10);
         daysArray.push(this.formatDate(formatDate));
@@ -121,15 +127,25 @@ export default {
     },
     setInvColor(inventoriesIDArray, colorsArray, object){
       inventoriesIDArray.forEach((id, index) => {
-
-        if(colorsArray[index]){
-          object[id].color = colorsArray[index];
-        } else {
-          let diff;
-          do {diff = index - colorsArray.length} while (diff > colorsArray.length);
-          object[id].color = colorsArray[diff];
+        if(object[id]){
+          if(colorsArray[index]){
+            object[id].color = colorsArray[index];
+          } else {
+            let diff;
+            do {
+              diff = index - colorsArray.length
+            } while (diff > colorsArray.length);
+            object[id].color = colorsArray[diff];
+          }
+        } else if(!object[id]){
+          const idData = {
+            color: colorsArray[index],
+            inventory: {}
+          }
+          object[id] = idData;
         }
       })
+      this.isLoaded = true;
     },
     formatDate(date) {
       let arr = date.split('-');
@@ -153,8 +169,6 @@ export default {
 
       if(res.ok) {
         const results = await res.json();
-        console.log(results);
-
         this.chartData.labels = this.getLabels(this.shortDateFrom, this.getDatesDifference(this.shortDateFrom, this.shortDateTo));
 
         if(results.length === 0){
@@ -163,30 +177,55 @@ export default {
             this.chartData.datasets[0].push(0);
           }
         } else {
-          results.forEach(result => {
-            let date = this.formatDate(result.date.slice(0, 10));
-            this.inventoriesArray.push(result.inventory_id);
-
-            let dataset = {
-              data: []
-            };
-            this.chartData.labels.forEach(label => {
-              if(label === date){
-                dataset.data.push(result.count) ;
-              } else {
-                dataset.data.push(0);
-              }
-            })
-            this.chartData.datasets.push(dataset);
+          results.forEach((result) => {
+            if(!this.inventoriesArray.includes(result.inventory_id)) {
+              this.inventoriesArray.push(result.inventory_id);
+            }
           });
-          await this.getInventoryByID();
-          this.setInvColor(this.inventoriesArray, this.backgroundColors, this.inventoryColorObj);
-          results.forEach((result, index) => {
-            this.chartData.datasets[index].backgroundColor = this.inventoryColorObj[result.inventory_id].color;
-            this.chartData.datasets[index].label = this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id) + ' ID ' + result.inventory_id;
-          })
+          await this.getInventoryByID(results);
         }
       }
+    },
+    setCount(results){
+      results.forEach(result => {
+        const date = this.formatDate(result.date.slice(0, 10));
+        const data = [];
+        for(let i = 0; i < this.chartData.labels.length; i++){
+          data.push(0);
+        }
+        const indexResultDate = this.chartData.labels.indexOf(date);
+
+        if(indexResultDate !== -1){
+          if(this.chartData.datasets.length === 0){
+            data[indexResultDate] = result.count;
+
+            this.datasetsIDObj[result.inventory_id] = 0;
+
+            const about = {
+              label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
+                  + ' ID ' + result.inventory_id,
+              data: data,
+              backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]
+            }
+            this.chartData.datasets.push(about);
+          } else {
+            if(Object.keys(this.datasetsIDObj).includes(result.inventory_id.toString())) {
+              this.chartData.datasets[this.datasetsIDObj[result.inventory_id]].data[indexResultDate] = result.count;
+            } else {
+              this.datasetsIDObj[result.inventory_id] = this.chartData.datasets.length;
+              data[indexResultDate] = result.count;
+              const about = {
+                label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
+                    + ' ID ' + result.inventory_id,
+                data: data,
+                backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]
+              }
+              this.chartData.datasets.push(about);
+            }
+          }
+        }
+      })
+      return this.setInvColor(this.inventoriesArray, this.backgroundColors, this.inventoryColorObj);
     },
     getEquipmentType(type_id) {
       let name;
@@ -200,8 +239,8 @@ export default {
   },
   mounted() {
     this.getResorts();
-    this.shortDateFrom = this.substratFromDate(new Date(), 'full', 1);
-    this.shortDateTo = this.shortDateFrom;
+    this.shortDateFrom = this.substratFromDate(new Date(), 'full', 7);
+    this.shortDateTo = this.substratFromDate(new Date(), 'full', 0);
     if(!this.GET_INVENTORY_TYPES) this.fetchInventoryTypes();
   }
 }

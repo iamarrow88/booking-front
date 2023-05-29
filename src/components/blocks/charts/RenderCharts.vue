@@ -27,6 +27,11 @@ export default {
     chartOptions: {
       responsive: Boolean
     },
+  },
+  data() {
+    return {
+      isLoaded: false,
+    }
   }
 }
 </script>
