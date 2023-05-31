@@ -205,7 +205,8 @@ export default {
               label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
                   + ' ID ' + result.inventory_id,
               data: data,
-              backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]
+              /*backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]*/
+              backgroundColor: this.getRandomColor(),
             }
             this.chartData.datasets.push(about);
           } else {
@@ -218,7 +219,8 @@ export default {
                 label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
                     + ' ID ' + result.inventory_id,
                 data: data,
-                backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]
+                /*backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]*/
+                backgroundColor: this.getRandomColor(),
               }
               this.chartData.datasets.push(about);
             }
@@ -235,6 +237,14 @@ export default {
         }
       })
       return name
+    },
+    getRandomColor() {
+      const num = Math.random().toString(16).slice(3, 9);
+      return `#${num}`;
+    },
+    scrollToResults() {
+      const resultsBlock = this.$refs.results;
+      resultsBlock.scrollIntoView({behavior: "smooth", block: "start"});
     },
   },
   mounted() {
