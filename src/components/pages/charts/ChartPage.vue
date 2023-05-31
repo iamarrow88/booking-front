@@ -32,8 +32,8 @@
 
       <button @click="getStats" class="cards-btn">Получить статистику</button>
     </div>
-    <div class="chart-data">
-      <RenderChart v-if="isLoaded" :chartData="chartData" :chartOptions="chartOptions" />
+    <div class="chart-data" ref="results">
+      <RenderChart v-if="isLoaded" :chartData="chartData" :chartOptions="chartOptions" :key="renderKey"/>
     </div>
   </div>
 </template>
@@ -66,10 +66,17 @@ export default {
       inventoriesArray: [],
       datasetsIDObj: {},
       isLoaded: false,
+      renderKey: 0,
     }
   },
   computed: {
     ...mapGetters(['GET_INVENTORY_TYPES']),
+  },
+  watch: {
+    groupBy(newVal){
+      console.log(newVal);
+      this.renderKey += 1;
+    }
   },
   methods: {
     ...mapActions(['fetchInventoryTypes']),
@@ -146,12 +153,16 @@ export default {
         }
       })
       this.isLoaded = true;
+      setTimeout(() => {
+        this.scrollToResults();
+      }, 1)
     },
     formatDate(date) {
       let arr = date.split('-');
       return arr.reverse().join('.');
     },
     async getStats(){
+      console.log('here');
       this.inventoriesArray = [];
       this.inventoryColorObj = {};
       this.chartData.labels = [];

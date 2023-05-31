@@ -128,7 +128,6 @@ export default {
       this.$store.commit('setEndTime', this.endTime);
     },
     endTime() {
-
       this.calcHoursNaming(this.duration);
       this.createEndOptions('00');
       this.$store.commit('setEndTime', this.endTime);
