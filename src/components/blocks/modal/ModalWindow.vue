@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style scoped>
-.pop-up__block {
+/* .pop-up__block {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -26,5 +26,5 @@ export default {
   padding: 2em;
   border-radius: 6px;
   box-shadow: 1px 1px 12px #fdd4bd;
-}
+} */
 </style>

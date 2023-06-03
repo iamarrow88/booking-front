@@ -43,11 +43,9 @@ export default {
     mutations: {
         setInventoryTypes(state, newTypesArray) {
             state.inventoryTypes = newTypesArray;
-            console.log(state.inventoryTypes);
         },
         setCities(state, newTypesArray) {
             state.cities = newTypesArray;
-            console.log(state.cities);
         }
     },
     state: {

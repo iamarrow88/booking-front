@@ -5,7 +5,6 @@ import {headerAPI, headerWithToken, user} from "@/data-and-functions/constants/U
 export default {
     actions: {
         async registerUser(context, body) {
-            console.log(body);
             const res = await asyncRequest(user.register.URL, body, user.register.METHOD, headerAPI);
             if (res.status === 200) {
                 console.log('не вошли в акк');
@@ -41,8 +40,6 @@ export default {
             }
         },
         async updateUser(context, body) {
-            console.log(body);
-            console.log(user.updateUser.URL);
             try {
                 const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, headerWithToken);
                 console.log('обновляем данные пользователя');
@@ -172,7 +169,6 @@ export default {
                 for (let i = 0; i < options.fields.length; i++) {
                     state[options.instance][options.fields[i]] = options.values[i];
                 }
-                console.log(state[options.instance]);
             } else {
                 for (let i = 0; i < options.fields.length; i++) {
                     state[options.fields[i]] = options.values[i];
@@ -223,20 +219,12 @@ export default {
             state.user.role_id = +localStorage.getItem('role_id');
         },
         checkLogin(state) {
-            console.log(localStorage.getItem('token'));
-            console.log(!!localStorage.getItem('token'));
             state.isLoggedIn = !!localStorage.getItem('token');
         },
         updateAuthorizationErrorMessage(state, newMessage) {
             state.authorizationErrorMsg = newMessage;
         },
 
-        /*
-        * const options = {
-        * typeError: errorFieldName,
-        * boolean: value
-        * }
-        * */
         detectError(state, options) {
             state[options.typeError] = options.boolean;
         },
