@@ -152,8 +152,6 @@ export default {
 .add-resort {
   width: 90%;
   margin: 0 auto;
-  display: flex;
-  justify-content: flex-start;
 }
 
 .pop-up__block > .add-resort {

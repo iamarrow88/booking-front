@@ -244,7 +244,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .result-item {
   display: flex;

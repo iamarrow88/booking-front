@@ -466,6 +466,11 @@ export default {
   flex-direction: column;
 }
 
+.modal-equipment-item {
+  display: flex;
+  gap: 2em;
+}
+
 .modal-equipment-item__about {
   display: flex;
   flex-direction: column;
@@ -558,6 +563,7 @@ export default {
 
 .pop-up__confirm > .pop-up__block {
   width: 30%;
+  height: 15em;
 }
 
 @media (max-width: 767px) {

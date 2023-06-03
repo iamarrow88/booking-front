@@ -85,6 +85,7 @@ export default {
       renderKey: 0,
       maxCount: 1,
       labelIndexes: {},
+      lounchCounter: 0,
     }
   },
   computed: {
@@ -92,16 +93,16 @@ export default {
   },
   watch: {
     groupBy(){
-      this.getStats();
+      if(this.lounchCounter > 0) this.getStats();
       this.renderKey += 1;
     },
     shortDateFrom(newDate){
       this.splittedDateFrom = newDate.split('-');
-      this.getStats();
+      if(this.lounchCounter > 0) this.getStats();
     },
     shortDateTo(newDate){
       this.splittedDateTo = newDate.split('-');
-      this.getStats();
+      if(this.lounchCounter > 0) this.getStats();
     },
   },
   methods: {
@@ -217,6 +218,7 @@ export default {
     },
     async getStats(){
       this.clearData();
+      this.lounchCounter += 1;
       if(this.isLoaded) this.isLoaded = false;
       this.isModalWindowShown = true;
       const body = {
@@ -224,6 +226,8 @@ export default {
         "end_time": `${this.shortDateTo}T23:00:00.000Z`,
         "group_by": this.groupBy,
       }
+
+      console.log(body);
       const res = await fetch(stats.getStatsByResortID.URL+this.selectedResort.id, {
         method: stats.getStatsByResortID.METHOD,
         headers: headerWithToken,
@@ -375,25 +379,6 @@ export default {
         }
         return monthsInYearsSum + (13 - +month1) + +month2;
       }
-
-//дни - отнять дату1 от даты 2 и разделить на кол-во мс в сутках?
-
-       /*new Date(new Date().setMonth(12));
-Wed Jan 31 2024 23:16:16 GMT+0300 (Москва, стандартное время)
-new Date(new Date(Date.now()).setMonth(12))
-Wed Jan 31 2024 23:18:05 GMT+0300 (Москва, стандартное время)
-newDate = data1.setMonth(data1.getMonth() + 1);
-1672531200000
-new Date(newDate)
-Sun Jan 01 2023 03:00:00 GMT+0300 (Москва, стандартное время)
-*/
-      /*if(daysDiff > 365){
-        let counter = 0;
-        do {
-          daysDiff -= 365;
-          counter += 1
-        } while (daysDiff > 365)
-      }*/
     },
     howManyYearsDiff(){
       const year1 = this.splittedDateFrom[0];
@@ -412,8 +397,8 @@ Sun Jan 01 2023 03:00:00 GMT+0300 (Москва, стандартное врем
   },
   mounted() {
     this.getResorts();
-/*    this.shortDateFrom = this.substratFromDate(new Date(), 'full', 7);
-    this.shortDateTo = this.substratFromDate(new Date(), 'full', 0);*/
+    this.shortDateFrom = this.substratFromDate(new Date(), 'full', 7);
+    this.shortDateTo = this.substratFromDate(new Date(), 'full', 0);
     if(!this.GET_INVENTORY_TYPES) this.fetchInventoryTypes();
     this.splittedDateFrom = this.shortDateFrom.split('-');
     this.splittedDateTo = this.shortDateTo.split('-');
@@ -438,11 +423,5 @@ Sun Jan 01 2023 03:00:00 GMT+0300 (Москва, стандартное врем
 
 label {
   margin: 1em 0 0.5em;
-}
-
-.pop-up > div {
-  width: 5vw;
-  height: 2vh;
-  border-radius: 15px;
 }
 </style>
