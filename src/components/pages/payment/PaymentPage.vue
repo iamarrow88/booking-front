@@ -3,9 +3,6 @@
     <div class="payment__title">Сумма к оплате {{ total }} RUB</div>
     <div class="payment__subtitle">Введите номер карты :)</div>
     <div class="card">
-      <div class="card__img">
-        <!--        <img src="../assets/card.png" alt="card">-->
-      </div>
       <div class="front-card__inputs">
         <div class="number-form">
           <label for="cardNumber">Номер карты</label>
@@ -44,7 +41,6 @@
 
 <script>
 import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
-import {mapGetters} from "vuex";
 import paths from "@/data-and-functions/constants/paths";
 
 export default {
@@ -59,27 +55,18 @@ export default {
       isCVCVisible: false
     }
   },
-  computed: {
-    ...mapGetters(['GET_SAVED_DATA', 'GET_USER_TOKEN']),
-  },
   methods: {
     async bookingItem() {
-
-      let body;
-      if(this.GET_SAVED_DATA.item.id){
-        body = {
-          "inventory_id": +this.GET_SAVED_DATA.item.id,
-          "start_time": this.GET_SAVED_DATA.startDateShort + 'T' + this.GET_SAVED_DATA.startTime + ':00:00Z',
-          "end_time": this.GET_SAVED_DATA.endDateShort + 'T' + this.GET_SAVED_DATA.endTime + ':00:00Z',
-        }
-      } else {
-        const endTime = +this.$route.query.endTime === 24 ? '00' : +this.$route.query.endTime;
-        body = {
-          inventory_id: +this.$route.query.itemId,
-          start_time: this.$route.query.selDateStartShort + 'T' + this.$route.query.startTime + ':00:00Z',
-          end_time: this.$route.query.selDateStartShort + 'T' + endTime + ':00:00Z'
-        }
-
+      let endTime = localStorage.getItem('endTime');
+      let endDate = localStorage.getItem('endDateShort');
+      if(endTime === '24') {
+        endTime = '00';
+        endDate = this.addDayToDate(endDate, 'short', 1)
+      }
+      const body = {
+          "inventory_id": +localStorage.getItem('selectedItemID'),
+          "start_time": localStorage.getItem('startDateShort') + 'T' + localStorage.getItem('startTime') + ':00:00Z',
+          "end_time": endDate + 'T' + endTime + ':00:00Z',
       }
       console.log(body);
       try {
@@ -90,10 +77,7 @@ export default {
             'Accept': '*',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
-
-
           body: JSON.stringify(body)
-
         });
         if (response.ok) {
           this.bookings = await response.json();
@@ -115,12 +99,16 @@ export default {
       let date = dateType === 'short' ? new Date(dateFull) : dateFull;
       return new Date(date.setDate(new Date().getDate() + daysToAdd)).toISOString().slice(0, 10);
     },
+    goToPrevPage(){
+      this.$router.push(paths.ResortPageByID)
+    }
   },
   created() {
-    if(!localStorage.getItem('firstName')){
+    if(!localStorage.getItem('token')){
+      console.log('Сначала нужно авторизоваться');
 
     }
-    this.total = this.$route.query.total;
+    this.total = this.$route.query.total ? this.$route.query.total : localStorage.getItem('totalPrice');
   }
 }
 </script>

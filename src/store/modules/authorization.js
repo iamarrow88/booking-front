@@ -5,8 +5,10 @@ import {headerAPI, user} from "@/data-and-functions/constants/URLS.js";
 export default {
     actions: {
         async registerUser(context, body) {
+            console.log(body);
             const res = await asyncRequest(user.register.URL, body, user.register.METHOD, headerAPI);
-            if (res.status === 200) {
+            console.log(res);
+            if (!res.ok) {
                 console.log('не вошли в акк');
                 context.commit('updateErrorMessage', 'Не удалось войти в аккаунт. Проверьте введенные данные.');
                 context.commit('login', false);

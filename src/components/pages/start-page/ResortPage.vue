@@ -71,6 +71,7 @@
                                :item="item"
                                :typeId="item.type_id"
                                :resortName="resortName"
+                               :resortId="this.$route.params.id"
                                :editMode="false"
                                :selDateStartShort="selDateStartShort"
                                :selDateEndShort="selDateEndShort"

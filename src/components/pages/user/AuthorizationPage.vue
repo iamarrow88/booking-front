@@ -26,10 +26,12 @@
 
 import {mapGetters} from "vuex";
 import paths from "@/data-and-functions/constants/paths";
+import LoginBlock from "@/components/blocks/user/LoginBlock.vue";
+import RegistrationBlock from "@/components/blocks/user/RegistrationBlock.vue";
 
 export default {
   name: "AuthorizationPage",
-  components: ['LoginBlock', 'RegistrationBlock'],
+  components: LoginBlock, RegistrationBlock,
   data() {
     return {
       isLoginChecked: true,
