@@ -66,9 +66,9 @@
         </select>
       </div>
       <div class="buttons">
-        <button class="btn btn-primary cards-btn" @click="register">Зарегистрироваться</button>
+        <button class="btn btn-primary cards-btn action" @click="register">Зарегистрироваться</button>
         <button @click="this.$emit('entryBlockToggle', true)"
-                class="sub-btn">У меня уже есть аккаунт
+                class="cards-btn">У меня уже есть аккаунт
         </button>
       </div>
     </div>
@@ -113,8 +113,8 @@ export default {
         middle_name: this.middleName,
         email: this.emailRegister,
         password: this.passwordRegister,
-        phone: this.phone,
-        role_id: this.roleId
+        phone: +this.phone,
+        role_id: +this.roleId
       }
 
       this.$store.dispatch('registerUser', body);

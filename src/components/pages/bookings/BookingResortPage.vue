@@ -29,6 +29,7 @@
 <script>
 import BookingItem from "@/components/items/bookings/BookingItem.vue";
 import {mapActions, mapGetters} from "vuex";
+import paths from "@/data-and-functions/constants/paths";
 
 export default {
   components: {BookingItem},
@@ -42,7 +43,6 @@ export default {
       selectedResortName: '',
       selectedResort: {},
       inv_types: [],
-      ...mapGetters(['GET_ALL_USER_INFO'])
     }
   },
   watch:{
@@ -53,7 +53,8 @@ export default {
   computed: {
     filteredBookings() {
       return this.bookings.filter(booking => +booking.inventory.resort_id === +this.selectedResort.id)
-    }
+    },
+    ...mapGetters(['GET_ALL_USER_INFO']),
   },
   methods: {
     ...mapActions(['fetchInventoryTypes', 'fetchCities']),
@@ -78,6 +79,9 @@ export default {
           this.selectedResort = resort;
         }
       })
+    },
+    goToStartPage() {
+      this.$router.push(paths.StartPage);
     },
   },
 

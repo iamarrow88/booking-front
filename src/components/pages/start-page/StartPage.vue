@@ -26,7 +26,6 @@
             </select>
           </div>
         </div>
-        <!--         <div class="duration form-title">Бронь на {{duration}} {{hoursNaming}}</div>-->
         <div class="form-group form-group-options">
           <div class="form-group form-group-city">
             <label for="city" class="form-title">Город:</label>
@@ -377,6 +376,7 @@ export default {
 .form-group-city label, .form-group-type label {
   margin: 0;
   align-self: end;
+  text-align: left;
 }
 
 .form-group-submit {
@@ -402,6 +402,7 @@ export default {
 .results__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  justify-items: center;
   grid-gap: 2%;
   padding: 3%;
 
@@ -412,4 +413,34 @@ export default {
   font-weight: 600;
 }
 
+@media (max-width: 860px) {
+  .form-group-dates, .form-group-time {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .form-group-dates > div, .form-group-time > div {
+    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+  }
+
+  .form-group-city, .form-group-type {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 100%;
+  }
+
+  .form-group-city > select, .form-group-type > select {
+    width: auto;
+  }
+}
+
+@media (max-width: 690px) {
+  .filters-wrapper {
+    width: 100%;
+    max-width: none;
+
+  }
+}
 </style>

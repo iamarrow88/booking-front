@@ -356,8 +356,10 @@ label.date__label, label.time__label, label.type__label {
   margin: 0 auto;
   width: 80%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  justify-items: center;
+  grid-gap: 2%;
+  padding: 3%;
 }
 
 
@@ -373,17 +375,63 @@ label.date__label, label.time__label, label.type__label {
   text-align: center;
   font-size: 28px;
 }
-
-@media (max-width: 767px) {
-
-  .results__item {
-    width: 25%;
+@media (max-width: 1050px){
+  .filters__img {
+    display: none;
   }
 
+  .filters__wrapper {
+    position: relative;
+    width: 100%;
+    height: 45vh;
+    background-image: url("../../../assets/3.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fffaf2;
+    z-index: -1;
+  }
+
+  .filters__wrapper:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:rgba(0, 0, 0, .3);
+    z-index: -1;
+  }
+
+  .filters__wrapper > .date {
+    margin-top: 10vh;
+  }
+
+  .buttons {
+    width: 100%;
+  }
+
+  button {
+    font-size: 0.6em;
+    padding: 0;
+  }
+}
+
+@media (max-width: 767px) {
   .resort-page {
     font-size: 1rem;
   }
 
+
 }
+/*
+@media (max-width: 515px) {
+
+}*/
+
+
 
 </style>

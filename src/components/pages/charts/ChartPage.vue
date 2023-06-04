@@ -417,7 +417,7 @@ export default {
   width: 90%;
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 3em;
 }
 
 .chart-filters {
@@ -427,5 +427,9 @@ export default {
 
 label {
   margin: 1em 0 0.5em;
+}
+
+.cards-btn {
+  margin: 0;
 }
 </style>

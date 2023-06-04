@@ -32,7 +32,10 @@
         </div>
       </div>
     </div>
-    <button @click="bookingItem" class="cards-btn">Я ввел, честно</button>
+    <div class="buttons">
+      <button @click="bookingItem" class="cards-btn action">Я ввел, честно</button>
+      <button @click="goToPrevPage" class="cards-btn">Передумал</button>
+    </div>
   </div>
   <div v-else>
     <success-window :isOpen="isOpen" @closePopUp="closePopUp"></success-window>
@@ -115,7 +118,6 @@ export default {
   },
   created() {
     if(!localStorage.getItem('firstName')){
-      console.log('Сначала нужно авторизоваться')
 
     }
     this.total = this.$route.query.total;
@@ -143,14 +145,9 @@ export default {
 
 .card {
   position: relative;
-  width: 50%;
+  width: 545px;
+  height: 1px;
   margin: 0 auto;
-}
-
-.card__img {
-  display: flex;
-  justify-content: flex-start;
-  /*background-image: url("../assets/card.png");*/
 }
 
 input {
@@ -194,7 +191,7 @@ label {
 
 .number-form {
   position: absolute;
-  top: 16px;
+  top: 0;
   left: 20px;
 }
 
@@ -205,7 +202,7 @@ label {
 
 .term-form {
   position: absolute;
-  top: 88px;
+  top: 73px;
   left: 20px;
 }
 
@@ -224,13 +221,13 @@ label {
 
 .holderName-form {
   position: absolute;
-  top: 162px;
+  top: 142px;
   left: 20px;
 }
 
 .cvc-form {
   position: relative;
-  top: 31px;
+  top: 17px;
   left: 243px;
   width: 100px;
 }
@@ -239,8 +236,17 @@ label {
   width: 100px;
 }
 
+.buttons {
+  margin: 300px auto 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.7em;
+}
+
 .cards-btn {
-  margin-top: 300px;
+  margin: 0 auto;
+  width: 50%;
 }
 
 </style>

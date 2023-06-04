@@ -18,8 +18,15 @@
         <button  class="btn cards-btn" @click="deleteBooking">Отменить бронирование</button>
       </div>
       <div class="my-booking-item__user" v-else>
-        <div><b>Пользователь:</b> {{ item.user.first_name + " " + item.user.surname + " " + item.user.middle_name }}</div>
-        <div><b>Телефон: </b>{{ item.user.phone }} </div>
+        <div class="user__name">
+          <div class="user__name-title">Пользователь:</div>
+          <div class="user__name-value">{{ item.user.first_name + " " + item.user.surname + " " + item.user.middle_name }}</div>
+        </div>
+
+        <div class="user__phone">
+          <div class="user__phone-title">Телефон: </div>
+          <div class="user__phone-value">{{ item.user.phone }} </div>
+        </div>
       </div>
     </div>
   </div>
@@ -125,12 +132,14 @@ export default {
 }
 
 .my-booking-item__block {
+  position: relative;
   display: grid;
   gap: 0.5em;
   align-items: start;
 }
 
 .button > button.cards-btn {
+  margin-top: -24px;
   height: auto;
 }
 
@@ -159,5 +168,94 @@ export default {
 .gridForResort {
   grid-template-columns: 1.5fr 3.5fr 2fr;
 }
+
+.user__name, .user__phone {
+  display: flex;
+  justify-content: flex-start;
+}
+.user__name-title, .user__phone-title {
+  font-weight: 900;
+  margin-right: 5px;
+}
+
+.user__name-value,.user__phone-value {
+  text-align: left;
+}
+
+@media (max-width: 1165px) {
+  .my-booking-item {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+  }
+
+  .my-booking-item__block {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .my-booking-item__user {
+    padding-left: 0;
+  }
+
+  .my-booking-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .body__term {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1em;
+  }
+
+  .button {
+    align-self: end;
+    position: absolute;
+    top: 0;
+    transform: translateY(50%);
+  }
+
+  .button > button {
+    margin-top: 0;
+    width: 9em;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 976px) {
+  .body__term {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.5em;
+  }
+}
+
+@media (max-width: 682px) {
+  .my-booking-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+  }
+}
+
+@media (max-width: 487px) {
+  .my-booking-item {
+    align-items: center;
+  }
+
+  .my-booking-item__id {
+    text-align: center;
+  }
+
+  .button {
+    margin: 20px 0 0 0;
+    position: static;
+    align-self: center;
+    transform: none;
+  }
+}
+
 
 </style>

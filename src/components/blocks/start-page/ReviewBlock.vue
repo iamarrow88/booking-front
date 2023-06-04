@@ -2,7 +2,7 @@
   <div class="block">
     <div class="review">
       <div class="review__author"><img src='../../../assets/admin.png' alt="avatar" class="author__img">
-        <div class="author__name">{{ review.user_name  }}</div>
+        <div class="author__name">{{ review.user_name ? review.user_name : "Аноним" }}</div>
       </div>
       <div class="review__rate">
         <stars-rate :rate="this.review.rating"></stars-rate>

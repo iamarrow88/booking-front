@@ -98,7 +98,7 @@
                       :selDateEndShort="selDateEndShort"
                       :startTime="startTime"
                       :endTime="endTime"
-                      :total="item.price * duration"
+                      :total="total"
                       :duration="duration"
                       class="pop-up__confirm"
                       @closePopUp="closePopUp"></confirm-window>
@@ -186,6 +186,9 @@ export default {
   },
   computed: {
     ...mapGetters(['GET_ALL_USER_INFO', 'GET_INVENTORY_TYPES']),
+    total() {
+      return this.item.price * this.duration;
+    }
   },
   methods: {
     showFullImage(src) {
@@ -423,11 +426,11 @@ export default {
   margin-top: 45px;
 }
 
-.no-scroll {
+/*.no-scroll {
   overflow: hidden;
   background-color: rgba(178, 178, 178, .3);
   z-index: 10;
-}
+}*/
 
 .buttons {
   display: flex;
@@ -440,29 +443,31 @@ export default {
 
 .inventory-edit {
   display: none;
-}
+}*/
 
+/*
 .equipment.inventory-card {
   padding: 1em;
 }
+*/
 
-.inventory-card__title {
+/*.inventory-card__title {
   display: none;
 }
 
 .pop-up__block {
   width: 65%;
-}
+}*/
 
 .pop-up__block > .modal-equipment-item {
   justify-content: space-around;
 }
 
-.display-grid{
+/*.display-grid{
   padding: 2em;
   display: grid;
   grid-template-columns: 2fr 3fr ;
-}
+}*/
 
 .modal-equipment-item {
   display: flex;
@@ -576,10 +581,10 @@ export default {
 
 @media (max-width: 767px) {
 
-  .equipment-item {
+  /*.equipment-item {
     font-size: 1rem;
     width: 23%;
-  }
+  }*/
 
   .equipment-item__type-name {
     font-size: 1.25rem;

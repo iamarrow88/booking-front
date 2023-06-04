@@ -2,10 +2,10 @@
   <div class="user-block">
     <div class="profile" v-key="GET_UPDATE_KEY">
       <div class="profile-photo">
-        <img src="../../../assets/user.png" v-if="!IS_USER_OWNER" alt="avatar">
+        <img class="avatar" src="../../../assets/user.png" v-if="!IS_USER_OWNER" alt="avatar">
         <img class="avatar" v-if="IS_USER_OWNER" src="../../../assets/admin.png" alt="avatar">
 
-        <p>{{ GET_ALL_USER_INFO.surname }}</p>
+        <p class="avatar__info">{{ GET_ALL_USER_INFO.surname }}</p>
       </div>
       <div class="user-data">
         <div class="form-group">
@@ -54,7 +54,8 @@
               isPhoneNumberNull ? "Поле обязательно для заполнения" : ""}}</div>
         </div>
         <div class="buttons">
-          <button class="cards-btn" @click="editUserData">{{ isEditModeOn ? 'Обновить' : 'Редактировать'}}</button>
+          <button class="cards-btn action" @click="editUserData">{{ isEditModeOn ? 'Обновить' : 'Редактировать'}}</button>
+          <button class="cards-btn" @click="isEditModeOn=false" v-if="isEditModeOn">{{ 'Отмена' }}</button>
           <button class="cards-btn" @click="deleteUserData" v-show="!isEditModeOn">Удалить аккаунт</button>
         </div>
       </div>
@@ -143,8 +144,8 @@ export default {
 <style scoped>
   .profile {
     display: grid;
-    grid-template-columns: 30% 70%;
-    column-gap: 50px;
+    grid-template-columns: 28% 65% 1%;
+    column-gap: 30px;
     width: 90%;
   }
 
@@ -154,7 +155,8 @@ export default {
 
   .form-group {
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 1.5fr 3.3fr;
+    gap: 0.6em;
   }
 
   .form-group label {
@@ -179,6 +181,32 @@ export default {
 
   .buttons > .cards-btn {
     width: 47%;
+  }
+
+  label {
+    margin: 0;
+  }
+
+  .form-group > label {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .form-group > .form-control {
+    display: flex;
+    align-items: center;
+  }
+
+  @media (max-width: 597px) {
+
+    .buttons {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .buttons > .cards-btn {
+      width: 100%;
+    }
   }
 
 </style>
