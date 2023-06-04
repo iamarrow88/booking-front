@@ -1,7 +1,7 @@
 <template>
   <div v-if="isLoggedIn" class="my-booking">
     <h3 class="my-booking__title">Мои бронирования:</h3>
-    <booking-item v-for="item in booking"
+    <booking-item v-for="item in bookings"
                   :key="item.id"
                   :item="item"
                   :inventoryTypes="inv_types"
@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      booking: [],
+      bookings: [],
       inv_types: [],
       ...mapGetters(['GET_ALL_USER_INFO']),
       isUserBookingsPage: null,
