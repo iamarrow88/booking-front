@@ -118,7 +118,7 @@ import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 import StarsRate from "@/components/UI/StarsRate.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
-import {comments, headerWithToken} from "@/data-and-functions/constants/URLS";
+import {comments} from "@/data-and-functions/constants/URLS";
 import asyncRequest from "@/data-and-functions/API/asyncRequest";
 import {mapGetters} from "vuex";
 import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
@@ -252,7 +252,11 @@ export default {
       console.log('deleteComment');
 
       try {
-        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
+        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, {
+          'Content-Type': 'application/json',
+          'Accept': '*',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        })
 
         if (res.ok) {
           console.log(res);
@@ -276,7 +280,11 @@ export default {
       }
 
       try {
-        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
+        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, {
+          'Content-Type': 'application/json',
+          'Accept': '*',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        });
         console.log('комментарий отправлен');
         if (!res.ok) {
           console.log('комментарий не создан, ошибка.');

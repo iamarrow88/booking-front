@@ -197,7 +197,11 @@ export default {
       }
       console.log(body);
       try {
-        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
+        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, {
+            'Content-Type': 'application/json',
+            'Accept': '*',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        })
 
         if(res.ok){
           console.log(res);
@@ -221,7 +225,11 @@ export default {
       }
 
       try {
-        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
+        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, {
+            'Content-Type': 'application/json',
+            'Accept': '*',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        });
         console.log('комментарий отправлен');
         if(!res.ok){
           console.log('комментарий не создан, ошибка.');

@@ -1,5 +1,5 @@
 import asyncRequest from "@/data-and-functions/API/asyncRequest.js";
-import {headerAPI, headerWithToken, user} from "@/data-and-functions/constants/URLS.js";
+import {headerAPI, user} from "@/data-and-functions/constants/URLS.js";
 
 
 export default {
@@ -41,7 +41,11 @@ export default {
         },
         async updateUser(context, body) {
             try {
-                const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, headerWithToken);
+                const res = await asyncRequest(user.updateUser.URL, body, user.updateUser.METHOD, {
+                    'Content-Type': 'application/json',
+                    'Accept': '*',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                });
                 console.log('обновляем данные пользователя');
 
                 if (!res.ok) {
@@ -71,7 +75,11 @@ export default {
         },
         async deleteUser(context, body) {
             try {
-                const res = await asyncRequest(user.deleteUser.URL, body, user.deleteUser.METHOD, headerWithToken);
+                const res = await asyncRequest(user.deleteUser.URL, body, user.deleteUser.METHOD, {
+                    'Content-Type': 'application/json',
+                    'Accept': '*',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                });
                 console.log('удаляем аккаунт');
 
                 if (!res.ok) {

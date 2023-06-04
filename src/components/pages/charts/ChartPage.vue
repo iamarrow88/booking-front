@@ -42,7 +42,7 @@
 
 <script>
 
-import {headerWithToken, resorts, stats, inventory} from "@/data-and-functions/constants/URLS";
+import {resorts, stats, inventory} from "@/data-and-functions/constants/URLS";
 import RenderChart from "@/components/blocks/charts/RenderCharts.vue";
 import {mapActions, mapGetters} from "vuex";
 import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
@@ -230,7 +230,11 @@ export default {
       console.log(body);
       const res = await fetch(stats.getStatsByResortID.URL+this.selectedResort.id, {
         method: stats.getStatsByResortID.METHOD,
-        headers: headerWithToken,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify(body)
       });
 

@@ -27,7 +27,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import {bookings, headerWithToken} from "@/data-and-functions/constants/URLS";
+import {bookings} from "@/data-and-functions/constants/URLS";
 
 export default {
   name: "BookingItem",
@@ -71,13 +71,21 @@ export default {
       const deleteL = [
         bookings.deleteBookingByID.URL+this.item.id, {
           method: bookings.deleteBookingByID.METHOD,
-          headers: headerWithToken,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
         }
       ];
       console.log(deleteL);
       const res = await fetch(bookings.deleteBookingByID.URL+this.item.id, {
         method: bookings.deleteBookingByID.METHOD,
-        headers: headerWithToken
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
       })
       this.res = await res;
       if(res.ok){
