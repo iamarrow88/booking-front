@@ -21,7 +21,8 @@
     </div>
 
     <div v-else>
-      Бронирований нет
+      <p class="info">Бронирований нет</p>
+      <button class="cards-btn action" @click="goToStartPage">Забронировать инвентарь</button>
     </div>
   </div>
 </template>
@@ -116,6 +117,15 @@ export default {
 .select {
   margin: 0 auto 4em;
   width: 83%;
+}
+
+.info {
+  margin-bottom: 2em;
+}
+
+.cards-btn {
+  width: 50%;
+  margin: 0 auto;
 }
 
 </style>
