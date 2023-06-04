@@ -318,6 +318,15 @@ export default {
     showPopUp() {
       this.editModalWindowOpen = false;
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
+      localStorage.setItem('selectedItemID', this.item.id);
+      localStorage.setItem('resortName', this.resortName);
+      localStorage.setItem('resortId', this.resortId.toString());
+      localStorage.setItem('startDateShort', this.selDateStartShort);
+      localStorage.setItem('endDateShort', this.selDateEndShort);
+      localStorage.setItem('startTime', this.startTime);
+      localStorage.setItem('endTime', this.endTime);
+      localStorage.setItem('totalPrice', this.total.toString());
+      localStorage.setItem('duration', this.duration.toString());
     },
     closePopUp(bool1, bool2) {
       this.isBookingProcessStarted = bool1;
@@ -441,7 +450,7 @@ export default {
   gap: 1em;
 }
 
-.inventory-edit {
+/*.inventory-edit {
   display: none;
 }*/
 
