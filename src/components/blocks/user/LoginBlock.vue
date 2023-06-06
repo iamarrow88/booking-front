@@ -31,12 +31,12 @@
         </div>
       </div>
       <div class="buttons">
-        <button class="btn cards-btn"
+        <button class="btn cards-btn action"
                 @click="login">Войти в аккаунт
         </button>
 
         <button @click="this.$emit('entryBlockToggle', false)"
-                class="sub-btn">Зарегистрироваться
+                class="cards-btn">Зарегистрироваться
         </button>
       </div>
     </div>
@@ -98,6 +98,7 @@ export default {
 button {
   width: 70%;
   margin: 0 auto;
+  order: 1;
 }
 
 </style>

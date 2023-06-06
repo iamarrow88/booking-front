@@ -12,12 +12,18 @@
         <stars-rate :rate="Math.round(resort.avg_rating)"></stars-rate>
       </div>
 
-      <button @click="showMore"
-              class="cards-btn">Подробнее
-      </button>
-<!--      <p class="item__description" v-if="isMoreShown">
-        <b>Описание:</b> {{ resort.description }}
-      </p>-->
+      <div class="buttons">
+        <button
+            @click="goToResortPage"
+            class="cards-btn action">
+          Посмотреть инвентарь
+        </button>
+
+        <button @click="showMore"
+                class="cards-btn">Подробнее
+        </button>
+      </div>
+
       <teleport to="body">
         <modal-window v-if="isMoreShown" @closePopUp="isMoreShown=false">
           <div class="item">
@@ -35,22 +41,10 @@
               <b>Описание:</b> {{ resort.description }}
             </p>
 
-            <button
-                @click="goToResortPage"
-                class="cards-btn">
-              Посмотреть инвентарь
-            </button>
+            <button class="cards-btn" @click="isMoreShown=false"> Назад </button>
           </div>
         </modal-window>
       </teleport>
-
-
-      <button
-          @click="goToResortPage"
-          class="cards-btn">
-        Посмотреть инвентарь
-      </button>
-
     </div>
     <div class="reviews">
       {{resort.description}}
@@ -141,15 +135,7 @@ export default {
     },
 
     showMore() {
-      /*console.log(e);*/
       this.isMoreShown = !this.isMoreShown;
-      /*      if([...e.target.closest('.result-item').classList].includes('showMore')) {
-              e.target.closest('.result-item').classList.remove('showMore');
-            } else {
-              document.querySelectorAll('.result-item').forEach(card => card.classList.remove('showMore'));
-              e.target.closest('.result-item').classList.add('showMore');
-            }*/
-
     },
     async getUsers() {
       try {
@@ -189,53 +175,6 @@ export default {
       if (this.currentReview > this.reviews.length) this.currentReview = 0;
 
     },
-    /*async deleteComment(id){
-      console.log('deleteComment');
-
-      const body = {
-        id: +id,
-      }
-      console.log(body);
-      try {
-        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
-
-        if(res.ok){
-          console.log(res);
-          console.log('комментарий удален');
-          this.currentReview -= 1;
-          await this.getReviewsByInventoryID();
-        } else {
-          console.log(res);
-
-          console.log('комментарий не удален, ошибка');
-        }
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    async postComment(comment){
-      const body = {
-        "resort_id": +this.resort.id,
-        "rating": +comment.rating,
-        "text": comment.text,
-      }
-
-      try {
-        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
-        console.log('комментарий отправлен');
-        if(!res.ok){
-          console.log('комментарий не создан, ошибка.');
-        } else {
-          console.log('Комментарий отправлен');
-          const comment = await res.json();
-          console.log(comment);
-          this.currentReview += 1;
-          await this.getReviewsByInventoryID();
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },*/
   },
   mounted() {
     this.getUsers();
@@ -244,7 +183,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .result-item {
   display: flex;
@@ -257,23 +196,13 @@ export default {
   overflow: hidden;
   transition: transform .7s;
   background-color: #f5fbfd;
-  order: 2
 }
 
 .item {
-  /*padding: 30px 20px;*/
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /*width: 280px;
-  min-height: 300px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  overflow: hidden;
-  transition: transform .7s;
-  background-color: #f5fbfd;
-  order: 2*/
 }
 
 .result-item:hover {
@@ -288,7 +217,6 @@ export default {
   padding-left: 13%;
   font-size: 21px;
   font-weight: 800;
-  order: 2
 }
 
 .item__address {
@@ -297,7 +225,6 @@ export default {
   justify-content: flex-start;
   gap: 7px;
   width: 100%;
-  order: 2
 }
 
 .address__img {
@@ -307,7 +234,6 @@ export default {
 .item__rate {
   margin-bottom: 10px;
   width: 100%;
-  order: 2;
   display: flex;
   justify-content: center;
 }
@@ -322,12 +248,9 @@ export default {
 
 .cards-btn {
   margin-bottom: 10px;
-  order: 2
 }
 
 .item__description {
-  order: 2;
-  /*  width: 100%;*/
   text-align: left;
   align-self: start;
 }
@@ -344,62 +267,23 @@ export default {
   fill: yellow;
 }
 
-.showMore {
-  width: 93%;
-  order: 1;
-  transition: all .3ms;
-  padding: 40px;
-}
-
-.showMore .item {
-  width: 65%;
-  margin-right: 10px;
-  padding: 20px;
-}
-
-.showMore .item__header {
-  padding-left: 0;
-  width: 100%;
-  order: 1;
-  align-self: start;
-}
-
-.showMore .address__text {
-  width: 100%;
-}
-
-.showMore .item__rate {
-  width: 100%;
-  margin: 0;
-  order: 1;
-  align-self: start;
-
-}
-
-.showMore .cards-btn {
-  align-self: start;
-
-}
-
-.showMore .item__rate {
-  justify-content: start;
-}
-
 .reviews {
   display: none;
 }
 
-.showMore .reviews {
-  display: block;
-  width: 45%;
-  text-align: left;
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5em;
 }
 
-.reviews__title {
-  padding-left: 7%;
-  font-weight: 900;
-  font-size: 30px;
+.buttons > button {
+  height: auto;
 }
 
-
+.item > .cards-btn {
+  margin: 0 auto;
+  width: 50%;
+}
 </style>

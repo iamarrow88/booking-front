@@ -98,7 +98,7 @@
                       :selDateEndShort="selDateEndShort"
                       :startTime="startTime"
                       :endTime="endTime"
-                      :total="item.price * duration"
+                      :total="total"
                       :duration="duration"
                       class="pop-up__confirm"
                       @closePopUp="closePopUp"></confirm-window>
@@ -118,7 +118,7 @@ import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import InventoryCard from "@/components/items/equipments/InventoryCard.vue";
 import StarsRate from "@/components/UI/StarsRate.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
-import {comments, headerWithToken} from "@/data-and-functions/constants/URLS";
+import {comments} from "@/data-and-functions/constants/URLS";
 import asyncRequest from "@/data-and-functions/API/asyncRequest";
 import {mapGetters} from "vuex";
 import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
@@ -186,6 +186,9 @@ export default {
   },
   computed: {
     ...mapGetters(['GET_ALL_USER_INFO', 'GET_INVENTORY_TYPES']),
+    total() {
+      return this.item.price * this.duration;
+    }
   },
   methods: {
     showFullImage(src) {
@@ -252,7 +255,11 @@ export default {
       console.log('deleteComment');
 
       try {
-        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, headerWithToken)
+        const res = await asyncRequest(`${comments.deleteCommentByID.URL}${id}`, undefined, comments.deleteCommentByID.METHOD, {
+          'Content-Type': 'application/json',
+          'Accept': '*',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        })
 
         if (res.ok) {
           console.log(res);
@@ -276,7 +283,11 @@ export default {
       }
 
       try {
-        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, headerWithToken);
+        const res = await asyncRequest(comments.createComment.URL, body, comments.createComment.METHOD, {
+          'Content-Type': 'application/json',
+          'Accept': '*',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        });
         console.log('комментарий отправлен');
         if (!res.ok) {
           console.log('комментарий не создан, ошибка.');
@@ -307,6 +318,15 @@ export default {
     showPopUp() {
       this.editModalWindowOpen = false;
       this.isBookingProcessStarted = !this.isBookingProcessStarted;
+      localStorage.setItem('selectedItemID', this.item.id);
+      localStorage.setItem('resortName', this.resortName);
+      localStorage.setItem('resortId', this.resortId.toString());
+      localStorage.setItem('startDateShort', this.selDateStartShort);
+      localStorage.setItem('endDateShort', this.selDateEndShort);
+      localStorage.setItem('startTime', this.startTime);
+      localStorage.setItem('endTime', this.endTime);
+      localStorage.setItem('totalPrice', this.total.toString());
+      localStorage.setItem('duration', this.duration.toString());
     },
     closePopUp(bool1, bool2) {
       this.isBookingProcessStarted = bool1;
@@ -415,11 +435,11 @@ export default {
   margin-top: 45px;
 }
 
-.no-scroll {
+/*.no-scroll {
   overflow: hidden;
   background-color: rgba(178, 178, 178, .3);
   z-index: 10;
-}
+}*/
 
 .buttons {
   display: flex;
@@ -430,31 +450,33 @@ export default {
   gap: 1em;
 }
 
-.inventory-edit {
+/*.inventory-edit {
   display: none;
-}
+}*/
 
+/*
 .equipment.inventory-card {
   padding: 1em;
 }
+*/
 
-.inventory-card__title {
+/*.inventory-card__title {
   display: none;
 }
 
 .pop-up__block {
   width: 65%;
-}
+}*/
 
 .pop-up__block > .modal-equipment-item {
   justify-content: space-around;
 }
 
-.display-grid{
+/*.display-grid{
   padding: 2em;
   display: grid;
   grid-template-columns: 2fr 3fr ;
-}
+}*/
 
 .modal-equipment-item {
   display: flex;
@@ -464,6 +486,11 @@ export default {
 
 .hide {
   flex-direction: column;
+}
+
+.modal-equipment-item {
+  display: flex;
+  gap: 2em;
 }
 
 .modal-equipment-item__about {
@@ -558,14 +585,15 @@ export default {
 
 .pop-up__confirm > .pop-up__block {
   width: 30%;
+  height: 15em;
 }
 
 @media (max-width: 767px) {
 
-  .equipment-item {
+  /*.equipment-item {
     font-size: 1rem;
     width: 23%;
-  }
+  }*/
 
   .equipment-item__type-name {
     font-size: 1.25rem;

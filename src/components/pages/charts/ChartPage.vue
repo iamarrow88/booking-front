@@ -32,21 +32,24 @@
 
       <button @click="getStats" class="cards-btn">Получить статистику</button>
     </div>
-    <div class="chart-data">
-      <RenderChart v-if="isLoaded" :chartData="chartData" :chartOptions="chartOptions" />
+    <div class="chart-data" ref="results">
+      <RenderChart v-if="isLoaded" :chartData="chartData" :chartOptions="chartOptions" :key="renderKey"/>
     </div>
+
+    <modal-window v-if="isModalWindowShown">Идет загрузка</modal-window>
   </div>
 </template>
 
 <script>
 
-import {headerWithToken, resorts, stats, inventory} from "@/data-and-functions/constants/URLS";
+import {resorts, stats, inventory} from "@/data-and-functions/constants/URLS";
 import RenderChart from "@/components/blocks/charts/RenderCharts.vue";
 import {mapActions, mapGetters} from "vuex";
+import ModalWindow from "@/components/blocks/modal/ModalWindow.vue";
 
 export default {
   name: "ChartPage",
-  components: {RenderChart},
+  components: {RenderChart, ModalWindow},
   data() {
     return {
       chartData: {
@@ -54,22 +57,53 @@ export default {
         datasets: [ /*{ data: [40, 20, 12] }*/ ],
       },
       chartOptions: {
-        responsive: true
+        responsive: true,
+        scales: {
+          y: {
+            ticks: {
+              min: 0,
+              stepSize: 1,
+              reverse: false,
+              beginAtZero: true
+            }
+          }
+        }
       },
       resorts: [],
       selectedResort: {},
-      shortDateFrom: '',
-      shortDateTo: '',
+      shortDateFrom: '2023-05-15',
+      shortDateTo: '2023-06-03',
+
+      splittedDateFrom: '',
+      splittedDateTo: '',
       groupBy: 'DAY',
-      backgroundColors: ['#f87979', '#c19efd', '#f45', '#d4f879', '#c19edd', '#c19fdd'],
       inventoryColorObj: {},
       inventoriesArray: [],
       datasetsIDObj: {},
       isLoaded: false,
+      isModalWindowShown: false,
+      renderKey: 0,
+      maxCount: 1,
+      labelIndexes: {},
+      lounchCounter: 0,
     }
   },
   computed: {
     ...mapGetters(['GET_INVENTORY_TYPES']),
+  },
+  watch: {
+    groupBy(){
+      if(this.lounchCounter > 0) this.getStats();
+      this.renderKey += 1;
+    },
+    shortDateFrom(newDate){
+      this.splittedDateFrom = newDate.split('-');
+      if(this.lounchCounter > 0) this.getStats();
+    },
+    shortDateTo(newDate){
+      this.splittedDateTo = newDate.split('-');
+      if(this.lounchCounter > 0) this.getStats();
+    },
   },
   methods: {
     ...mapActions(['fetchInventoryTypes']),
@@ -115,117 +149,171 @@ export default {
       const msInDay = 1000* 60 * 60 * 24;
       return (date2formatted - date1formatted) / msInDay;
     },
-    getLabels(startDay, days){
-      let daysArray = [];
-      for(let i = 0; i <= days; i++){
-        const addDays = new Date(startDay).getDate() + i;
-        const addedDays = new Date().setDate(addDays);
-        const formatDate = new Date(addedDays).toISOString().slice(0, 10);
-        daysArray.push(this.formatDate(formatDate));
-      }
-      return daysArray;
-    },
-    setInvColor(inventoriesIDArray, colorsArray, object){
-      inventoriesIDArray.forEach((id, index) => {
-        if(object[id]){
-          if(colorsArray[index]){
-            object[id].color = colorsArray[index];
-          } else {
-            let diff;
-            do {
-              diff = index - colorsArray.length
-            } while (diff > colorsArray.length);
-            object[id].color = colorsArray[diff];
+    getLabels(start, count, sortBy){
+      const monthsNames = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+      let labelsArray = [];
+      if(sortBy === 'DAY') {
+        for(let i = 0; i <= count; i++){
+          const addDays = new Date(start).getDate() + i;
+          const addedDays = new Date(start).setDate(addDays);
+          const formattedDate = new Date(addedDays).toISOString().slice(0, 10);
+          labelsArray.push(this.formatDate(formattedDate));
+        }
+      } else if(sortBy === 'MONTH') {
+        let year = this.splittedDateFrom[0];
+        let counter = +start;
+        let basicMonth = +start;
+        for(let i = 0; i < count; i++){
+          if(counter === 13) {
+            basicMonth = 1;
+            counter = 1;
+            year = +year + 1;
           }
-        } else if(!object[id]){
+          //const monthToAdd = basicMonth.toString().length === 1 ? '0' + basicMonth : basicMonth.toString();
+          //labelsArray.push(monthToAdd);
+          labelsArray.push(monthsNames[basicMonth - 1]);
+          let key = `${year.toString()}-${basicMonth.toString().length === 1 ? '0' + basicMonth : basicMonth.toString()}`;
+          this.labelIndexes[key] = i;
+          counter += 1;
+          basicMonth += 1;
+        }
+
+      } else if(sortBy === 'YEAR') {
+        let basicYear = +start;
+        for(let i = 0; i < count; i++){
+          labelsArray.push(basicYear.toString());
+          basicYear += 1;
+        }
+      }
+
+
+      return labelsArray;
+    },
+    setInvColor(inventoriesIDArray, object){
+      inventoriesIDArray.forEach((id) => {
+        if(!object[id]){
           const idData = {
-            color: colorsArray[index],
             inventory: {}
           }
           object[id] = idData;
         }
       })
       this.isLoaded = true;
+      this.isModalWindowShown = false;
+      setTimeout(() => {
+        this.scrollToResults();
+      }, 1)
     },
     formatDate(date) {
       let arr = date.split('-');
       return arr.reverse().join('.');
     },
-    async getStats(){
-      this.inventoriesArray = [];
-      this.inventoryColorObj = {};
-      this.chartData.labels = [];
+    clearData(){
       this.chartData.datasets = [];
+      this.chartData.labels = [];
+      this.datasetsIDObj = {};
+      this.inventoriesArray = [];
+      this.inventoryColorObj = [];
+      this.labelIndexes = {};
+    },
+    async getStats(){
+      this.clearData();
+      this.lounchCounter += 1;
+      if(this.isLoaded) this.isLoaded = false;
+      this.isModalWindowShown = true;
       const body = {
         "start_time": `${this.shortDateFrom}T10:00:00.000Z`,
         "end_time": `${this.shortDateTo}T23:00:00.000Z`,
         "group_by": this.groupBy,
       }
+
+      console.log(body);
       const res = await fetch(stats.getStatsByResortID.URL+this.selectedResort.id, {
         method: stats.getStatsByResortID.METHOD,
-        headers: headerWithToken,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
         body: JSON.stringify(body)
       });
 
       if(res.ok) {
         const results = await res.json();
-        this.chartData.labels = this.getLabels(this.shortDateFrom, this.getDatesDifference(this.shortDateFrom, this.shortDateTo));
+        if(this.groupBy === 'DAY'){
+          this.chartData.labels = this.getLabels(this.shortDateFrom, this.getDatesDifference(this.shortDateFrom, this.shortDateTo), 'DAY');
 
-        if(results.length === 0){
-          this.chartData.datasets[0] = [];
-          for(let i = 0; i < this.chartData.labels.length; i++){
-            this.chartData.datasets[0].push(0);
+          if(results.length === 0){
+            this.chartData.datasets[0] = [];
+            for(let i = 0; i < this.chartData.labels.length; i++){
+              this.chartData.datasets[0].push(0);
+            }
+          } else {
+            results.forEach((result) => {
+              if(!this.inventoriesArray.includes(result.inventory_id)) {
+                this.inventoriesArray.push(result.inventory_id);
+              }
+            });
+            await this.getInventoryByID(results);
           }
         } else {
-          results.forEach((result) => {
-            if(!this.inventoriesArray.includes(result.inventory_id)) {
-              this.inventoriesArray.push(result.inventory_id);
+          if(this.groupBy === 'MONTH') {
+            this.chartData.labels = this.getLabels(this.splittedDateFrom[1], this.howManyMonthsDiff(), 'MONTH');
+
+            if(results.length === 0){
+              this.chartData.datasets[0] = [];
+              for(let i = 0; i < this.chartData.labels.length; i++){
+                this.chartData.datasets[0].push(0);
+              }
+            } else {
+              results.forEach((result) => {
+                if(!this.inventoriesArray.includes(result.inventory_id)) {
+                  this.inventoriesArray.push(result.inventory_id);
+                }
+              });
+              await this.getInventoryByID(results);
             }
-          });
-          await this.getInventoryByID(results);
+          } else if(this.groupBy === 'YEAR'){
+            this.chartData.labels = this.getLabels(this.splittedDateFrom[0], this.howManyYearsDiff(), 'YEAR');
+
+            if(results.length === 0){
+              this.chartData.datasets[0] = [];
+              for(let i = 0; i < this.chartData.labels.length; i++){
+                this.chartData.datasets[0].push(0);
+              }
+            } else {
+              results.forEach((result) => {
+                if(!this.inventoriesArray.includes(result.inventory_id)) {
+                  this.inventoriesArray.push(result.inventory_id);
+                }
+              });
+              await this.getInventoryByID(results);
+            }
+          }
         }
       }
     },
     setCount(results){
       results.forEach(result => {
-        const date = this.formatDate(result.date.slice(0, 10));
         const data = [];
         for(let i = 0; i < this.chartData.labels.length; i++){
           data.push(0);
         }
-        const indexResultDate = this.chartData.labels.indexOf(date);
-
-        if(indexResultDate !== -1){
-          if(this.chartData.datasets.length === 0){
-            data[indexResultDate] = result.count;
-
-            this.datasetsIDObj[result.inventory_id] = 0;
-
-            const about = {
-              label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
-                  + ' ID ' + result.inventory_id,
-              data: data,
-              backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]
-            }
-            this.chartData.datasets.push(about);
-          } else {
-            if(Object.keys(this.datasetsIDObj).includes(result.inventory_id.toString())) {
-              this.chartData.datasets[this.datasetsIDObj[result.inventory_id]].data[indexResultDate] = result.count;
-            } else {
-              this.datasetsIDObj[result.inventory_id] = this.chartData.datasets.length;
-              data[indexResultDate] = result.count;
-              const about = {
-                label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
-                    + ' ID ' + result.inventory_id,
-                data: data,
-                backgroundColor: this.backgroundColors[this.inventoryColorObj[result.inventory_id].inventory.type_id - 1]
-              }
-              this.chartData.datasets.push(about);
-            }
-          }
+        if(this.groupBy === 'DAY') {
+          const date = this.formatDate(result.date.slice(0, 10));
+          const indexResultDate = this.chartData.labels.indexOf(date);
+          this.selDataToDataset(result, indexResultDate);
+        } else if(this.groupBy === 'MONTH'){
+          const month = result.date.split('-')[0] + '-' + result.date.split('-')[1];
+          const indexOfMonth = Object.keys(this.labelIndexes).indexOf(month);
+          this.selDataToDataset(result, indexOfMonth);
+        } else if(this.groupBy === 'YEAR') {
+          const year = result.date.split('-')[0];
+          const yearIndex = this.chartData.labels.indexOf(year);
+          this.selDataToDataset(result, yearIndex);
         }
       })
-      return this.setInvColor(this.inventoriesArray, this.backgroundColors, this.inventoryColorObj);
+      return this.setInvColor(this.inventoriesArray, this.inventoryColorObj);
     },
     getEquipmentType(type_id) {
       let name;
@@ -236,24 +324,100 @@ export default {
       })
       return name
     },
+    getRandomColor() {
+      const num = Math.random().toString(16).slice(3, 9);
+      return `#${num}`;
+    },
+    selDataToDataset(result, index){
+      const data = [];
+      for(let i = 0; i < this.chartData.labels.length; i++){
+        data.push(0);
+      }
+
+      if(this.chartData.datasets.length === 0){
+        this.datasetsIDObj[result.inventory_id] = 0;
+        data[index] = result.count;
+        const about = {
+          label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
+              + ' ID ' + result.inventory_id,
+          data: data,
+          backgroundColor: this.getRandomColor(),
+        }
+        this.chartData.datasets.push(about);
+      } else {
+        if(Object.keys(this.datasetsIDObj).includes(result.inventory_id.toString())) {
+          this.chartData.datasets[this.datasetsIDObj[result.inventory_id]].data[index] = result.count;
+        } else {
+          this.datasetsIDObj[result.inventory_id] = this.chartData.datasets.length;
+          data[index] = result.count;
+          const about = {
+            label: this.getEquipmentType(this.inventoryColorObj[result.inventory_id].inventory.type_id)
+                + ' ID ' + result.inventory_id,
+            data: data,
+            backgroundColor: this.getRandomColor(),
+          }
+          this.chartData.datasets.push(about);
+        }
+      }
+    },
+    howManyDaysDiff(startDate, endDate){
+      const MsPerDay = 86400000;
+      return ((new Date(endDate) - new Date(startDate)) / MsPerDay) + 1;
+    },
+    howManyMonthsDiff(){
+      const year1 = this.splittedDateFrom[0];
+      const year2 = this.splittedDateTo[0];
+      const month1 = this.splittedDateFrom[1];
+      const month2 = this.splittedDateTo[1];
+
+      if(year1 === year2) {
+        if(month1 === month2){
+          return 1;
+        } else {
+          return (+month2 - +month1) + 1;
+        }
+      } else {
+        let monthsInYearsSum = 0;
+        if((+year2 - +year1) >= 2){
+            monthsInYearsSum = 12 * ((+year2 - +year1) - 1);
+        }
+        return monthsInYearsSum + (13 - +month1) + +month2;
+      }
+    },
+    howManyYearsDiff(){
+      const year1 = this.splittedDateFrom[0];
+      const year2 = this.splittedDateTo[0];
+
+      if(year1 === year2){
+        return 1;
+      } else {
+        return (+year2 - +year1) + 1;
+      }
+    },
+    scrollToResults() {
+      const resultsBlock = this.$refs.results;
+      resultsBlock.scrollIntoView({behavior: "smooth", block: "start"});
+    },
   },
   mounted() {
     this.getResorts();
     this.shortDateFrom = this.substratFromDate(new Date(), 'full', 7);
     this.shortDateTo = this.substratFromDate(new Date(), 'full', 0);
     if(!this.GET_INVENTORY_TYPES) this.fetchInventoryTypes();
+    this.splittedDateFrom = this.shortDateFrom.split('-');
+    this.splittedDateTo = this.shortDateTo.split('-');
   }
 }
 </script>
 
-<style scoped>
+<style>
 
 .chart-container {
   margin: 0 auto;
   width: 90%;
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 3em;
 }
 
 .chart-filters {
@@ -263,5 +427,9 @@ export default {
 
 label {
   margin: 1em 0 0.5em;
+}
+
+.cards-btn {
+  margin: 0;
 }
 </style>

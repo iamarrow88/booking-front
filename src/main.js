@@ -6,7 +6,7 @@ import BookingResortPage from "@/components/pages/bookings/BookingResortPage.vue
 import PaymentPage from "@/components/pages/payment/PaymentPage.vue";
 import ResortPage from "@/components/pages/start-page/ResortPage.vue";
 import StartPage from "@/components/pages/start-page/StartPage.vue";
-import RegistrationBlock from "@/components/pages/user/RegistrationBlock.vue";
+import RegistrationBlock from "@/components/blocks/user/RegistrationBlock.vue";
 import UserPage from "@/components/pages/user/UserPage.vue";
 
 import BookingItem from "@/components/items/bookings/BookingItem.vue";
@@ -21,7 +21,7 @@ import SuccessWindow from "@/components/blocks/modal/SuccessWindow.vue";
 import CreateResortBlock from "@/components/blocks/resorts/CreateResortBlock.vue";
 import ManageResortCard from "@/components/blocks/resorts/ManageResortCard.vue";
 import ReviewBlock from "@/components/blocks/start-page/ReviewBlock.vue";
-import AuthorizationPage from "@/components/blocks/user/AuthorizationPage.vue";
+import AuthorizationPage from "@/components/pages/user/AuthorizationPage.vue";
 import LoginBlock from "@/components/blocks/user/LoginBlock.vue";
 
 import '@/main.css'

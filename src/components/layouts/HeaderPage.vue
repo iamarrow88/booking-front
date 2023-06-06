@@ -2,11 +2,9 @@
   <header>
     <div class="header-container">
       <nav class="header-nav">
-        <div>
-          <div @click="goToHomePage" class="logo">
-            <img class="logo-img" src="../../assets/logo1.png" alt="logo">
-            <div class="logo-title">Домашняя страница</div>
-          </div>
+        <div @click="goToHomePage" class="logo">
+          <img class="logo-img" src="../../assets/logo1.png" alt="logo">
+          <div class="logo-title">Домашняя страница</div>
         </div>
         <div class="user-block">
           <div v-if="IS_LOGGED_IN" class="header-management">
@@ -26,7 +24,9 @@
               <transition name="fade">
                 <div class="profile-auth" v-if="isHoverOnProfileIcon">
                   <button @click="goToProfile" v-if="IS_LOGGED_IN">В профиль</button>
+                  <button @click="goToMenu" v-if="IS_LOGGED_IN" class="mobile-menu">Меню</button>
                   <button @click="logout" v-if="IS_LOGGED_IN">Выйти</button>
+
                 </div>
               </transition>
             </div>
@@ -40,7 +40,7 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
 import paths from "@/data-and-functions/constants/paths.js";
-import AuthorizationPage from "@/components/blocks/user/AuthorizationPage.vue";
+import AuthorizationPage from "@/components/pages/user/AuthorizationPage.vue";
 
 export default {
   name: "HeaderPage",
@@ -78,6 +78,9 @@ export default {
     },
     goToResortStatisticsPage() {
       this.$router.push(paths.StatisticsPage);
+    },
+    goToMenu() {
+      this.$router.push(paths.LoginPage);
     }
   },
   mounted() {
@@ -91,7 +94,7 @@ export default {
 <style scoped>
 .header-container {
   color: #000;
-  padding: 20px 80px;
+  padding: 20px 50px;
 }
 
 .header-nav {
@@ -101,6 +104,7 @@ export default {
 }
 
 .logo {
+  margin-right: 2em;
   max-width: 180px;
   cursor: pointer;
 }
@@ -110,13 +114,14 @@ export default {
 }
 
 .logo-title {
-  font-size: 24px;
+  width: 115%;
+  font-size: 1.5em;
 }
 
 .user-block {
   display: flex;
   align-items: center;
-  gap: 50px
+  gap: 30px
 }
 
 .header-management {
@@ -174,6 +179,11 @@ button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
+
+.mobile-menu {
+  display: none;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -183,5 +193,33 @@ button:hover {
 .fade-leave-to {
   opacity: 0;
   transition: opacity 0.5s ease;
+}
+
+@media (max-width: 1040px) {
+
+  .logo {
+    max-width: 80px;
+  }
+
+  .logo-img {
+    width: 100%;
+  }
+
+  .logo-title {
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 767px) {
+  .header-container {
+    padding: 20px 25px;
+  }
+  .header-management {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
 }
 </style>

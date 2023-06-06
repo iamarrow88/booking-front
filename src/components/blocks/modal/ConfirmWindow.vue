@@ -58,7 +58,7 @@ export default {
     formattedEndDate() {
       return this.formatDate(this.selDateEndShort);
     },
-    ...mapGetters(['IS_LOGGED_IN', 'GET_SAVED_DATA'])
+    ...mapGetters(['IS_LOGGED_IN'])
   },
   methods: {
     ...mapMutations(['updateSavedData']),
@@ -70,7 +70,6 @@ export default {
       return arr.reverse().join('.');
     },
     GoToAuthPage(){
-      console.log('go to auth page');
       console.log(this.item);
       const saved = {
         item: this.item,
@@ -101,16 +100,5 @@ export default {
 </script>
 
 <style scoped>
-/*.pop-up {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: table;
-  transition: opacity 0.3s ease;
-}*/
 
 </style>

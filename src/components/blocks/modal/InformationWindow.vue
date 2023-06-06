@@ -3,7 +3,7 @@
     <div class="pop-up__block">
       <div class="info__text">Сначала необходимо войти в аккаунт или зарегистрироваться</div>
       <div class="buttons">
-        <button class="btn cards-btn" @click="this.$emit('GoToAuthPage')">На страницу авторизации</button>
+        <button class="btn cards-btn action" @click="this.$emit('GoToAuthPage')">На страницу авторизации</button>
         <button class="btn cards-btn" @click="this.$emit('Back')">Назад</button>
       </div>
     </div>

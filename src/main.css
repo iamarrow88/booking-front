@@ -47,6 +47,10 @@ input, select {
     box-sizing: border-box;
 }
 
+#main {
+    width: 100vw;
+}
+
 .sub-btn {
     /*padding: 7px;*/
     background-color: transparent;
@@ -86,14 +90,13 @@ input[type="date"], select {
 }
 
 .pop-up__block {
-    /*position: absolute;
-    top: 46%;
-    left: 35%;*/
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     padding: 3em;
+    width: auto;
+    height: auto;
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -107,6 +110,7 @@ input[type="date"], select {
     margin: 23px auto 0;
     display: flex;
     justify-content: space-between;
+    gap: 0.5em;
     width: 70%;
 }
 
