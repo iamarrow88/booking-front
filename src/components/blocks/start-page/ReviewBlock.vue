@@ -85,15 +85,13 @@ export default {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  width: 17vw;
+  width: 80%;
 }
 
 button {
-  width: 100px;
   display: flex;
   justify-content: center;
   color: #fb946d;
-  margin: 0 auto;
 }
 
 button:hover {
@@ -102,7 +100,7 @@ button:hover {
 
 .review {
   width: 80%;
-  padding: 50px;
+  padding: 4vw;
   margin: 30px 0;
   border: 1px solid #d0cece;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
