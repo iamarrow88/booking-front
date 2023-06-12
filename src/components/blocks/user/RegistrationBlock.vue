@@ -113,7 +113,7 @@ export default {
         middle_name: this.middleName,
         email: this.emailRegister,
         password: this.passwordRegister,
-        phone: +this.phone,
+        phone: this.phone,
         role_id: +this.roleId
       }
 

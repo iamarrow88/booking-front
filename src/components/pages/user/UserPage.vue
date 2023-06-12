@@ -67,6 +67,7 @@
 <script>
 import validationMixins from "@/components/mixins/validationMixins.js";
 import {mapActions, mapGetters} from "vuex";
+import paths from "@/data-and-functions/constants/paths";
 export default {
   name: "UserPage",
   mixins: [validationMixins],
@@ -101,7 +102,6 @@ export default {
     editUserData() {
       if(this.isEditModeOn){
         const body = {
-          "id": +this.$store.getters.GET_ALL_USER_INFO.id,
           "first_name": this.firstName,
           "surname": this.surname,
           "middle_name": this.middleName,
@@ -128,7 +128,8 @@ export default {
       };
 
       console.log(body);
-      this.$store.dispatch('deleteUser', body);
+      const isLogout = this.$store.dispatch('deleteUser', body);
+      if(isLogout) this.$router.push(paths.LoginPage);
     }
   },
   mounted() {

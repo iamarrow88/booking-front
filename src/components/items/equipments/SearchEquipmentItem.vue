@@ -34,7 +34,6 @@
               class="btn cards-btn">Подробнее
       </button>
       <button v-if="editMode"
-
               @click="editModalWindowOpen=!editModalWindowOpen"
               class="btn cards-btn">Редактировать
       </button>
@@ -45,7 +44,10 @@
     </div>
 
     <teleport to="body">
-      <modal-window v-if="editModalWindowOpen" @refreshInventoryArray="closeAndRefreshAddWindow" @closePopUp="editModalWindowOpen=false">
+      <modal-window v-if="editModalWindowOpen"
+                    @refreshInventoryArray="closeAndRefreshAddWindow"
+                    @closePopUp="editModalWindowOpen=false"
+                    :wideWindow="wideWindow">
         <div class="modal-equipment-item" :class="{ 'hide': isEditBlockHide }">
           <div class="modal-equipment-item__body">
             <div class="modal-equipment-item__about" :class="{ 'centered': isEditBlockHide }">
@@ -75,17 +77,31 @@
             @refreshInventoryArray="closeAndRefreshAddWindow"
             @closeAndRefreshAddWindow="editModalWindowOpen=false"></inventory-card>
           </div>
+
+          <review-block class="review" v-for="review in reviews" :key="review.id" :review="review" :reviewsLength="reviews.length"></review-block>
+
+
           <div class="buttons" v-if="!isEditBlockShow">
             <button @click="showPopUp"
                     v-if="!editMode"
                     class="btn cards-btn action">Забронировать
             </button>
-            <button @click="showMore"
+            <button @click="goToReviewPage"
+                    v-if="!editMode"
+                    class="btn cards-btn">Отзывы ({{reviews.length}})
+            </button>
+            <button @click="closeAndRefreshAddWindow"
+                    v-if="!editMode"
+                    class="btn cards-btn">Назад
+            </button>
+<!--            <button @click="showMore"
                     v-if="!editMode"
                     class="btn cards-btn">Отмена
-            </button>
+            </button>-->
           </div>
         </div>
+
+
       </modal-window>
     </teleport>
 
@@ -168,6 +184,8 @@ export default {
 
       isEditBlockShow: false,
       isEditBlockHide: false,
+
+      wideWindow: false,
     }
   },
   watch: {
@@ -295,7 +313,6 @@ export default {
           console.log('Комментарий отправлен');
           const comment = await res.json();
           console.log(comment);
-          /*this.currentReview += 1;*/
           await this.getReviewsByInventoryID();
           this.currentReview = 0;
         }
@@ -303,11 +320,13 @@ export default {
         console.error(e);
       }
     },
-
+    goToReviewPage(){
+      this.wideWindow = !this.wideWindow;
+      this.classForDisplay = this.$refs.review;
+    },
     showMore() {
       this.editModalWindowOpen = !this.editModalWindowOpen;
     },
-
     getEquipmentType() {
       this.GET_INVENTORY_TYPES.forEach(type => {
         if (type.id === this.item.type_id) {
@@ -366,7 +385,6 @@ export default {
     this.isEditBlockShow = !!this.$route.path.split('/').includes('manage');
     this.isEditBlockHide = !this.isEditBlockShow;
   },
-
 }
 
 </script>

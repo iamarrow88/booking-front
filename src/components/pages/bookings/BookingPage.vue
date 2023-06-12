@@ -47,6 +47,9 @@ export default {
     }
   },
   async mounted() {
+    await this.fetchInventoryTypes();
+    await this.fetchCities();
+    this.isUserBookingsPage = !!this.$route.fullPath.split('/').includes('user');
     try {
       const res = await fetch('/api/user/bookings', {
         method: 'GET',
@@ -64,9 +67,7 @@ export default {
     } catch (err) {
       console.error(err);
     }
-    await this.fetchInventoryTypes();
-    await this.fetchCities();
-    this.isUserBookingsPage = !!this.$route.fullPath.split('/').includes('user');
+
   }
 
 }
